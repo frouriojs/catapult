@@ -8,3 +8,4 @@ RUN ( \
 )
 RUN npm install -g firebase-tools
 COPY . /opt/workspace/
+COPY ./seeder /seeder
