@@ -14,6 +14,7 @@ test(GET(apiClient.health), async () => {
 
   expect(res.server).toEqual('ok');
   expect(res.db).toEqual('ok');
+  expect(res.storage).toEqual('ok');
 });
 
 test(DELETE(apiClient.session), async () => {
