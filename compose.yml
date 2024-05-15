@@ -40,7 +40,7 @@ services:
       "
 
   postgres:
-    image: postgres:13
+    image: postgres:15.5
     restart: always
     ports:
       - 5432:5432
