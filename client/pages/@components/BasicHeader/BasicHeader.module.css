@@ -28,8 +28,7 @@
 }
 
 .userBtn:hover {
-  background: white;
-  border-color: #eee;
+  box-shadow: 2px 2px 8px #0002;
 }
 
 .userIcon {

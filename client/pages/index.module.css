@@ -18,7 +18,7 @@
   overflow: hidden;
   background: #fff;
   border-radius: 8px;
-  box-shadow: 2px 2px 12px #0004;
+  box-shadow: 4px 4px 10px #0002;
 }
 
 @keyframes gradient {
@@ -64,6 +64,7 @@
   padding: 4px 8px;
   margin-left: auto;
   cursor: pointer;
+  background: transparent;
   border-radius: 4px;
 }
 
