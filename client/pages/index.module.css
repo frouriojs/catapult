@@ -36,7 +36,7 @@
 }
 
 .title {
-  padding-top: 80px;
+  padding-top: 40px;
   font-size: 80px;
   font-weight: 900;
   color: transparent;
@@ -47,17 +47,24 @@
   animation: gradient 10s ease infinite;
 }
 
+.form {
+  padding: 16px;
+}
+
 .controls {
   display: flex;
   gap: 8px;
   align-items: center;
-  padding: 12px 16px;
 }
 
 .textInput {
-  width: 200px;
+  width: 100%;
   padding: 4px 8px;
-  border-radius: 4px;
+  margin-bottom: 16px;
+  font-size: 16px;
+  background: #f5f5f5;
+  border: none;
+  border-bottom: 1px solid #bbb;
 }
 
 .btn {

@@ -2,7 +2,7 @@ import type { TaskEntity } from 'api/@types/task';
 import { Loading } from 'components/Loading/Loading';
 import { useAtom } from 'jotai';
 import { BasicHeader } from 'pages/@components/BasicHeader/BasicHeader';
-import type { ChangeEvent, FormEvent } from 'react';
+import type { FormEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { apiClient } from 'utils/apiClient';
 import { returnNull } from 'utils/returnNull';
@@ -16,16 +16,8 @@ const Home = () => {
   const [label, setLabel] = useState('');
   const [image, setImage] = useState<File>();
   const [previewImageUrl, setPreviewImageUrl] = useState<string>();
-  const inputLabel = (e: ChangeEvent<HTMLInputElement>) => {
-    setLabel(e.target.value);
-  };
-  const inputFile = (e: ChangeEvent<HTMLInputElement>) => {
-    setImage(e.target.files?.[0]);
-  };
   const fetchTasks = async () => {
-    const tasks = await apiClient.private.tasks.$get().catch(returnNull);
-
-    if (tasks !== null) setTasks(tasks);
+    await apiClient.private.tasks.$get().then(setTasks).catch(returnNull);
   };
   const createTask = async (e: FormEvent) => {
     e.preventDefault();
@@ -61,9 +53,8 @@ const Home = () => {
 
     const newUrl = URL.createObjectURL(image);
     setPreviewImageUrl(newUrl);
-    return () => {
-      URL.revokeObjectURL(newUrl);
-    };
+
+    return () => URL.revokeObjectURL(newUrl);
   }, [image]);
 
   if (!tasks || !user) return <Loading visible />;
@@ -73,24 +64,23 @@ const Home = () => {
       <BasicHeader user={user} />
       <div className={styles.container}>
         <div className={styles.title}>Welcome to frourio!</div>
-
         <div className={styles.main}>
           <div className={styles.card}>
-            <form onSubmit={createTask}>
-              {previewImageUrl && <img src={previewImageUrl} className={styles.taskImage} />}
+            {previewImageUrl && <img src={previewImageUrl} className={styles.taskImage} />}
+            <form className={styles.form} onSubmit={createTask}>
+              <input
+                value={label}
+                className={styles.textInput}
+                type="text"
+                placeholder="Todo task"
+                onChange={(e) => setLabel(e.target.value)}
+              />
               <div className={styles.controls}>
-                <input
-                  value={label}
-                  className={styles.textInput}
-                  type="text"
-                  placeholder="Todo task"
-                  onChange={inputLabel}
-                />
                 <input
                   type="file"
                   ref={fileRef}
                   accept=".png,.jpg,.jpeg,.gif,.webp,.svg"
-                  onChange={inputFile}
+                  onChange={(e) => setImage(e.target.files?.[0])}
                 />
                 <input className={styles.btn} disabled={label === ''} type="submit" value="ADD" />
               </div>
@@ -101,15 +91,17 @@ const Home = () => {
               {task.image && (
                 <img src={task.image.url} alt={task.label} className={styles.taskImage} />
               )}
-              <div className={styles.controls}>
-                <input type="checkbox" checked={task.done} onChange={() => toggleDone(task)} />
-                <span>{task.label}</span>
-                <input
-                  type="button"
-                  value="DELETE"
-                  className={styles.btn}
-                  onClick={() => deleteTask(task)}
-                />
+              <div className={styles.form}>
+                <div className={styles.controls}>
+                  <input type="checkbox" checked={task.done} onChange={() => toggleDone(task)} />
+                  <span>{task.label}</span>
+                  <input
+                    type="button"
+                    value="DELETE"
+                    className={styles.btn}
+                    onClick={() => deleteTask(task)}
+                  />
+                </div>
               </div>
             </div>
           ))}
