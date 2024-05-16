@@ -1,15 +1,15 @@
 import type { TaskEntity, TaskUpdateVal } from 'api/@types/task';
 import type { UserEntity } from 'api/@types/user';
 import assert from 'assert';
-import { randomUUID } from 'crypto';
 import { deletableTaskIdParser, taskIdParser } from 'service/idParsers';
 import { s3 } from 'service/s3Client';
+import { ulid } from 'ulid';
 import type { TaskCreateServerVal, TaskDeleteVal, TaskSaveVal } from './taskEntity';
 
 export const taskMethod = {
   create: async (user: UserEntity, val: TaskCreateServerVal): Promise<TaskSaveVal> => {
     const task: TaskEntity = {
-      id: taskIdParser.parse(randomUUID()),
+      id: taskIdParser.parse(ulid()),
       done: false,
       label: val.label,
       image: undefined,
@@ -19,7 +19,7 @@ export const taskMethod = {
 
     if (val.image === undefined) return { task };
 
-    const s3Key = `tasks/images/${randomUUID()}.${val.image.filename.split('.').at(-1)}`;
+    const s3Key = `tasks/images/${ulid()}.${val.image.filename.split('.').at(-1)}`;
     const url = await s3.getSignedUrl(s3Key);
 
     return {
