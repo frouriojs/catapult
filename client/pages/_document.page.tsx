@@ -8,13 +8,14 @@ function Document() {
     <Html lang="ja">
       <Head>
         <title>{APP_NAME}</title>
-        <meta name="robots" content="noindex,nofollow" />
         <meta name="description" content={APP_NAME} />
         <link rel="icon" href={staticPath.favicon_png} />
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
+        {GA_ID && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
@@ -22,8 +23,10 @@ function Document() {
                   page_path: window.location.pathname,
                 });
               `,
-          }}
-        />
+              }}
+            />
+          </>
+        )}
       </Head>
       <body>
         <Main />
