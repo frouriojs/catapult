@@ -5,7 +5,7 @@
     "predev": "npm run generate && npm run migrate:deploy",
     "dev": "run-p dev:*",
     "dev:build": "node ./scripts/build.dev.js",
-    "dev:server": "node-dev --respawn index.js",
+    "dev:server": "touch index.js && node-dev --respawn index.js",
     "dev:frourio": "frourio --watch",
     "dev:prisma": "prisma generate --watch",
     "prebuild": "npm run generate && npm run migrate:deploy",
