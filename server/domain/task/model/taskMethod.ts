@@ -1,7 +1,7 @@
 import type { TaskEntity, TaskUpdateVal } from 'api/@types/task';
 import type { UserEntity } from 'api/@types/user';
 import assert from 'assert';
-import { deletableTaskIdParser, taskIdParser } from 'service/idParsers';
+import { taskIdParser } from 'service/idParsers';
 import { s3 } from 'service/s3Client';
 import { ulid } from 'ulid';
 import type { TaskCreateServerVal, TaskDeleteVal, TaskSaveVal } from './taskEntity';
@@ -35,6 +35,6 @@ export const taskMethod = {
   delete: (user: UserEntity, task: TaskEntity): TaskDeleteVal => {
     assert(user.id === task.author.id);
 
-    return { task, deletableId: deletableTaskIdParser.parse(task.id) };
+    return { deletable: true, task };
   },
 };
