@@ -20,7 +20,7 @@ const toModel = async (prismaTask: Task & { Author: User }): Promise<TaskEntity>
   createdTime: prismaTask.createdAt.getTime(),
 });
 
-const findManyByAuthorId = async (
+const listByAuthorId = async (
   tx: Prisma.TransactionClient,
   authorId: UserId,
   limit?: number,
@@ -36,11 +36,11 @@ const findManyByAuthorId = async (
 };
 
 export const taskQuery = {
-  findManyByAuthorId,
+  listByAuthorId,
   findManyWithDI: depend(
-    { findManyByAuthorId },
+    { listByAuthorId },
     (deps, tx: Prisma.TransactionClient, userId: UserId): Promise<TaskEntity[]> =>
-      deps.findManyByAuthorId(tx, userId),
+      deps.listByAuthorId(tx, userId),
   ),
   findById: async (tx: Prisma.TransactionClient, taskId: Maybe<TaskId>): Promise<TaskEntity> =>
     tx.task.findUniqueOrThrow({ where: { id: taskId }, include: { Author: true } }).then(toModel),

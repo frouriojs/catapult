@@ -9,7 +9,7 @@ import { defineController } from './$relay';
 export default defineController(() => ({
   get: async ({ user, query }) => ({
     status: 200,
-    body: await taskQuery.findManyByAuthorId(prismaClient, user.id, query?.limit),
+    body: await taskQuery.listByAuthorId(prismaClient, user.id, query?.limit),
   }),
   post: {
     validators: { body: taskValidator.taskCreate },

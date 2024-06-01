@@ -29,7 +29,7 @@ test('Dependency Injection', async () => {
   ];
 
   const res2 = await controller
-    .inject({ findManyByAuthorId: mockedFindManyTask })(fastify())
+    .inject({ listByAuthorId: mockedFindManyTask })(fastify())
     .get({ user: { id: 'dummy-userId' } as UserEntity });
 
   expect(res2.body).toHaveLength(1);
