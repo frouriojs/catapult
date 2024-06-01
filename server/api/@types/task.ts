@@ -1,14 +1,14 @@
-import type { Maybe, TaskId, UserId } from './brandedId';
+import type { EntityId, MaybeId } from './brandedId';
 
 export type TaskEntity = {
-  id: TaskId;
+  id: EntityId['task'];
   label: string;
   done: boolean;
   createdTime: number;
   image: { url: string; s3Key: string } | undefined;
-  author: { id: UserId; displayName: string | undefined };
+  author: { id: EntityId['user']; displayName: string | undefined };
 };
 
 export type TaskCreateVal = { label: string; image?: Blob };
 
-export type TaskUpdateVal = { taskId: Maybe<TaskId>; label?: string; done?: boolean };
+export type TaskUpdateVal = { taskId: MaybeId['task']; label?: string; done?: boolean };

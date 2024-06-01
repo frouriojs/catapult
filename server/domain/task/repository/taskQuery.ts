@@ -1,12 +1,12 @@
 import type { Prisma, Task, User } from '@prisma/client';
-import type { Maybe, TaskId, UserId } from 'api/@types/brandedId';
+import type { EntityId, MaybeId } from 'api/@types/brandedId';
 import type { TaskEntity } from 'api/@types/task';
-import { taskIdParser, userIdParser } from 'service/idParsers';
+import { brandedId } from 'service/brandedId';
 import { s3 } from 'service/s3Client';
 import { depend } from 'velona';
 
 const toModel = async (prismaTask: Task & { Author: User }): Promise<TaskEntity> => ({
-  id: taskIdParser.parse(prismaTask.id),
+  id: brandedId.task.entity.parse(prismaTask.id),
   label: prismaTask.label,
   done: prismaTask.done,
   image:
@@ -14,7 +14,7 @@ const toModel = async (prismaTask: Task & { Author: User }): Promise<TaskEntity>
       ? undefined
       : { url: await s3.getSignedUrl(prismaTask.imageKey), s3Key: prismaTask.imageKey },
   author: {
-    id: userIdParser.parse(prismaTask.authorId),
+    id: brandedId.user.entity.parse(prismaTask.authorId),
     displayName: prismaTask.Author.displayName ?? undefined,
   },
   createdTime: prismaTask.createdAt.getTime(),
@@ -22,7 +22,7 @@ const toModel = async (prismaTask: Task & { Author: User }): Promise<TaskEntity>
 
 const listByAuthorId = async (
   tx: Prisma.TransactionClient,
-  authorId: UserId,
+  authorId: EntityId['user'],
   limit?: number,
 ): Promise<TaskEntity[]> => {
   const prismaTasks = await tx.task.findMany({
@@ -39,9 +39,9 @@ export const taskQuery = {
   listByAuthorId,
   findManyWithDI: depend(
     { listByAuthorId },
-    (deps, tx: Prisma.TransactionClient, userId: UserId): Promise<TaskEntity[]> =>
+    (deps, tx: Prisma.TransactionClient, userId: EntityId['user']): Promise<TaskEntity[]> =>
       deps.listByAuthorId(tx, userId),
   ),
-  findById: async (tx: Prisma.TransactionClient, taskId: Maybe<TaskId>): Promise<TaskEntity> =>
+  findById: async (tx: Prisma.TransactionClient, taskId: MaybeId['task']): Promise<TaskEntity> =>
     tx.task.findUniqueOrThrow({ where: { id: taskId }, include: { Author: true } }).then(toModel),
 };

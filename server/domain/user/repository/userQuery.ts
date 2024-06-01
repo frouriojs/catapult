@@ -1,9 +1,9 @@
 import type { Prisma, User } from '@prisma/client';
 import type { UserEntity } from 'api/@types/user';
-import { userIdParser } from 'service/idParsers';
+import { brandedId } from 'service/brandedId';
 
 const toUserEntity = (user: User): UserEntity => ({
-  id: userIdParser.parse(user.id),
+  id: brandedId.user.entity.parse(user.id),
   email: user.email,
   displayName: user.displayName ?? undefined,
   photoURL: user.photoURL ?? undefined,

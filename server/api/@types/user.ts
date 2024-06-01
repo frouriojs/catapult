@@ -1,7 +1,7 @@
-import type { UserId } from './brandedId';
+import type { EntityId } from './brandedId';
 
 export type UserEntity = {
-  id: UserId;
+  id: EntityId['user'];
   email: string;
   displayName: string | undefined;
   photoURL: string | undefined;

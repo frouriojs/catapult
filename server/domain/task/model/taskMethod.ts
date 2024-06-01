@@ -1,7 +1,7 @@
 import type { TaskEntity, TaskUpdateVal } from 'api/@types/task';
 import type { UserEntity } from 'api/@types/user';
 import assert from 'assert';
-import { taskIdParser } from 'service/idParsers';
+import { brandedId } from 'service/brandedId';
 import { s3 } from 'service/s3Client';
 import { ulid } from 'ulid';
 import type { TaskCreateServerVal, TaskDeleteVal, TaskSaveVal } from './taskEntity';
@@ -9,7 +9,7 @@ import type { TaskCreateServerVal, TaskDeleteVal, TaskSaveVal } from './taskEnti
 export const taskMethod = {
   create: async (user: UserEntity, val: TaskCreateServerVal): Promise<TaskSaveVal> => {
     const task: TaskEntity = {
-      id: taskIdParser.parse(ulid()),
+      id: brandedId.task.entity.parse(ulid()),
       done: false,
       label: val.label,
       image: undefined,

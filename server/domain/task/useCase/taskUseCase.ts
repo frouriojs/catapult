@@ -1,4 +1,4 @@
-import type { Maybe, TaskId } from 'api/@types/brandedId';
+import type { MaybeId } from 'api/@types/brandedId';
 import type { TaskEntity, TaskUpdateVal } from 'api/@types/task';
 import type { UserEntity } from 'api/@types/user';
 import { transaction } from 'service/prismaClient';
@@ -25,7 +25,7 @@ export const taskUseCase = {
 
       return updated.task;
     }),
-  delete: (user: UserEntity, taskId: Maybe<TaskId>): Promise<TaskEntity> =>
+  delete: (user: UserEntity, taskId: MaybeId['task']): Promise<TaskEntity> =>
     transaction('RepeatableRead', async (tx) => {
       const task = await taskQuery.findById(tx, taskId);
       const deleted = taskMethod.delete(user, task);
