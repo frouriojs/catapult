@@ -41,3 +41,4 @@ jobs:
           cp server/.env.example server/.env
           docker compose up -d
       - run: npm test
+      - run: npm run build

@@ -5,10 +5,12 @@ import { connectAuthEmulator, getAuth } from 'firebase/auth';
 export const createAuth = () => {
   if (getApps().length > 0) return getAuth();
 
-  if (process.env.NEXT_PUBLIC_AUTH_EMULATOR_URL !== undefined) {
+  if (process.env.FIREBASE_AUTH_EMULATOR_HOST !== undefined) {
     // https://firebase.google.com/docs/emulator-suite/connect_auth
     const auth = getAuth(initializeApp({ apiKey: 'fake-api-key', authDomain: location.hostname }));
-    connectAuthEmulator(auth, process.env.NEXT_PUBLIC_AUTH_EMULATOR_URL, { disableWarnings: true });
+    connectAuthEmulator(auth, `http://${process.env.FIREBASE_AUTH_EMULATOR_HOST}`, {
+      disableWarnings: true,
+    });
 
     return auth;
   } else {

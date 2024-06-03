@@ -1,17 +1,19 @@
 import server from '$server';
 import cookie from '@fastify/cookie';
-import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
+import fastifyStatic from '@fastify/static';
 import type { FastifyInstance, FastifyServerFactory } from 'fastify';
 import Fastify from 'fastify';
-import { API_BASE_PATH, CORS_ORIGIN } from 'service/envValues';
+import { join } from 'path';
+import { API_BASE_PATH } from 'service/envValues';
 
 export const init = (serverFactory?: FastifyServerFactory): FastifyInstance => {
-  const app = Fastify({ serverFactory });
-  app.register(helmet);
-  app.register(cors, { origin: CORS_ORIGIN, credentials: true });
-  app.register(cookie);
-  server(app, { basePath: API_BASE_PATH });
+  const fastify = Fastify({ serverFactory, ignoreTrailingSlash: true });
 
-  return app;
+  fastify.register(helmet);
+  fastify.register(cookie);
+  fastify.register(fastifyStatic, { root: join(__dirname, '../out') });
+  server(fastify, { basePath: API_BASE_PATH });
+
+  return fastify;
 };

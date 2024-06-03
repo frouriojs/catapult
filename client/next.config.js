@@ -1,14 +1,24 @@
+require('dotenv').config({ path: '../server/.env' });
+
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: true,
   pageExtensions: ['page.tsx'],
-  basePath:
-    process.env.GITHUB_REPOSITORY !== undefined
-      ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}`
-      : '',
-  output: 'export',
-  trailingSlash: true,
+  env: {
+    API_BASE_PATH: process.env.API_BASE_PATH,
+    FIREBASE_AUTH_EMULATOR_HOST: process.env.FIREBASE_AUTH_EMULATOR_HOST,
+  },
   transpilePackages: ['api', 'commonConstantsWithClient'],
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
+  ...(process.env.NODE_ENV === 'development'
+    ? {
+        rewrites: async () => [
+          {
+            source: `${process.env.API_BASE_PATH}/:path*`,
+            destination: `http://localhost:31577${process.env.API_BASE_PATH}/:path*`,
+          },
+        ],
+      }
+    : { output: 'export' }),
 };

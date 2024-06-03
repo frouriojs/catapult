@@ -12,7 +12,7 @@ const options: CookieSerializeOptions = {
   httpOnly: true,
   secure: true,
   path: '/',
-  sameSite: 'none',
+  sameSite: 'strict',
 };
 
 export default defineController(() => ({
