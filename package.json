@@ -15,6 +15,7 @@
     "lint": "run-p lint:*",
     "lint:client": "npm run lint:fix --prefix client",
     "lint:server": "npm run lint:fix --prefix server",
+    "start": "npm start --prefix server",
     "test": "run-p test:*",
     "test:client": "npm run test --prefix client",
     "test:server": "npm run test --prefix server",

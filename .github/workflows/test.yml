@@ -27,11 +27,11 @@ jobs:
         with:
           path: 'server/node_modules'
           key: server-npm-${{ hashFiles('server/package-lock.json') }}
-      - run: npm install
+      - run: npm ci
         if: steps.root-npm-cache.outputs.cache-hit != 'true'
-      - run: npm install --prefix client
+      - run: npm ci --prefix client
         if: steps.client-npm-cache.outputs.cache-hit != 'true'
-      - run: npm install --prefix server
+      - run: npm ci --prefix server
         if: steps.server-npm-cache.outputs.cache-hit != 'true'
       - run: npm run generate
       - run: npm run lint

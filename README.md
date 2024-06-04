@@ -1,8 +1,8 @@
 # Next frourio starter
 
-フロントエンドは client ディレクトリの [Next.js](https://nextjs.org/) 、バックエンドは server ディレクトリの [frourio](https://frourio.com/) で構築された TypeScript で一気通貫開発が可能なモノレポサービス
+フロントエンドは client ディレクトリの [Next.js](https://nextjs.org) 、バックエンドは server ディレクトリの [frourio](https://frourio.com) で構築された TypeScript で一気通貫開発が可能なモノレポサービス
 
-最新のコミットによるデモ - https://solufa.github.io/next-frourio-starter/
+最新のコミットによるデモ - https://starter.frourio.com
 
 ## 開発手順
 

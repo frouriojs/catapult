@@ -39,7 +39,7 @@ export default defineController(() => ({
   delete: {
     hooks: {
       preHandler: async (req, reply) => {
-        assert(req.cookies.session);
+        if (!req.cookies.session) return;
 
         const auth = firebaseAdmin.auth();
         const sessionId = req.cookies.session;

@@ -1,6 +1,6 @@
 import { COOKIE_NAME } from 'service/constants';
 import { expect, test } from 'vitest';
-import { apiClient } from './apiClient';
+import { apiClient, noCookieClient } from './apiClient';
 import { DELETE, GET } from './utils';
 
 test(GET(apiClient), async () => {
@@ -18,8 +18,11 @@ test(GET(apiClient.health), async () => {
 });
 
 test(DELETE(apiClient.session), async () => {
-  const res = await apiClient.session.delete();
+  const res1 = await noCookieClient.session.delete();
+  expect(res1.status).toEqual(200);
 
-  expect(res.headers['set-cookie'][0].startsWith(`${COOKIE_NAME}=;`)).toBeTruthy();
-  expect(res.body.status === 'success').toBeTruthy();
+  const res2 = await apiClient.session.delete();
+
+  expect(res2.headers['set-cookie'][0].startsWith(`${COOKIE_NAME}=;`)).toBeTruthy();
+  expect(res2.body.status === 'success').toBeTruthy();
 });

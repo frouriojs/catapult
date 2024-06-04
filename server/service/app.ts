@@ -12,7 +12,10 @@ export const init = (serverFactory?: FastifyServerFactory): FastifyInstance => {
 
   fastify.register(helmet);
   fastify.register(cookie);
-  fastify.register(fastifyStatic, { root: join(__dirname, '../out') });
+  fastify.register(fastifyStatic, {
+    root: join(process.cwd(), '../client/out'),
+    setHeaders: (res) => res.setHeader('content-security-policy', undefined),
+  });
   server(fastify, { basePath: API_BASE_PATH });
 
   return fastify;
