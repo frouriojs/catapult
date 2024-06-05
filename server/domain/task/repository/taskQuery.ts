@@ -5,7 +5,7 @@ import { brandedId } from 'service/brandedId';
 import { s3 } from 'service/s3Client';
 import { depend } from 'velona';
 
-const toModel = async (prismaTask: Task & { Author: User }): Promise<TaskEntity> => ({
+const toEntity = async (prismaTask: Task & { Author: User }): Promise<TaskEntity> => ({
   id: brandedId.task.entity.parse(prismaTask.id),
   label: prismaTask.label,
   done: prismaTask.done,
@@ -32,7 +32,7 @@ const listByAuthorId = async (
     include: { Author: true },
   });
 
-  return Promise.all(prismaTasks.map(toModel));
+  return Promise.all(prismaTasks.map(toEntity));
 };
 
 export const taskQuery = {
@@ -43,5 +43,5 @@ export const taskQuery = {
       deps.listByAuthorId(tx, userId),
   ),
   findById: async (tx: Prisma.TransactionClient, taskId: MaybeId['task']): Promise<TaskEntity> =>
-    tx.task.findUniqueOrThrow({ where: { id: taskId }, include: { Author: true } }).then(toModel),
+    tx.task.findUniqueOrThrow({ where: { id: taskId }, include: { Author: true } }).then(toEntity),
 };
