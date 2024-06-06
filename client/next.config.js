@@ -9,9 +9,13 @@ module.exports = {
     API_BASE_PATH: process.env.API_BASE_PATH,
     FIREBASE_AUTH_EMULATOR_HOST: process.env.FIREBASE_AUTH_EMULATOR_HOST,
   },
-  transpilePackages: ['api', 'commonConstantsWithClient'],
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
+  webpack: (config) => {
+    config.resolve.symlinks = false;
+
+    return config;
+  },
   ...(process.env.NODE_ENV === 'development'
     ? {
         rewrites: async () => [
