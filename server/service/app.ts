@@ -1,4 +1,5 @@
 import cookie from '@fastify/cookie';
+import fastifyEtag from '@fastify/etag';
 import helmet from '@fastify/helmet';
 import fastifyStatic from '@fastify/static';
 import type { FastifyInstance, FastifyServerFactory } from 'fastify';
@@ -12,6 +13,7 @@ export const init = (serverFactory?: FastifyServerFactory): FastifyInstance => {
 
   fastify.register(helmet);
   fastify.register(cookie);
+  fastify.register(fastifyEtag, { weak: true });
   fastify.register(fastifyStatic, {
     root: join(process.cwd(), '../client/out'),
     setHeaders: (res) => res.setHeader('content-security-policy', undefined),
