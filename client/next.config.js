@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '../server/.env' });
+require('dotenv').config();
 
 /** @type {import('next').NextConfig} */
 module.exports = {
@@ -6,8 +6,8 @@ module.exports = {
   pageExtensions: ['page.tsx'],
   trailingSlash: true,
   env: {
-    API_BASE_PATH: process.env.API_BASE_PATH,
-    FIREBASE_AUTH_EMULATOR_HOST: process.env.FIREBASE_AUTH_EMULATOR_HOST,
+    COGNITO_USER_POOL_CLIENT_ID: process.env.COGNITO_USER_POOL_CLIENT_ID,
+    COGNITO_USER_POOL_ID: process.env.COGNITO_USER_POOL_ID,
   },
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
@@ -20,8 +20,8 @@ module.exports = {
     ? {
         rewrites: async () => [
           {
-            source: `${process.env.API_BASE_PATH}/:path*`,
-            destination: `http://localhost:31577${process.env.API_BASE_PATH}/:path*`,
+            source: `${process.env.NEXT_PUBLIC_API_BASE_PATH}/:path*`,
+            destination: `http://localhost:31577${process.env.NEXT_PUBLIC_API_BASE_PATH}/:path*`,
           },
         ],
       }

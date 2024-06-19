@@ -3,40 +3,36 @@
   top: 0;
   height: 60px;
   background: #fff;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-color-default);
 }
 
 .main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 960px;
   height: 100%;
-  padding: 0 16px;
+  padding: 0 24px;
   margin: 0 auto;
+}
+
+.appName {
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 0.2em;
 }
 
 .userBtn {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   align-items: center;
-  padding: 8px 16px;
+  padding: 6px 12px;
+  margin-left: auto;
   cursor: pointer;
-  border: 1px solid transparent;
-  border-radius: 8px;
+  border: 1px solid var(--border-color-default);
+  border-radius: 6px;
   transition: 0.2s;
 }
 
 .userBtn:hover {
-  box-shadow: 2px 2px 8px #0002;
-}
-
-.userIcon {
-  border-radius: 50%;
-}
-
-.userName {
-  font-size: 14px;
-  font-weight: bold;
-  color: #555;
+  background: #eee;
 }

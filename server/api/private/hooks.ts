@@ -1,21 +1,25 @@
 import type { UserEntity } from 'api/@types/user';
+import assert from 'assert';
 import { userUseCase } from 'domain/user/useCase/userUseCase';
-import { getUserRecord } from 'middleware/firebaseAdmin';
+import type { JWT_PROP_NAME } from 'service/constants';
+import type { JwtUser } from 'service/types';
 import { defineHooks } from './$relay';
 
 export type AdditionalRequest = {
-  user: UserEntity;
-};
+  [Key in typeof JWT_PROP_NAME]: JwtUser;
+} & { user: UserEntity };
 
 export default defineHooks(() => ({
-  preHandler: async (req, res) => {
-    const user = await getUserRecord(req.cookies.session);
-
-    if (!user) {
+  onRequest: async (req, res) => {
+    try {
+      await req.jwtVerify({ onlyCookie: true });
+    } catch (e) {
       res.status(401).send();
       return;
     }
 
-    req.user = await userUseCase.findOrCreateUser(user);
+    assert(req.jwtUser);
+
+    req.user = await userUseCase.findOrCreateUser(req.jwtUser);
   },
 }));

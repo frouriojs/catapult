@@ -1,46 +1,46 @@
 import aspida from '@aspida/axios';
 import api from 'api/$api';
 import axios from 'axios';
-import { initializeApp } from 'firebase/app';
-import {
-  GithubAuthProvider,
-  connectAuthEmulator,
-  getAuth,
-  signInWithCredential,
-} from 'firebase/auth';
-import { firebaseAdmin } from 'middleware/firebaseAdmin';
-import { API_BASE_PATH, FIREBASE_AUTH_EMULATOR_HOST, PORT } from 'service/envValues';
-import { afterAll, beforeAll } from 'vitest';
+import { COOKIE_NAME } from 'service/constants';
+import { API_BASE_PATH, COGNITO_POOL_ENDPOINT, PORT } from 'service/envValues';
+import { ulid } from 'ulid';
 
-export const testUser = { name: 'vitest-user', email: 'vitest@example.com' };
-
-const agent = axios.create();
 const baseURL = `http://127.0.0.1:${PORT}${API_BASE_PATH}`;
 
 export const noCookieClient = api(
   aspida(undefined, { baseURL, headers: { 'Content-Type': 'text/plain' } }),
 );
 
-export const apiClient = api(aspida(agent, { baseURL }));
+export const createUserClient = async (): Promise<{
+  userClient: typeof noCookieClient;
+  cleanUp: () => Promise<void>;
+}> => {
+  const cognitoUrl = `${COGNITO_POOL_ENDPOINT}/backdoor`;
+  const tokens = await fetch(cognitoUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      username: 'test-client',
+      email: `${ulid()}@example.com`,
+      password: 'test-client-password',
+    }),
+  }).then((b) => b.json());
+  const agent = axios.create({
+    baseURL,
+    headers: { cookie: `${COOKIE_NAME}=${tokens.IdToken}`, 'Content-Type': 'text/plain' },
+  });
 
-try {
-  getAuth();
-} catch (e) {
-  const auth = getAuth(initializeApp({ apiKey: 'fake-api-key', authDomain: 'localhost' }));
-  connectAuthEmulator(auth, `http://${FIREBASE_AUTH_EMULATOR_HOST}`, { disableWarnings: true });
-}
-
-beforeAll(async () => {
-  const result = await signInWithCredential(
-    getAuth(),
-    GithubAuthProvider.credential(JSON.stringify({ sub: testUser.name, email: testUser.email })),
+  agent.interceptors.response.use(undefined, (err) =>
+    Promise.reject(axios.isAxiosError(err) ? new Error(JSON.stringify(err.toJSON())) : err),
   );
-  const idToken = await result.user.getIdToken();
-  const res = await apiClient.session.post({ body: { idToken } });
-  agent.defaults.headers.Cookie = res.headers['set-cookie'][0].split(';')[0];
-});
 
-afterAll(async () => {
-  const user = await firebaseAdmin.auth().getUserByEmail(testUser.email);
-  await firebaseAdmin.auth().deleteUser(user.uid);
-});
+  return {
+    userClient: api(aspida(agent)),
+    cleanUp: async (): Promise<void> => {
+      await fetch(cognitoUrl, {
+        method: 'DELETE',
+        headers: { cookie: `${COOKIE_NAME}=${tokens.IdToken}` },
+      });
+    },
+  };
+};

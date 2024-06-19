@@ -6,7 +6,7 @@ export type TaskEntity = {
   done: boolean;
   createdTime: number;
   image: { url: string; s3Key: string } | undefined;
-  author: { id: EntityId['user']; displayName: string | undefined };
+  author: { id: EntityId['user']; signInName: string };
 };
 
 export type TaskCreateVal = { label: string; image?: Blob };

@@ -5,12 +5,11 @@ export const userCommand = {
   save: async (tx: Prisma.TransactionClient, user: UserEntity): Promise<void> => {
     await tx.user.upsert({
       where: { id: user.id },
-      update: {},
+      update: { email: user.email, signInName: user.signInName },
       create: {
         id: user.id,
         email: user.email,
-        displayName: user.displayName,
-        photoURL: user.photoURL,
+        signInName: user.signInName,
         createdAt: new Date(user.createdTime),
       },
     });

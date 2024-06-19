@@ -15,7 +15,7 @@ const toEntity = async (prismaTask: Task & { Author: User }): Promise<TaskEntity
       : { url: await s3.getSignedUrl(prismaTask.imageKey), s3Key: prismaTask.imageKey },
   author: {
     id: brandedId.user.entity.parse(prismaTask.authorId),
-    displayName: prismaTask.Author.displayName ?? undefined,
+    signInName: prismaTask.Author.signInName,
   },
   createdTime: prismaTask.createdAt.getTime(),
 });

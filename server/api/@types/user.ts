@@ -2,8 +2,7 @@ import type { EntityId } from './brandedId';
 
 export type UserEntity = {
   id: EntityId['user'];
+  signInName: string;
   email: string;
-  displayName: string | undefined;
-  photoURL: string | undefined;
   createdTime: number;
 };

@@ -5,13 +5,23 @@ import type { UserEntity } from 'api/@types/user';
 import controller from 'api/private/tasks/di/controller';
 import fastify from 'fastify';
 import { brandedId } from 'service/brandedId';
+import type { JwtUser } from 'service/types';
 import { ulid } from 'ulid';
 import { expect, test } from 'vitest';
 
 test('Dependency Injection', async () => {
-  const res1 = await controller(fastify()).get({
-    user: { id: 'dummy-userId' } as UserEntity,
-  });
+  const jwtUser: JwtUser = {
+    sub: brandedId.user.entity.parse(''),
+    'cognito:username': 'dummy-user',
+    email: 'aa@example.com',
+  };
+  const user: UserEntity = {
+    id: jwtUser.sub,
+    signInName: jwtUser['cognito:username'],
+    email: jwtUser.email,
+    createdTime: Date.now(),
+  };
+  const res1 = await controller(fastify()).get({ jwtUser, user });
 
   expect(res1.body).toHaveLength(0);
 
@@ -25,13 +35,13 @@ test('Dependency Injection', async () => {
       done: false,
       image: undefined,
       createdTime: Date.now(),
-      author: { id: authorId, displayName: undefined },
+      author: { id: authorId, signInName: user.signInName },
     },
   ];
 
   const res2 = await controller
     .inject({ listByAuthorId: mockedFindManyTask })(fastify())
-    .get({ user: { id: 'dummy-userId' } as UserEntity });
+    .get({ jwtUser, user });
 
   expect(res2.body).toHaveLength(1);
 });

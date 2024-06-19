@@ -1,33 +1,50 @@
+import { Authenticator } from '@aws-amplify/ui-react';
 import { APP_NAME } from 'api/@constants';
-import { GithubIcon } from 'components/icons/GithubIcon';
-import { staticPath } from 'utils/$path';
-import { loginWithGitHub } from 'utils/login';
-import { useLoading } from '../@hooks/useLoading';
+import { signUp } from 'aws-amplify/auth';
+import { Spacer } from 'components/Spacer';
+import { useUser } from 'components/auth/useUser';
+import { Loading } from 'components/loading/Loading';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { pagesPath, staticPath } from 'utils/$path';
 import styles from './index.module.css';
 
 const Login = () => {
-  const { loadingElm, addLoading, removeLoading } = useLoading();
-  const login = async () => {
-    addLoading();
-    await loginWithGitHub();
-    removeLoading();
-  };
+  const { user } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user.data !== null) router.replace(pagesPath.$url());
+  }, [user, router]);
 
   return (
     <div
       className={styles.container}
       style={{ background: `center/cover url('${staticPath.images.odaiba_jpg}')` }}
     >
-      <div className={styles.main}>
-        <div className={styles.title}>{APP_NAME}</div>
-        <div style={{ marginTop: '16px' }} onClick={login}>
-          <div className={styles.btn}>
-            <GithubIcon size={18} fill="#fff" />
-            <span>Login with GitHub</span>
-          </div>
+      {user.inited && user.data === null ? (
+        <div className={styles.main}>
+          <div className={styles.title}>{APP_NAME}</div>
+          <Spacer axis="y" size={24} />
+          <Authenticator
+            signUpAttributes={['email']}
+            services={{
+              handleSignUp: (input) =>
+                signUp({
+                  ...input,
+                  options: {
+                    userAttributes: { ...input.options?.userAttributes },
+                    ...input.options,
+                    autoSignIn: true,
+                  },
+                }),
+            }}
+          />
+          <Spacer axis="y" size={40} />
         </div>
-      </div>
-      {loadingElm}
+      ) : (
+        <Loading visible />
+      )}
     </div>
   );
 };

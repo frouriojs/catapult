@@ -14,7 +14,7 @@ export const taskMethod = {
       label: val.label,
       image: undefined,
       createdTime: Date.now(),
-      author: { id: user.id, displayName: user.displayName },
+      author: { id: user.id, signInName: user.signInName },
     };
 
     if (val.image === undefined) return { task };

@@ -1,11 +1,12 @@
 import type { CookieSerializeOptions } from '@fastify/cookie';
 import assert from 'assert';
-import { firebaseAdmin } from 'middleware/firebaseAdmin';
 import { COOKIE_NAME } from 'service/constants';
+import { z } from 'zod';
+import type { Methods } from '.';
 import { defineController } from './$relay';
 
 export type AdditionalRequest = {
-  body: { idToken: string };
+  body: Methods['post']['reqBody'];
 };
 
 const options: CookieSerializeOptions = {
@@ -17,41 +18,30 @@ const options: CookieSerializeOptions = {
 
 export default defineController(() => ({
   post: {
+    validators: { body: z.object({ jwt: z.string() }) },
     hooks: {
-      preHandler: async (req, reply) => {
+      preHandler: (req, reply, done) => {
         assert(req.body);
 
-        const auth = firebaseAdmin.auth();
         const expiresIn = 60 * 60 * 24 * 5 * 1000;
-        const idToken = req.body.idToken;
-        const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
 
-        reply.setCookie(COOKIE_NAME, sessionCookie, {
+        reply.setCookie(COOKIE_NAME, req.body.jwt, {
           ...options,
           expires: new Date(Date.now() + expiresIn),
         });
+
+        done();
       },
     },
-    handler: () => {
-      return { status: 200, body: { status: 'success' } };
-    },
+    handler: () => ({ status: 200, body: { status: 'success' } }),
   },
   delete: {
     hooks: {
-      preHandler: async (req, reply) => {
-        if (!req.cookies.session) return;
-
-        const auth = firebaseAdmin.auth();
-        const sessionId = req.cookies.session;
-        const decodedClaims = await auth.verifySessionCookie(sessionId).catch(() => null);
-
-        if (decodedClaims) await auth.revokeRefreshTokens(decodedClaims.sub);
-
+      preHandler: (_, reply, done) => {
         reply.clearCookie(COOKIE_NAME, options);
+        done();
       },
     },
-    handler: () => {
-      return { status: 200, body: { status: 'success' } };
-    },
+    handler: () => ({ status: 200, body: { status: 'success' } }),
   },
 }));

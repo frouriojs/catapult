@@ -10,7 +10,7 @@
 
 ローカルマシンに直接インストールする
 
-https://nodejs.org/ の左ボタン、LTS をダウンロードしてインストール
+https://nodejs.org の左ボタン、LTS をダウンロードしてインストール
 
 ### npm モジュールのインストール
 
@@ -51,13 +51,9 @@ Web ブラウザで http://localhost:3000 を開く
 
 閉じるときは `Ctrl + C` を 2 回連続で入力
 
-#### Firebase Emulator
-
-http://localhost:4000/auth
-
 #### MinIO Console
 
-http://localhost:9001/
+http://localhost:9001
 
 #### PostgreSQL UI
 
@@ -65,3 +61,11 @@ http://localhost:9001/
 $ cd server
 $ npx prisma studio
 ```
+
+### SMTPサーバー
+
+Docker の Inbucket が SMTP サーバーのスタブを提供している
+
+http://localhost:2501
+
+serverからsendMailするとInbucketヘッダー中央の「Recent Mailboxes」に仮想メールが届く

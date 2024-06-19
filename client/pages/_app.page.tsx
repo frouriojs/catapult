@@ -1,10 +1,33 @@
+import { Authenticator, translations } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
+import { Amplify } from 'aws-amplify';
+import { I18n } from 'aws-amplify/utils';
+import { AuthLoader } from 'components/auth/AuthLoader';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import 'styles/globals.css';
+import {
+  COGNITO_USER_POOL_CLIENT_ID,
+  COGNITO_USER_POOL_ID,
+  NEXT_PUBLIC_COGNITO_POOL_ENDPOINT,
+} from 'utils/envValues';
 import { gaPageview } from 'utils/gtag';
 import '../styles/globals.css';
-import { AuthLoader } from './@components/AuthLoader';
+
+Amplify.configure({
+  Auth: {
+    Cognito: {
+      userPoolEndpoint: NEXT_PUBLIC_COGNITO_POOL_ENDPOINT,
+      userPoolId: COGNITO_USER_POOL_ID,
+      userPoolClientId: COGNITO_USER_POOL_CLIENT_ID,
+    },
+  },
+});
+
+I18n.putVocabularies(translations);
+I18n.setLanguage('ja');
 
 function MyApp({ Component, pageProps }: AppProps) {
   const SafeHydrate = dynamic(() => import('../components/SafeHydrate'), { ssr: false });
@@ -22,12 +45,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [router.events]);
 
   return (
-    <>
-      <SafeHydrate>
+    <SafeHydrate>
+      <Authenticator.Provider>
+        <AuthLoader />
         <Component {...pageProps} />
-      </SafeHydrate>
-      <AuthLoader />
-    </>
+      </Authenticator.Provider>
+    </SafeHydrate>
   );
 }
 
