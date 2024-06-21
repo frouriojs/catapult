@@ -1,3 +1,4 @@
+import { createSigner } from 'fast-jwt';
 import { COOKIE_NAME } from 'service/constants';
 import { expect, test } from 'vitest';
 import { createUserClient, noCookieClient } from './apiClient';
@@ -24,7 +25,7 @@ test(GET(noCookieClient.health), async () => {
 });
 
 test(POST(noCookieClient.session), async () => {
-  const jwt = 'dummy-jwt';
+  const jwt = createSigner({ key: 'dummy' })({ exp: Math.floor(Date.now() / 1000) + 100 });
   const res = await noCookieClient.session.post({ body: { jwt } });
 
   expect(res.headers['set-cookie'][0].startsWith(`${COOKIE_NAME}=${jwt};`)).toBeTruthy();

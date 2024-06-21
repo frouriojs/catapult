@@ -3,7 +3,6 @@ import api from 'api/$api';
 import axios from 'axios';
 import { COOKIE_NAME } from 'service/constants';
 import { API_BASE_PATH, COGNITO_POOL_ENDPOINT, PORT } from 'service/envValues';
-import { ulid } from 'ulid';
 
 const baseURL = `http://127.0.0.1:${PORT}${API_BASE_PATH}`;
 
@@ -15,14 +14,13 @@ export const createUserClient = async (): Promise<{
   userClient: typeof noCookieClient;
   cleanUp: () => Promise<void>;
 }> => {
-  const cognitoUrl = `${COGNITO_POOL_ENDPOINT}/backdoor`;
-  const tokens = await fetch(cognitoUrl, {
+  const tokens = await fetch(`${COGNITO_POOL_ENDPOINT}/public/backdoor`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      username: 'test-client',
-      email: `${ulid()}@example.com`,
-      password: 'test-client-password',
+      username: `test-${Date.now()}`,
+      email: `${Date.now()}@example.com`,
+      password: 'Test-client-password1',
     }),
   }).then((b) => b.json());
   const agent = axios.create({
@@ -37,7 +35,7 @@ export const createUserClient = async (): Promise<{
   return {
     userClient: api(aspida(agent)),
     cleanUp: async (): Promise<void> => {
-      await fetch(cognitoUrl, {
+      await fetch(`${COGNITO_POOL_ENDPOINT}/private/backdoor`, {
         method: 'DELETE',
         headers: { cookie: `${COOKIE_NAME}=${tokens.IdToken}` },
       });
