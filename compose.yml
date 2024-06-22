@@ -1,6 +1,6 @@
 services:
   magnito:
-    image: frourio/magnito:0.8.0
+    image: frourio/magnito:0.8.1
     ports:
       - 5000:5000
       - 5001:5001
