@@ -1,9 +1,9 @@
 services:
   magnito:
-    image: frourio/magnito:0.8.1
+    image: frourio/magnito:0.9.0
     ports:
-      - 5000:5000
-      - 5001:5001
+      - 5050:5050
+      - 5051:5051
     env_file:
       - ./client/.env
     volumes:
