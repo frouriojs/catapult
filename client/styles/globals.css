@@ -16,6 +16,11 @@ a {
   margin: 0;
 }
 
+:root {
+  --border-color-default: #eee;
+  --font-color-default: #336;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }

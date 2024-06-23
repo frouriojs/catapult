@@ -9,7 +9,7 @@ export const BasicHeader = (props: { user: UserEntity }) => {
   const { setConfirm } = useConfirm();
   const onClick = async () => {
     const confirmed = await setConfirm(
-      `ユーザー名: ${props.user.signInName}\nメールアドレス: ${props.user.email}\n\nサインアウトしてよろしいですか？`,
+      `ユーザー名: ${props.user.signInName}\nメールアドレス: ${props.user.email}\n\nサインアウトしますか？`,
     );
 
     if (confirmed) await signOut();
@@ -20,7 +20,7 @@ export const BasicHeader = (props: { user: UserEntity }) => {
       <div className={styles.main}>
         <span className={styles.appName}>{APP_NAME}</span>
         <div className={styles.userBtn} onClick={onClick}>
-          <HumanIcon size={18} fill="#555" />
+          <HumanIcon size={18} fill="#336" />
           {props.user.signInName}
         </div>
       </div>

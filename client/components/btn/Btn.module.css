@@ -3,10 +3,10 @@
   font-weight: bold;
   color: #fff;
   letter-spacing: 0.1em;
-  background: blue;
+  background: #7af;
   border: none;
   border-radius: 6px;
-  transition: transform 0.2s;
+  transition: 0.2s;
 }
 
 .small {
@@ -26,6 +26,7 @@
 }
 
 .enabled:hover {
+  background: #44f;
   transform: scale(1.05);
 }
 

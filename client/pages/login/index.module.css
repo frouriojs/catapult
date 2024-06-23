@@ -4,6 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
+  overflow: auto;
 }
 
 .main {
@@ -11,30 +12,32 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  backdrop-filter: blur(4px);
+  min-height: 100%;
 }
 
 .title {
-  font-size: 80px;
-  font-weight: bold;
-  text-shadow: 1px 1px white;
+  font-size: 64px;
+  color: #fff;
+  letter-spacing: 0.18em;
 }
 
-.btn {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding: 8px 12px;
+@media screen and (width <= 800px) {
+  .title {
+    font-size: 32px;
+    text-align: center;
+  }
+}
+
+.credit {
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
   font-size: 14px;
-  font-weight: bold;
-  color: white;
-  cursor: pointer;
-  background: #222;
-  border-radius: 4px;
-  transition: 0.2s background;
+  color: #fff;
+  text-align: center;
 }
 
-.btn:hover {
-  background: #444;
+.link:hover {
+  text-decoration: underline;
 }

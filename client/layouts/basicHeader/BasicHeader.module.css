@@ -18,7 +18,14 @@
 .appName {
   font-size: 24px;
   font-weight: bold;
-  letter-spacing: 0.2em;
+  color: var(--font-color-default);
+  letter-spacing: 0.18em;
+}
+
+@media screen and (width <= 800px) {
+  .appName {
+    font-size: 16px;
+  }
 }
 
 .userBtn {
@@ -27,6 +34,7 @@
   align-items: center;
   padding: 6px 12px;
   margin-left: auto;
+  text-transform: uppercase;
   cursor: pointer;
   border: 1px solid var(--border-color-default);
   border-radius: 6px;
@@ -34,5 +42,5 @@
 }
 
 .userBtn:hover {
-  background: #eee;
+  background: #f0f0f0;
 }

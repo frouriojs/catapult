@@ -20,12 +20,12 @@ const Login = () => {
   return (
     <div
       className={styles.container}
-      style={{ background: `center/cover url('${staticPath.images.odaiba_jpg}')` }}
+      style={{ background: `center/cover url('${staticPath.images.bg_jpg}')` }}
     >
       {user.inited && user.data === null ? (
         <div className={styles.main}>
           <div className={styles.title}>{APP_NAME}</div>
-          <Spacer axis="y" size={24} />
+          <Spacer axis="y" size={36} />
           <Authenticator
             signUpAttributes={['email']}
             services={{
@@ -40,11 +40,21 @@ const Login = () => {
                 }),
             }}
           />
-          <Spacer axis="y" size={40} />
+          <Spacer axis="y" size={60} />
         </div>
       ) : (
         <Loading visible />
       )}
+      <div className={styles.credit}>
+        <a
+          className={styles.link}
+          href="https://www.freepik.com/free-vector/gradient-blue-background_23985231.htm"
+          target="_brank"
+          title="Freepik | Create great designs, faster"
+        >
+          Image by freepik
+        </a>
+      </div>
     </div>
   );
 };
