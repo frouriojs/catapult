@@ -1,10 +1,12 @@
 import { Authenticator, translations } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
+import { APP_NAME } from 'api/@constants';
 import { Amplify } from 'aws-amplify';
 import { I18n } from 'aws-amplify/utils';
 import { AuthLoader } from 'components/auth/AuthLoader';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import 'styles/globals.css';
@@ -45,12 +47,17 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [router.events]);
 
   return (
-    <SafeHydrate>
-      <Authenticator.Provider>
-        <AuthLoader />
-        <Component {...pageProps} />
-      </Authenticator.Provider>
-    </SafeHydrate>
+    <>
+      <Head>
+        <title>{APP_NAME}</title>
+      </Head>
+      <SafeHydrate>
+        <Authenticator.Provider>
+          <AuthLoader />
+          <Component {...pageProps} />
+        </Authenticator.Provider>
+      </SafeHydrate>
+    </>
   );
 }
 

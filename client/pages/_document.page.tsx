@@ -7,7 +7,6 @@ function Document() {
   return (
     <Html lang="ja">
       <Head>
-        <title>{APP_NAME}</title>
         <meta name="description" content={APP_NAME} />
         <link rel="icon" href={staticPath.favicon_png} />
         {GA_ID && (
