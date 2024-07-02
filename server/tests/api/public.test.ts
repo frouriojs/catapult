@@ -5,23 +5,19 @@ import { createUserClient, noCookieClient } from './apiClient';
 import { DELETE, GET, POST } from './utils';
 
 test(GET(noCookieClient), async () => {
-  const { userClient, cleanUp } = await createUserClient();
+  const userClient = await createUserClient();
   const res = await userClient.$get();
 
   expect(res).toEqual('');
-
-  await cleanUp();
 });
 
 test(GET(noCookieClient.health), async () => {
-  const { userClient, cleanUp } = await createUserClient();
+  const userClient = await createUserClient();
   const res = await userClient.health.$get();
 
   expect(res.server).toEqual('ok');
   expect(res.db).toEqual('ok');
   expect(res.storage).toEqual('ok');
-
-  await cleanUp();
 });
 
 test(POST(noCookieClient.session), async () => {
@@ -33,11 +29,9 @@ test(POST(noCookieClient.session), async () => {
 });
 
 test(DELETE(noCookieClient.session), async () => {
-  const { userClient, cleanUp } = await createUserClient();
+  const userClient = await createUserClient();
   const res = await userClient.session.delete();
 
   expect(res.headers['set-cookie'][0].startsWith(`${COOKIE_NAME}=;`)).toBeTruthy();
   expect(res.body.status === 'success').toBeTruthy();
-
-  await cleanUp();
 });
