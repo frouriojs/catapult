@@ -1,4 +1,4 @@
 import { init } from 'service/app';
-import { PORT } from 'service/envValues';
+import { SERVER_PORT } from 'service/envValues';
 
-init().listen({ port: PORT, host: '0.0.0.0' });
+init().listen({ port: SERVER_PORT, host: '0.0.0.0' });

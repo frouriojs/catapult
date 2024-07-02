@@ -4,7 +4,7 @@ import { z } from 'zod';
 dotenv.config({ path: '../client/.env' });
 dotenv.config();
 
-const PORT = +z.string().regex(/^\d+$/).parse(process.env.PORT);
+const SERVER_PORT = +z.string().regex(/^\d+$/).parse(process.env.SERVER_PORT);
 const API_BASE_PATH = z.string().startsWith('/').parse(process.env.NEXT_PUBLIC_API_BASE_PATH);
 const COGNITO_POOL_ENDPOINT = z.string().parse(process.env.NEXT_PUBLIC_COGNITO_POOL_ENDPOINT);
 const COGNITO_ACCESS_KEY = z.string().parse(process.env.COGNITO_ACCESS_KEY);
@@ -26,10 +26,10 @@ export {
   COGNITO_SECRET_KEY,
   COGNITO_USER_POOL_CLIENT_ID,
   COGNITO_USER_POOL_ID,
-  PORT,
   S3_ACCESS_KEY,
   S3_BUCKET,
   S3_ENDPOINT,
   S3_REGION,
   S3_SECRET_KEY,
+  SERVER_PORT,
 };
