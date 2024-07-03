@@ -39,7 +39,7 @@
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
     "dotenv": "^16.4.5",
-    "happy-css-modules": "^2.1.2",
+    "happy-css-modules": "^3.1.1",
     "notios": "^0.4.1",
     "pathpida": "^0.22.0"
   },

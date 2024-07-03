@@ -41,7 +41,7 @@ export const ModalFooter = (
         </>
       )}
       {props.cancel && (
-        <Btn size="small" text={props.cancelText ?? 'キャンセル'} onClick={props.cancel} />
+        <Btn size="small" text={props.cancelText ?? 'Cancel'} onClick={props.cancel} />
       )}
       {props.okText !== undefined && (
         <>

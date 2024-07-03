@@ -28,6 +28,10 @@
   }
 }
 
+.btnContainer {
+  position: relative;
+}
+
 .userBtn {
   display: flex;
   gap: 8px;
@@ -43,4 +47,26 @@
 
 .userBtn:hover {
   background: #f0f0f0;
+}
+
+.menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 160px;
+  background: #fff;
+  border: 1px solid var(--border-color-default);
+  border-radius: 4px;
+  box-shadow: 1px 1px 4px #0002;
+}
+
+.menuItem {
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.menuItem:hover {
+  background: #eee;
 }
