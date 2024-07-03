@@ -18,19 +18,6 @@ import {
 import { gaPageview } from 'utils/gtag';
 import '../styles/globals.css';
 
-Amplify.configure({
-  Auth: {
-    Cognito: {
-      userPoolEndpoint: NEXT_PUBLIC_COGNITO_POOL_ENDPOINT,
-      userPoolId: COGNITO_USER_POOL_ID,
-      userPoolClientId: COGNITO_USER_POOL_CLIENT_ID,
-    },
-  },
-});
-
-I18n.putVocabularies(translations);
-I18n.setLanguage('ja');
-
 function MyApp({ Component, pageProps }: AppProps) {
   const SafeHydrate = dynamic(() => import('../components/SafeHydrate'), { ssr: false });
   const router = useRouter();
@@ -45,6 +32,21 @@ function MyApp({ Component, pageProps }: AppProps) {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
   }, [router.events]);
+
+  useEffect(() => {
+    Amplify.configure({
+      Auth: {
+        Cognito: {
+          userPoolEndpoint: NEXT_PUBLIC_COGNITO_POOL_ENDPOINT,
+          userPoolId: COGNITO_USER_POOL_ID,
+          userPoolClientId: COGNITO_USER_POOL_CLIENT_ID,
+        },
+      },
+    });
+
+    I18n.putVocabularies(translations);
+    I18n.setLanguage(navigator.language.split('-')[0]);
+  }, []);
 
   return (
     <>

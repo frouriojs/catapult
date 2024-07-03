@@ -64,10 +64,7 @@ export const AuthLoader = () => {
             await updateCookie().catch(catchApiErr);
             break;
           case 'tokenRefresh_failure':
-            await setAlert('トークンの有効期限が切れました。再度サインインしてください。');
-            setLoading(true);
-            await signOut().catch(catchApiErr);
-            setLoading(false);
+            await signOut();
             break;
           /* v8 ignore next 2 */
           default:

@@ -1,6 +1,8 @@
+import { AccountSettings } from '@aws-amplify/ui-react';
 import { APP_NAME } from 'api/@constants';
 import type { UserEntity } from 'api/@types/user';
 import { signOut } from 'aws-amplify/auth';
+import { Spacer } from 'components/Spacer';
 import { HumanIcon } from 'components/icons/HumanIcon';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'components/modal/Modal';
 import type { ReactNode } from 'react';
@@ -38,6 +40,7 @@ const MenuItem = (props: { onClick: () => void; children: ReactNode }) => {
 export const BasicHeader = (props: { user: UserEntity }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const [openProfile, setOpenProfile] = useState(false);
+  const [openPassword, setOpenPassword] = useState(false);
 
   return (
     <div className={styles.container}>
@@ -50,6 +53,7 @@ export const BasicHeader = (props: { user: UserEntity }) => {
           </div>
           <Menu open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
             <MenuItem onClick={() => setOpenProfile(true)}>Your profile</MenuItem>
+            <MenuItem onClick={() => setOpenPassword(true)}>Change password</MenuItem>
             <MenuItem onClick={signOut}>Sign out</MenuItem>
           </Menu>
         </div>
@@ -58,9 +62,19 @@ export const BasicHeader = (props: { user: UserEntity }) => {
         <ModalHeader text="Your profile" />
         <ModalBody>
           <div>User name: {props.user.signInName}</div>
+          <Spacer axis="y" size={8} />
           <div>Email: {props.user.email}</div>
         </ModalBody>
         <ModalFooter cancelText="Close" cancel={() => setOpenProfile(false)} />
+      </Modal>
+      <Modal open={openPassword} onClose={() => setOpenPassword(false)}>
+        <ModalHeader text="Change password" />
+        <ModalBody>
+          <div className={styles.passwordContainer}>
+            <AccountSettings.ChangePassword onSuccess={signOut} />
+          </div>
+        </ModalBody>
+        <ModalFooter cancelText="Close" cancel={() => setOpenPassword(false)} />
       </Modal>
     </div>
   );
