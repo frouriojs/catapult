@@ -6,7 +6,6 @@ import {
 import api from 'api/$api';
 import assert from 'assert';
 import axios from 'axios';
-import { cognitoClient } from 'service/cognito';
 import { COOKIE_NAME } from 'service/constants';
 import {
   API_BASE_PATH,
@@ -14,6 +13,7 @@ import {
   COGNITO_USER_POOL_ID,
   SERVER_PORT,
 } from 'service/envValues';
+import { cognitoClient } from 'tests/api/cognito';
 
 const baseURL = `http://127.0.0.1:${SERVER_PORT}${API_BASE_PATH}`;
 

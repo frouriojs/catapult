@@ -30,7 +30,6 @@
     "seed": "node -r esbuild-register prisma/seed.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.606.0",
     "@aws-sdk/client-s3": "^3.569.0",
     "@aws-sdk/s3-request-presigner": "^3.572.0",
     "@fastify/cookie": "^9.3.1",
@@ -48,6 +47,7 @@
   },
   "devDependencies": {
     "@aspida/axios": "^1.14.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.609.0",
     "@types/busboy": "^1.5.4",
     "@types/node": "^20.12.10",
     "axios": "^1.6.8",
