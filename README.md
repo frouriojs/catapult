@@ -69,3 +69,41 @@ Docker の Inbucket が SMTP サーバーのスタブを提供している
 http://localhost:2501
 
 serverからsendMailするとInbucketヘッダー中央の「Recent Mailboxes」に仮想メールが届く
+
+### デプロイ
+
+- `Dockerfile` でデプロイ可能
+- WebSocket対応サーバー必須
+
+#### データベース
+
+`PostgreSQL`
+
+#### 検証済みPaaS
+
+- [Render](https://render.com) FreeプランのWebサーバーとPostgreSQL対応 / PORT設定不要
+- [Railway](https://railway.app) PORT=8080の設定必須
+
+#### 外部連携サービス
+
+- AWS Cognito
+- AWS S3 or Cloudflare R2
+
+ヘルスチェック用エンドポイント
+
+`/api/health`
+
+#### 環境変数
+
+```sh
+COGNITO_USER_POOL_CLIENT_ID=
+COGNITO_USER_POOL_ID=
+DATABASE_URL=
+NEXT_PUBLIC_COGNITO_POOL_ENDPOINT=
+PORT=
+S3_ACCESS_KEY=
+S3_BUCKET=
+S3_ENDPOINT=
+S3_REGION=
+S3_SECRET_KEY=
+```
