@@ -1,0 +1,49 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 640px;
+  max-width: 100%;
+  margin: 0 auto;
+  margin-top: 32px;
+}
+
+.card {
+  overflow: hidden;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 4px 4px 10px #0002;
+}
+
+.form {
+  padding: 16px;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.textInput {
+  width: 100%;
+  padding: 4px 8px;
+  margin-bottom: 16px;
+  font-size: 16px;
+  background: #f5f5f5;
+  border: none;
+  border-bottom: 1px solid #bbb;
+}
+
+.btn {
+  padding: 4px 8px;
+  margin-left: auto;
+  cursor: pointer;
+  background: transparent;
+  border-radius: 4px;
+}
+
+.taskImage {
+  width: 100%;
+  vertical-align: bottom;
+}

@@ -2,7 +2,7 @@ import { WS_TYPES } from 'api/@constants';
 import type { TaskCreated, TaskDeleted, TaskUpdated } from 'api/@types/task';
 import { expect, test } from 'vitest';
 import { createUserClient, noCookieClient } from '../apiClient';
-import { DELETE, GET, PATCH, POST, createWsClient } from '../utils';
+import { DELETE, GET, PATCH, POST, WS, createWsClient } from '../utils';
 
 test(GET(noCookieClient.private.tasks), async () => {
   const userClient = await createUserClient();
@@ -55,7 +55,7 @@ test(DELETE(noCookieClient.private.tasks._taskId('_taskId')), async () => {
   expect(res2.status === 204).toBeTruthy();
 });
 
-test(`WS: ${WS_TYPES[0]}`, async () => {
+test(WS(WS_TYPES[0]), async () => {
   const ws = await createWsClient();
   const userClient = await createUserClient();
 
@@ -75,7 +75,7 @@ test(`WS: ${WS_TYPES[0]}`, async () => {
   });
 });
 
-test(`WS: ${WS_TYPES[1]}`, async () => {
+test(WS(WS_TYPES[1]), async () => {
   const ws = await createWsClient();
   const userClient = await createUserClient();
   const created = await userClient.private.tasks.$post({ body: { label: 'a' } });
@@ -96,7 +96,7 @@ test(`WS: ${WS_TYPES[1]}`, async () => {
   });
 });
 
-test(`WS: ${WS_TYPES[2]}`, async () => {
+test(WS(WS_TYPES[2]), async () => {
   const ws = await createWsClient();
   const userClient = await createUserClient();
   const created = await userClient.private.tasks.$post({ body: { label: 'a' } });
