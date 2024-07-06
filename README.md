@@ -1,8 +1,8 @@
-# Next frourio starter
+# C A T A P U L T
 
 フロントエンドは client ディレクトリの [Next.js](https://nextjs.org) 、バックエンドは server ディレクトリの [frourio](https://frourio.com) で構築された TypeScript で一気通貫開発が可能なモノレポサービス
 
-最新のコミットによるデモ - https://starter.frourio.com
+最新のコミットによるデモ - https://catapult.frourio.com
 
 ## 開発手順
 
@@ -81,8 +81,8 @@ serverからsendMailするとInbucketヘッダー中央の「Recent Mailboxes」
 
 #### 検証済みPaaS
 
-- [Render](https://render.com) FreeプランのWebサーバーとPostgreSQL対応 / PORT設定不要
-- [Railway](https://railway.app) PORT=8080の設定必須
+- [Render](https://render.com) FreeプランのWebサーバーとPostgreSQL対応 / 環境変数にPORT設定不要
+- [Railway](https://railway.app) 環境変数にPORTの設定必須
 
 #### 外部連携サービス
 

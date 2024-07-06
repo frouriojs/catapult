@@ -16,9 +16,9 @@
 }
 
 .title {
-  font-size: 64px;
+  font-size: 80px;
   color: #fff;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
 }
 
 @media screen and (width <= 800px) {
