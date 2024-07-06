@@ -1,20 +1,20 @@
-import type { TaskEntity, TaskUpdateVal } from 'api/@types/task';
-import type { UserEntity } from 'api/@types/user';
+import type { TaskUpdateVal } from 'api/@types/task';
+import type { UserDto } from 'api/@types/user';
 import assert from 'assert';
 import { brandedId } from 'service/brandedId';
 import { s3 } from 'service/s3Client';
 import { ulid } from 'ulid';
-import type { TaskCreateServerVal, TaskDeleteVal, TaskSaveVal } from './taskEntity';
+import type { TaskCreateServerVal, TaskDeleteVal, TaskEntity, TaskSaveVal } from './taskEntity';
 
 export const taskMethod = {
-  create: async (user: UserEntity, val: TaskCreateServerVal): Promise<TaskSaveVal> => {
+  create: async (user: UserDto, val: TaskCreateServerVal): Promise<TaskSaveVal> => {
     const task: TaskEntity = {
       id: brandedId.task.entity.parse(ulid()),
       done: false,
       label: val.label,
       image: undefined,
       createdTime: Date.now(),
-      author: { id: user.id, signInName: user.signInName },
+      author: { id: brandedId.user.entity.parse(user.id), signInName: user.signInName },
     };
 
     if (val.image === undefined) return { task };
@@ -27,13 +27,13 @@ export const taskMethod = {
       s3Params: { key: s3Key, data: val.image },
     };
   },
-  update: (user: UserEntity, task: TaskEntity, val: TaskUpdateVal): TaskSaveVal => {
-    assert(user.id === task.author.id);
+  update: (user: UserDto, task: TaskEntity, val: TaskUpdateVal): TaskSaveVal => {
+    assert(user.id === String(task.author.id));
 
     return { task: { ...task, ...val } };
   },
-  delete: (user: UserEntity, task: TaskEntity): TaskDeleteVal => {
-    assert(user.id === task.author.id);
+  delete: (user: UserDto, task: TaskEntity): TaskDeleteVal => {
+    assert(user.id === String(task.author.id));
 
     return { deletable: true, task };
   },

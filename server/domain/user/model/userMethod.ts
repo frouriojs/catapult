@@ -1,6 +1,6 @@
-import type { UserEntity } from 'api/@types/user';
 import { brandedId } from 'service/brandedId';
 import type { JwtUser } from 'service/types';
+import type { UserEntity } from './userEntity';
 
 export const userMethod = {
   create: (jwtUser: JwtUser): UserEntity => ({

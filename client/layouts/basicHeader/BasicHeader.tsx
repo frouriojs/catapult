@@ -1,6 +1,6 @@
 import { AccountSettings } from '@aws-amplify/ui-react';
 import { APP_NAME } from 'api/@constants';
-import type { UserEntity } from 'api/@types/user';
+import type { UserDto } from 'api/@types/user';
 import { signOut } from 'aws-amplify/auth';
 import { Spacer } from 'components/Spacer';
 import { HumanIcon } from 'components/icons/HumanIcon';
@@ -37,7 +37,7 @@ const MenuItem = (props: { onClick: () => void; children: ReactNode }) => {
   );
 };
 
-export const BasicHeader = (props: { user: UserEntity }) => {
+export const BasicHeader = (props: { user: UserDto }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const [openProfile, setOpenProfile] = useState(false);
   const [openPassword, setOpenPassword] = useState(false);

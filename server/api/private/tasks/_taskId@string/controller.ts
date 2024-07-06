@@ -9,14 +9,14 @@ export default defineController(() => ({
     handler: async ({ user, body, params }) => {
       const task = await taskUseCase.update(user, {
         ...body,
-        taskId: brandedId.task.entity.parse(params.taskId),
+        taskId: brandedId.task.dto.parse(params.taskId),
       });
 
       return { status: 204, body: task };
     },
   },
   delete: async ({ user, params }) => {
-    const task = await taskUseCase.delete(user, brandedId.task.entity.parse(params.taskId));
+    const task = await taskUseCase.delete(user, brandedId.task.dto.parse(params.taskId));
 
     return { status: 204, body: task };
   },

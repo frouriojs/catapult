@@ -1,3 +1,3 @@
-import type { EntityId } from 'api/@types/brandedId';
+import type { DtoId } from 'api/@types/brandedId';
 
-export type JwtUser = { sub: EntityId['user']; 'cognito:username': string; email: string };
+export type JwtUser = { sub: DtoId['user']; 'cognito:username': string; email: string };

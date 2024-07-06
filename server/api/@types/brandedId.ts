@@ -1,10 +1,12 @@
 import type { BRANDED_ID_NAMES } from 'api/@constants';
 import type { z } from 'zod';
 
-export type IdName = (typeof BRANDED_ID_NAMES)[number];
+type IdName = (typeof BRANDED_ID_NAMES)[number];
 
 type Branded<T extends string> = string & z.BRAND<T>;
-type Entity<T extends IdName> = string & z.BRAND<`${T}EntityId`>;
 
-export type EntityId = { [T in IdName]: Entity<T> };
-export type MaybeId = { [T in IdName]: Entity<T> | Branded<'maybe'> };
+type Dto<T extends IdName> = string & z.BRAND<`${T}DtoId`>;
+
+export type DtoId = { [T in IdName]: Dto<T> };
+
+export type MaybeId = { [T in IdName]: Dto<T> | Branded<'maybe'> };

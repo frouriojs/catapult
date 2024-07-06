@@ -1,5 +1,5 @@
 import { WS_PATH } from 'api/@constants';
-import type { TaskEntity, TaskEvent } from 'api/@types/task';
+import type { TaskDto, TaskEvent } from 'api/@types/task';
 import { Loading } from 'components/loading/Loading';
 import { useCatchApiErr } from 'hooks/useCatchApiErr';
 import type { FormEvent } from 'react';
@@ -17,7 +17,7 @@ export const TaskList = () => {
       : `ws://localhost:${SERVER_PORT}${WS_PATH}`,
   );
   const fileRef = useRef<HTMLInputElement | null>(null);
-  const [tasks, setTasks] = useState<TaskEntity[]>();
+  const [tasks, setTasks] = useState<TaskDto[]>();
   const [label, setLabel] = useState('');
   const [image, setImage] = useState<File>();
   const [previewImageUrl, setPreviewImageUrl] = useState<string>();
@@ -32,13 +32,13 @@ export const TaskList = () => {
     setPreviewImageUrl(undefined);
     fileRef.current.value = '';
   };
-  const toggleDone = async (task: TaskEntity) => {
+  const toggleDone = async (task: TaskDto) => {
     await apiClient.private.tasks
       ._taskId(task.id)
       .patch({ body: { done: !task.done } })
       .catch(catchApiErr);
   };
-  const deleteTask = async (task: TaskEntity) => {
+  const deleteTask = async (task: TaskDto) => {
     await apiClient.private.tasks._taskId(task.id).delete().catch(catchApiErr);
   };
 

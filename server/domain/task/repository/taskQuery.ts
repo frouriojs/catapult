@@ -1,9 +1,9 @@
 import type { Prisma, Task, User } from '@prisma/client';
-import type { EntityId, MaybeId } from 'api/@types/brandedId';
-import type { TaskEntity } from 'api/@types/task';
+import type { DtoId, MaybeId } from 'api/@types/brandedId';
 import { brandedId } from 'service/brandedId';
 import { s3 } from 'service/s3Client';
 import { depend } from 'velona';
+import type { TaskEntity } from '../model/taskEntity';
 
 const toEntity = async (prismaTask: Task & { Author: User }): Promise<TaskEntity> => ({
   id: brandedId.task.entity.parse(prismaTask.id),
@@ -22,7 +22,7 @@ const toEntity = async (prismaTask: Task & { Author: User }): Promise<TaskEntity
 
 const listByAuthorId = async (
   tx: Prisma.TransactionClient,
-  authorId: EntityId['user'],
+  authorId: DtoId['user'],
   limit?: number,
 ): Promise<TaskEntity[]> => {
   const prismaTasks = await tx.task.findMany({
@@ -39,7 +39,7 @@ export const taskQuery = {
   listByAuthorId,
   findManyWithDI: depend(
     { listByAuthorId },
-    (deps, tx: Prisma.TransactionClient, userId: EntityId['user']): Promise<TaskEntity[]> =>
+    (deps, tx: Prisma.TransactionClient, userId: DtoId['user']): Promise<TaskEntity[]> =>
       deps.listByAuthorId(tx, userId),
   ),
   findById: async (tx: Prisma.TransactionClient, taskId: MaybeId['task']): Promise<TaskEntity> =>

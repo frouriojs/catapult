@@ -1,15 +1,16 @@
 import type { MaybeId } from 'api/@types/brandedId';
-import type { TaskEntity, TaskUpdateVal } from 'api/@types/task';
-import type { UserEntity } from 'api/@types/user';
+import type { TaskDto, TaskUpdateVal } from 'api/@types/task';
+import type { UserDto } from 'api/@types/user';
 import { transaction } from 'service/prismaClient';
 import { taskEvent } from '../event/taskEvent';
 import type { TaskCreateServerVal } from '../model/taskEntity';
 import { taskMethod } from '../model/taskMethod';
 import { taskCommand } from '../repository/taskCommand';
 import { taskQuery } from '../repository/taskQuery';
+import { toTaskDto } from '../service/toTaskDto';
 
 export const taskUseCase = {
-  create: (user: UserEntity, val: TaskCreateServerVal): Promise<TaskEntity> =>
+  create: (user: UserDto, val: TaskCreateServerVal): Promise<TaskDto> =>
     transaction('RepeatableRead', async (tx) => {
       const created = await taskMethod.create(user, val);
 
@@ -17,9 +18,9 @@ export const taskUseCase = {
 
       taskEvent.created(created.task);
 
-      return created.task;
+      return toTaskDto(created.task);
     }),
-  update: (user: UserEntity, val: TaskUpdateVal): Promise<TaskEntity> =>
+  update: (user: UserDto, val: TaskUpdateVal): Promise<TaskDto> =>
     transaction('RepeatableRead', async (tx) => {
       const task = await taskQuery.findById(tx, val.taskId);
       const updated = await taskMethod.update(user, task, val);
@@ -28,9 +29,9 @@ export const taskUseCase = {
 
       taskEvent.updated(updated.task);
 
-      return updated.task;
+      return toTaskDto(updated.task);
     }),
-  delete: (user: UserEntity, taskId: MaybeId['task']): Promise<TaskEntity> =>
+  delete: (user: UserDto, taskId: MaybeId['task']): Promise<TaskDto> =>
     transaction('RepeatableRead', async (tx) => {
       const task = await taskQuery.findById(tx, taskId);
       const deleted = taskMethod.delete(user, task);
@@ -39,6 +40,6 @@ export const taskUseCase = {
 
       taskEvent.deleted(deleted.task);
 
-      return task;
+      return toTaskDto(task);
     }),
 };

@@ -1,5 +1,5 @@
 import type { MaybeId } from 'api/@types/brandedId';
-import type { TaskCreateVal, TaskEntity, TaskUpdateVal } from 'api/@types/task';
+import type { TaskCreateVal, TaskDto, TaskUpdateVal } from 'api/@types/task';
 import type { DefineMethods } from 'aspida';
 
 export type Methods = DefineMethods<{
@@ -7,19 +7,19 @@ export type Methods = DefineMethods<{
     query?: {
       limit?: number;
     };
-    resBody: TaskEntity[];
+    resBody: TaskDto[];
   };
 
   post: {
     reqFormat: FormData;
     reqBody: TaskCreateVal;
-    resBody: TaskEntity;
+    resBody: TaskDto;
   };
 
   patch: {
     reqBody: TaskUpdateVal;
     status: 204;
-    resBody: TaskEntity;
+    resBody: TaskDto;
   };
 
   delete: {
@@ -27,6 +27,6 @@ export type Methods = DefineMethods<{
       taskId: MaybeId['task'];
     };
     status: 204;
-    resBody: TaskEntity;
+    resBody: TaskDto;
   };
 }>;

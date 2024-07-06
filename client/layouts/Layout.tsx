@@ -1,4 +1,4 @@
-import type { UserEntity } from 'api/@types/user';
+import type { UserDto } from 'api/@types/user';
 import { useAlert } from 'components/alert/useAlert';
 import { useUser } from 'components/auth/useUser';
 import { useConfirm } from 'components/confirm/useConfirm';
@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { pagesPath } from 'utils/$path';
 
-export const Layout = (props: { render: (user: UserEntity) => React.ReactNode }) => {
+export const Layout = (props: { render: (user: UserDto) => React.ReactNode }) => {
   const router = useRouter();
   const { user } = useUser();
   const { loadingElm } = useLoading();

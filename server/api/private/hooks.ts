@@ -1,4 +1,4 @@
-import type { UserEntity } from 'api/@types/user';
+import type { UserDto } from 'api/@types/user';
 import assert from 'assert';
 import { userUseCase } from 'domain/user/useCase/userUseCase';
 import type { JWT_PROP_NAME } from 'service/constants';
@@ -7,7 +7,7 @@ import { defineHooks } from './$relay';
 
 export type AdditionalRequest = {
   [Key in typeof JWT_PROP_NAME]: JwtUser;
-} & { user: UserEntity };
+} & { user: UserDto };
 
 export default defineHooks(() => ({
   onRequest: async (req, res) => {

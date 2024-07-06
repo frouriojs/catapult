@@ -1,6 +1,12 @@
 import type { MultipartFile } from '@fastify/multipart';
-import type { TaskEntity } from 'api/@types/task';
+import type { TaskDto } from 'api/@types/task';
+import type { EntityId } from 'service/brandedId';
 import type { S3PutParams } from 'service/s3Client';
+
+export type TaskEntity = Omit<TaskDto, 'id' | 'author'> & {
+  id: EntityId['task'];
+  author: Omit<TaskDto['author'], 'id'> & { id: EntityId['user'] };
+};
 
 export type TaskCreateServerVal = { label: string; image?: MultipartFile };
 
