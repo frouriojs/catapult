@@ -4,6 +4,8 @@ import helmet from '@fastify/helmet';
 import fastifyHttpProxy from '@fastify/http-proxy';
 import type { TokenOrHeader } from '@fastify/jwt';
 import fastifyJwt from '@fastify/jwt';
+import fastifyWebsocket from '@fastify/websocket';
+import { WS_PATH } from 'api/@constants';
 import assert from 'assert';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import Fastify from 'fastify';
@@ -17,6 +19,7 @@ import {
   COGNITO_USER_POOL_ID,
   SERVER_PORT,
 } from './envValues';
+import { websocket } from './websocket';
 
 export const init = (): FastifyInstance => {
   const fastify = Fastify();
@@ -40,11 +43,19 @@ export const init = (): FastifyInstance => {
     },
   });
 
-  fastify.register(fastifyHttpProxy, {
-    upstream: `http://localhost:${SERVER_PORT + 1}`,
-    replyOptions: {
-      rewriteHeaders: (headers) => ({ ...headers, 'content-security-policy': undefined }),
-    },
+  if (process.env.NODE_ENV === 'production') {
+    fastify.register(fastifyHttpProxy, {
+      upstream: `http://localhost:${SERVER_PORT + 1}`,
+      replyOptions: {
+        rewriteHeaders: (headers) => ({ ...headers, 'content-security-policy': undefined }),
+      },
+    });
+  }
+
+  fastify.register(fastifyWebsocket);
+  fastify.register(async (fastify) => {
+    websocket.init(fastify);
+    fastify.get(WS_PATH, { websocket: true }, () => {});
   });
 
   server(fastify, { basePath: API_BASE_PATH });

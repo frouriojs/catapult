@@ -2,6 +2,7 @@ import type { MaybeId } from 'api/@types/brandedId';
 import type { TaskEntity, TaskUpdateVal } from 'api/@types/task';
 import type { UserEntity } from 'api/@types/user';
 import { transaction } from 'service/prismaClient';
+import { taskEvent } from '../event/taskEvent';
 import type { TaskCreateServerVal } from '../model/taskEntity';
 import { taskMethod } from '../model/taskMethod';
 import { taskCommand } from '../repository/taskCommand';
@@ -14,6 +15,8 @@ export const taskUseCase = {
 
       await taskCommand.save(tx, created);
 
+      taskEvent.created(created.task);
+
       return created.task;
     }),
   update: (user: UserEntity, val: TaskUpdateVal): Promise<TaskEntity> =>
@@ -23,6 +26,8 @@ export const taskUseCase = {
 
       await taskCommand.save(tx, updated);
 
+      taskEvent.updated(updated.task);
+
       return updated.task;
     }),
   delete: (user: UserEntity, taskId: MaybeId['task']): Promise<TaskEntity> =>
@@ -31,6 +36,8 @@ export const taskUseCase = {
       const deleted = taskMethod.delete(user, task);
 
       await taskCommand.delete(tx, deleted);
+
+      taskEvent.deleted(deleted.task);
 
       return task;
     }),
