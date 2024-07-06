@@ -8,6 +8,7 @@ module.exports = {
   env: {
     COGNITO_USER_POOL_CLIENT_ID: process.env.COGNITO_USER_POOL_CLIENT_ID,
     COGNITO_USER_POOL_ID: process.env.COGNITO_USER_POOL_ID,
+    SERVER_PORT: process.env.SERVER_PORT,
   },
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },

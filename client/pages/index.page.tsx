@@ -1,23 +1,29 @@
-import type { TaskEntity } from 'api/@types/task';
+import { WS_PATH } from 'api/@constants';
+import type { TaskEntity, TaskEvent } from 'api/@types/task';
 import type { UserEntity } from 'api/@types/user';
 import { Loading } from 'components/loading/Loading';
 import { useCatchApiErr } from 'hooks/useCatchApiErr';
 import { Layout } from 'layouts/Layout';
 import type { FormEvent } from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import useWebSocket from 'react-use-websocket';
 import { apiClient } from 'utils/apiClient';
+import { SERVER_PORT } from 'utils/envValues';
 import styles from './index.module.css';
 
 const Main = (props: { user: UserEntity }) => {
   const catchApiErr = useCatchApiErr();
+  const { lastMessage } = useWebSocket(
+    process.env.NODE_ENV === 'production'
+      ? `wss://${location.host}${WS_PATH}`
+      : `ws://localhost:${SERVER_PORT}${WS_PATH}`,
+  );
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [tasks, setTasks] = useState<TaskEntity[]>();
   const [label, setLabel] = useState('');
   const [image, setImage] = useState<File>();
   const [previewImageUrl, setPreviewImageUrl] = useState<string>();
-  const fetchTasks = useCallback(async () => {
-    await apiClient.private.tasks.$get().then(setTasks).catch(catchApiErr);
-  }, [catchApiErr]);
+
   const createTask = async (e: FormEvent) => {
     e.preventDefault();
     if (!fileRef.current) return;
@@ -27,23 +33,43 @@ const Main = (props: { user: UserEntity }) => {
     setImage(undefined);
     setPreviewImageUrl(undefined);
     fileRef.current.value = '';
-    await fetchTasks();
   };
   const toggleDone = async (task: TaskEntity) => {
     await apiClient.private.tasks
       ._taskId(task.id)
       .patch({ body: { done: !task.done } })
       .catch(catchApiErr);
-    await fetchTasks();
   };
   const deleteTask = async (task: TaskEntity) => {
     await apiClient.private.tasks._taskId(task.id).delete().catch(catchApiErr);
-    await fetchTasks();
   };
 
   useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
+    if (tasks !== undefined) return;
+
+    apiClient.private.tasks.$get().then(setTasks).catch(catchApiErr);
+  }, [tasks, catchApiErr]);
+
+  useEffect(() => {
+    if (lastMessage === null) return;
+
+    const event: TaskEvent = JSON.parse(lastMessage.data);
+
+    switch (event.type) {
+      case 'taskCreated':
+        setTasks((tasks) => [event.task, ...(tasks ?? [])]);
+        return;
+      case 'taskUpdated':
+        setTasks((tasks) => tasks?.map((t) => (t.id === event.task.id ? event.task : t)));
+        return;
+      case 'taskDeleted':
+        setTasks((tasks) => tasks?.filter((t) => t.id !== event.taskId));
+        return;
+      /* v8 ignore next 2 */
+      default:
+        throw new Error(event satisfies never);
+    }
+  }, [lastMessage]);
 
   useEffect(() => {
     if (!image) return;
