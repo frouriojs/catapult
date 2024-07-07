@@ -29,7 +29,7 @@ $ cp client/.env.example client/.env
 $ cp server/.env.example server/.env
 ```
 
-### ミドルウェアのセットアップ
+### Docker compose起動
 
 ```sh
 $ docker compose up -d
@@ -96,10 +96,10 @@ serverからsendMailするとInbucketヘッダー中央の「Recent Mailboxes」
 #### 環境変数
 
 ```sh
-COGNITO_USER_POOL_CLIENT_ID=
-COGNITO_USER_POOL_ID=
-DATABASE_URL=
+NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID=
+NEXT_PUBLIC_COGNITO_USER_POOL_ID=
 NEXT_PUBLIC_COGNITO_POOL_ENDPOINT=
+DATABASE_URL=
 PORT=
 S3_ACCESS_KEY=
 S3_BUCKET=

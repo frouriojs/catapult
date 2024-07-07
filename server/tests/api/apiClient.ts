@@ -11,11 +11,11 @@ import {
   API_BASE_PATH,
   COGNITO_USER_POOL_CLIENT_ID,
   COGNITO_USER_POOL_ID,
-  SERVER_PORT,
 } from 'service/envValues';
 import { cognitoClient } from 'tests/api/cognito';
+import { TEST_PORT } from './utils';
 
-const baseURL = `http://127.0.0.1:${SERVER_PORT}${API_BASE_PATH}`;
+const baseURL = `http://127.0.0.1:${TEST_PORT}${API_BASE_PATH}`;
 
 export const noCookieClient = api(
   aspida(undefined, { baseURL, headers: { 'Content-Type': 'text/plain' } }),

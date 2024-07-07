@@ -1,15 +1,8 @@
-require('dotenv').config();
-
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: true,
   pageExtensions: ['page.tsx'],
   trailingSlash: true,
-  env: {
-    COGNITO_USER_POOL_CLIENT_ID: process.env.COGNITO_USER_POOL_CLIENT_ID,
-    COGNITO_USER_POOL_ID: process.env.COGNITO_USER_POOL_ID,
-    SERVER_PORT: process.env.SERVER_PORT,
-  },
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   webpack: (config) => {
@@ -20,7 +13,7 @@ module.exports = {
   rewrites: async () => [
     {
       source: `${process.env.NEXT_PUBLIC_API_BASE_PATH}/:path*`,
-      destination: `http://localhost:${process.env.SERVER_PORT}${process.env.NEXT_PUBLIC_API_BASE_PATH}/:path*`,
+      destination: `http://localhost:${process.env.NEXT_PUBLIC_SERVER_PORT}${process.env.NEXT_PUBLIC_API_BASE_PATH}/:path*`,
     },
   ],
 };

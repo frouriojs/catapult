@@ -4,8 +4,16 @@ services:
     ports:
       - 5050:5050
       - 5051:5051
-    env_file:
-      - ./client/.env
+    environment:
+      COGNITO_USER_POOL_ID: ap-northeast-1_frourio
+      COGNITO_USER_POOL_CLIENT_ID: catapult
+      COGNITO_ACCESS_KEY: magnito-access-key
+      COGNITO_SECRET_KEY: magnito-secret-key
+      COGNITO_REGION: ap-northeast-1
+      SMTP_HOST: inbucket
+      SMTP_PORT: 2500
+      SMTP_USER: fake_mail_user
+      SMTP_PASS: fake_mail_password
     volumes:
       - magnito:/usr/src/app/data
 
@@ -22,8 +30,9 @@ services:
     ports:
       - 9000:9000 # Storage
       - 9001:9001 # Console
-    env_file:
-      - ./server/.env
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: password
     volumes:
       - minio:/data
     entrypoint: []
@@ -38,8 +47,11 @@ services:
     depends_on:
       minio:
         condition: service_healthy
-    env_file:
-      - ./server/.env
+    environment:
+      S3_BUCKET: app
+      S3_REGION: ap-northeast-1
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: password
     entrypoint: []
     command: |
       sh -c "

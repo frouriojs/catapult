@@ -7,7 +7,7 @@ dotenv.config();
 export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
-    env: { DATABASE_URL: process.env.TEST_DATABASE_URL ?? '' },
+    env: { DATABASE_URL: process.env.DATABASE_URL?.replace(/[^/]+$/, 'test') ?? '' },
     setupFiles: ['tests/setup.ts'],
     includeSource: ['**/*.ts'],
     // include: ['**/index.test.ts'],

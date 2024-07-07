@@ -6,7 +6,7 @@ import type { FormEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import useWebSocket from 'react-use-websocket';
 import { apiClient } from 'utils/apiClient';
-import { SERVER_PORT } from 'utils/envValues';
+import { NEXT_PUBLIC_SERVER_PORT } from 'utils/envValues';
 import styles from './taskList.module.css';
 
 export const TaskList = () => {
@@ -14,7 +14,7 @@ export const TaskList = () => {
   const { lastMessage } = useWebSocket(
     process.env.NODE_ENV === 'production'
       ? `wss://${location.host}${WS_PATH}`
-      : `ws://localhost:${SERVER_PORT}${WS_PATH}`,
+      : `ws://localhost:${NEXT_PUBLIC_SERVER_PORT}${WS_PATH}`,
   );
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [tasks, setTasks] = useState<TaskDto[]>();

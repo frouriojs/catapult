@@ -11,9 +11,9 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import 'styles/globals.css';
 import {
-  COGNITO_USER_POOL_CLIENT_ID,
-  COGNITO_USER_POOL_ID,
   NEXT_PUBLIC_COGNITO_POOL_ENDPOINT,
+  NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID,
+  NEXT_PUBLIC_COGNITO_USER_POOL_ID,
 } from 'utils/envValues';
 import { gaPageview } from 'utils/gtag';
 import '../styles/globals.css';
@@ -38,8 +38,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       Auth: {
         Cognito: {
           userPoolEndpoint: NEXT_PUBLIC_COGNITO_POOL_ENDPOINT,
-          userPoolId: COGNITO_USER_POOL_ID,
-          userPoolClientId: COGNITO_USER_POOL_CLIENT_ID,
+          userPoolId: NEXT_PUBLIC_COGNITO_USER_POOL_ID,
+          userPoolClientId: NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID,
         },
       },
     });
