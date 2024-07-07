@@ -7,7 +7,6 @@ import { AuthLoader } from 'components/auth/AuthLoader';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import 'styles/globals.css';
 import {
@@ -15,23 +14,10 @@ import {
   NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID,
   NEXT_PUBLIC_COGNITO_USER_POOL_ID,
 } from 'utils/envValues';
-import { gaPageview } from 'utils/gtag';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const SafeHydrate = dynamic(() => import('../components/SafeHydrate'), { ssr: false });
-  const router = useRouter();
-
-  useEffect(() => {
-    const handleRouteChange = (url: string, { shallow }: { shallow: boolean }) => {
-      if (!shallow) gaPageview(url);
-    };
-
-    router.events.on('routeChangeComplete', handleRouteChange);
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
-    };
-  }, [router.events]);
 
   useEffect(() => {
     Amplify.configure({
