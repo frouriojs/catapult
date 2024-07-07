@@ -79,10 +79,10 @@ serverからsendMailするとInbucketヘッダー中央の「Recent Mailboxes」
 
 `PostgreSQL`
 
-#### 検証済みPaaS
+#### デプロイ検証済みPaaS
 
-- [Render](https://render.com) FreeプランのWebサーバーとPostgreSQL対応 / 環境変数にPORT設定不要
-- [Railway](https://railway.app) 環境変数にPORTの設定必須
+- [Render](https://render.com)
+- [Railway](https://railway.app)
 
 #### 外部連携サービス
 
@@ -93,14 +93,13 @@ serverからsendMailするとInbucketヘッダー中央の「Recent Mailboxes」
 
 `/api/health`
 
-#### 環境変数
+#### Dockerによるデプロイ時の環境変数
 
 ```sh
 NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID=
 NEXT_PUBLIC_COGNITO_USER_POOL_ID=
 NEXT_PUBLIC_COGNITO_POOL_ENDPOINT=
 DATABASE_URL=
-PORT=
 S3_ACCESS_KEY=
 S3_BUCKET=
 S3_ENDPOINT=
