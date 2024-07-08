@@ -1,14 +1,13 @@
 import type { TaskDto } from 'api/@types/task';
 import { Loading } from 'components/loading/Loading';
 import { usePickedLastMsg } from 'features/ws/AuthedWebSocket';
-import { useCatchApiErr } from 'hooks/useCatchApiErr';
 import type { FormEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { apiClient } from 'utils/apiClient';
+import { catchApiErr } from 'utils/catchApiErr';
 import styles from './taskList.module.css';
 
 export const TaskList = () => {
-  const catchApiErr = useCatchApiErr();
   const { lastMsg } = usePickedLastMsg(['taskCreated', 'taskUpdated']);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [tasks, setTasks] = useState<TaskDto[]>();
@@ -48,7 +47,7 @@ export const TaskList = () => {
     if (tasks !== undefined) return;
 
     apiClient.private.tasks.$get().then(setTasks).catch(catchApiErr);
-  }, [tasks, catchApiErr]);
+  }, [tasks]);
 
   useEffect(() => {
     if (lastMsg === undefined) return;
