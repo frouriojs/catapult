@@ -1,20 +1,38 @@
 # C A T A P U L T
 
-フロントエンドは client ディレクトリの [Next.js](https://nextjs.org) 、バックエンドは server ディレクトリの [frourio](https://frourio.com) で構築された TypeScript で一気通貫開発が可能なモノレポサービス
+aspida と frourio を用いた TypeScript フレームワーク
 
-最新のコミットによるデモ - https://catapult.frourio.com
+- Frontend: Next.js
+- Backend: Fastify
+- ORM: Prisma + PostgreSQL
+- Auth: AWS Cognito
+- Object Storage: AWS S3 or Cloudflare R2
+- 関数型ドメイン駆動設計
+- 全ての関数に依存性注入が可能
+- Cookie 認証付き WebSocket 対応
+- 3rd Party Cookie なし
+- Docker コンテナー1つだけでデプロイ
+- ローカル開発は Node.js + Docker Compose で完結
+- 最新コミットのデモ: https://catapult.frourio.com
 
 ## 開発手順
 
 ### Node.js のインストール
 
-ローカルマシンに直接インストールする
+https://nodejs.org/en で v20 以上をインストール
 
-https://nodejs.org の左ボタン、LTS をダウンロードしてインストール
+### Gitリポジトリのクローン
+
+```sh
+$ git clone https://github.com/frouriojs/catapult.git
+$ cd catapult
+$ rm -rf .git # 既存のコミット履歴を削除
+$ git init
+```
 
 ### npm モジュールのインストール
 
-ルートとフロントとバックエンドそれぞれに package.json があるので 3 回インストールが必要
+package.json は3つ存在する
 
 ```sh
 $ npm i
@@ -62,29 +80,27 @@ $ cd server
 $ npx prisma studio
 ```
 
-### SMTPサーバー
+#### SMTPサーバー
 
-Docker の Inbucket が SMTP サーバーのスタブを提供している
+2501 番ポートの Inbucket が SMTP サーバーのスタブを提供している
 
-http://localhost:2501
+ローカル開発時にアカウントを作成すると http://localhost:2501 のヘッダー中央の「Recent Mailboxes」に検証コードの仮想メールが届く
 
-serverからsendMailするとInbucketヘッダー中央の「Recent Mailboxes」に仮想メールが届く
-
-### デプロイ
+## デプロイ
 
 - `Dockerfile` でデプロイ可能
-- WebSocket対応サーバー必須
+- WebSocket 対応サーバー必須
 
-#### データベース
+### データベース
 
 `PostgreSQL`
 
-#### デプロイ検証済みPaaS
+### デプロイ検証済みPaaS
 
 - [Render](https://render.com)
 - [Railway](https://railway.app)
 
-#### 外部連携サービス
+### 外部連携サービス
 
 - AWS Cognito
 - AWS S3 or Cloudflare R2
@@ -93,7 +109,7 @@ serverからsendMailするとInbucketヘッダー中央の「Recent Mailboxes」
 
 `/api/health`
 
-#### Dockerによるデプロイ時の環境変数
+### Dockerfile を用いたデプロイ時の環境変数
 
 ```sh
 NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID=
