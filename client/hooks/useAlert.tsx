@@ -1,6 +1,6 @@
+import { Modal, ModalBody, ModalFooter } from 'components/modal/Modal';
 import { atom, useAtom } from 'jotai';
 import { useCallback } from 'react';
-import { Alert } from './Alert';
 
 const alertAtom = atom<{ text: string | null; resolve: null | (() => void) }>({
   text: null,
@@ -22,7 +22,14 @@ export const useAlert = () => {
   }, [alertParams, setAlertParams]);
 
   return {
-    alertElm: alertParams.text !== null && <Alert text={alertParams.text} ok={agreeAlert} />,
+    alertElm: alertParams.text !== null && (
+      <Modal open onClose={agreeAlert}>
+        <ModalBody>
+          <div style={{ whiteSpace: 'pre-wrap' }}>{alertParams.text}</div>
+        </ModalBody>
+        <ModalFooter okText="OK" ok={agreeAlert} />
+      </Modal>
+    ),
     setAlert,
   };
 };

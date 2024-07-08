@@ -1,12 +1,12 @@
 import { fetchAuthSession, getCurrentUser, signOut } from 'aws-amplify/auth';
 import { Hub } from 'aws-amplify/utils';
 import { isAxiosError } from 'axios';
-import { useAlert } from 'components/alert/useAlert';
 import { useLoading } from 'components/loading/useLoading';
+import { useAlert } from 'hooks/useAlert';
 import { useCatchApiErr } from 'hooks/useCatchApiErr';
+import { useUser } from 'hooks/useUser';
 import { useCallback, useEffect } from 'react';
 import { apiAxios, apiClient } from 'utils/apiClient';
-import { useUser } from './useUser';
 
 export const AuthLoader = () => {
   const { user, setUser } = useUser();

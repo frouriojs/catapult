@@ -1,10 +1,10 @@
 import type { UserDto } from 'api/@types/user';
-import { useAlert } from 'components/alert/useAlert';
-import { useUser } from 'components/auth/useUser';
-import { useConfirm } from 'components/confirm/useConfirm';
 import { Loading } from 'components/loading/Loading';
 import { useLoading } from 'components/loading/useLoading';
 import { AuthedWebSocket } from 'features/ws/AuthedWebSocket';
+import { useAlert } from 'hooks/useAlert';
+import { useConfirm } from 'hooks/useConfirm';
+import { useUser } from 'hooks/useUser';
 import { BasicHeader } from 'layouts/basicHeader/BasicHeader';
 import { useRouter } from 'next/router';
 import React from 'react';

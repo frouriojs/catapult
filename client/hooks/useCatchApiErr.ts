@@ -1,4 +1,4 @@
-import { useAlert } from 'components/alert/useAlert';
+import { useAlert } from 'hooks/useAlert';
 import { useCallback } from 'react';
 
 export const useCatchApiErr = () => {

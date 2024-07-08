@@ -3,7 +3,7 @@ import '@aws-amplify/ui-react/styles.css';
 import { APP_NAME } from 'api/@constants';
 import { Amplify } from 'aws-amplify';
 import { I18n } from 'aws-amplify/utils';
-import { AuthLoader } from 'components/auth/AuthLoader';
+import { AuthLoader } from 'features/auth/AuthLoader';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
