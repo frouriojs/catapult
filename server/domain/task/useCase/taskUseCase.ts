@@ -16,9 +16,10 @@ export const taskUseCase = {
 
       await taskCommand.save(tx, created);
 
-      taskEvent.created(created.task);
+      const dto = toTaskDto(created.task);
+      taskEvent.created(user, dto);
 
-      return toTaskDto(created.task);
+      return dto;
     }),
   update: (user: UserDto, val: TaskUpdateVal): Promise<TaskDto> =>
     transaction('RepeatableRead', async (tx) => {
@@ -27,9 +28,10 @@ export const taskUseCase = {
 
       await taskCommand.save(tx, updated);
 
-      taskEvent.updated(updated.task);
+      const dto = toTaskDto(updated.task);
+      taskEvent.updated(user, dto);
 
-      return toTaskDto(updated.task);
+      return dto;
     }),
   delete: (user: UserDto, taskId: MaybeId['task']): Promise<TaskDto> =>
     transaction('RepeatableRead', async (tx) => {
@@ -38,8 +40,9 @@ export const taskUseCase = {
 
       await taskCommand.delete(tx, deleted);
 
-      taskEvent.deleted(deleted.task);
+      const dto = toTaskDto(deleted.task);
+      taskEvent.deleted(user, dto);
 
-      return toTaskDto(task);
+      return dto;
     }),
 };

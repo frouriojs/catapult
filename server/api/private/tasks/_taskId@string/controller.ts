@@ -12,12 +12,12 @@ export default defineController(() => ({
         taskId: brandedId.task.dto.parse(params.taskId),
       });
 
-      return { status: 204, body: task };
+      return { status: 200, body: task };
     },
   },
   delete: async ({ user, params }) => {
     const task = await taskUseCase.delete(user, brandedId.task.dto.parse(params.taskId));
 
-    return { status: 204, body: task };
+    return { status: 200, body: task };
   },
 }));

@@ -26,7 +26,7 @@ export default defineController(() => ({
     handler: async ({ user, body }) => {
       const task = await taskUseCase.update(user, body);
 
-      return { status: 204, body: task };
+      return { status: 200, body: task };
     },
   },
   delete: {
@@ -34,7 +34,7 @@ export default defineController(() => ({
     handler: async ({ user, body }) => {
       const task = await taskUseCase.delete(user, body.taskId);
 
-      return { status: 204, body: task };
+      return { status: 200, body: task };
     },
   },
 }));

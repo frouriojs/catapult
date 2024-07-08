@@ -1,21 +1,15 @@
-import { WS_PATH } from 'api/@constants';
-import type { TaskDto, TaskEvent } from 'api/@types/task';
+import type { TaskDto } from 'api/@types/task';
 import { Loading } from 'components/loading/Loading';
+import { usePickedLastMsg } from 'features/ws/AuthedWebSocket';
 import { useCatchApiErr } from 'hooks/useCatchApiErr';
 import type { FormEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import useWebSocket from 'react-use-websocket';
 import { apiClient } from 'utils/apiClient';
-import { NEXT_PUBLIC_SERVER_PORT } from 'utils/envValues';
 import styles from './taskList.module.css';
 
 export const TaskList = () => {
   const catchApiErr = useCatchApiErr();
-  const { lastMessage } = useWebSocket(
-    process.env.NODE_ENV === 'production'
-      ? `wss://${location.host}${WS_PATH}`
-      : `ws://localhost:${NEXT_PUBLIC_SERVER_PORT}${WS_PATH}`,
-  );
+  const { lastMsg } = usePickedLastMsg(['taskCreated', 'taskUpdated']);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [tasks, setTasks] = useState<TaskDto[]>();
   const [label, setLabel] = useState('');
@@ -26,7 +20,10 @@ export const TaskList = () => {
     e.preventDefault();
     if (!fileRef.current) return;
 
-    await apiClient.private.tasks.post({ body: { label, image } }).catch(catchApiErr);
+    await apiClient.private.tasks
+      .$post({ body: { label, image } })
+      .then((task) => setTasks((tasks) => [task, ...(tasks ?? [])]))
+      .catch(catchApiErr);
     setLabel('');
     setImage(undefined);
     setPreviewImageUrl(undefined);
@@ -35,11 +32,16 @@ export const TaskList = () => {
   const toggleDone = async (task: TaskDto) => {
     await apiClient.private.tasks
       ._taskId(task.id)
-      .patch({ body: { done: !task.done } })
+      .$patch({ body: { done: !task.done } })
+      .then((task) => setTasks((tasks) => tasks?.map((t) => (t.id === task.id ? task : t))))
       .catch(catchApiErr);
   };
   const deleteTask = async (task: TaskDto) => {
-    await apiClient.private.tasks._taskId(task.id).delete().catch(catchApiErr);
+    await apiClient.private.tasks
+      ._taskId(task.id)
+      .$delete()
+      .then((task) => setTasks((tasks) => tasks?.filter((t) => t.id !== task.id)))
+      .catch(catchApiErr);
   };
 
   useEffect(() => {
@@ -49,25 +51,18 @@ export const TaskList = () => {
   }, [tasks, catchApiErr]);
 
   useEffect(() => {
-    if (lastMessage === null) return;
+    if (lastMsg === undefined) return;
 
-    const event: TaskEvent = JSON.parse(lastMessage.data);
-
-    switch (event.type) {
+    switch (lastMsg.type) {
       case 'taskCreated':
-        setTasks((tasks) => [event.task, ...(tasks ?? [])]);
-        return;
       case 'taskUpdated':
-        setTasks((tasks) => tasks?.map((t) => (t.id === event.task.id ? event.task : t)));
-        return;
-      case 'taskDeleted':
-        setTasks((tasks) => tasks?.filter((t) => t.id !== event.taskId));
+        console.log(lastMsg);
         return;
       /* v8 ignore next 2 */
       default:
-        throw new Error(event satisfies never);
+        throw new Error(lastMsg satisfies never);
     }
-  }, [lastMessage]);
+  }, [lastMsg]);
 
   useEffect(() => {
     if (!image) return;

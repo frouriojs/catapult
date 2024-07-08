@@ -5,13 +5,13 @@ import fastifyHttpProxy from '@fastify/http-proxy';
 import type { TokenOrHeader } from '@fastify/jwt';
 import fastifyJwt from '@fastify/jwt';
 import fastifyWebsocket from '@fastify/websocket';
-import { WS_PATH } from 'api/@constants';
+import { IS_PROD, WS_PATH } from 'api/@constants';
 import assert from 'assert';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import Fastify from 'fastify';
 import buildGetJwks from 'get-jwks';
 import server from '../$server';
-import { COOKIE_NAME, JWT_PROP_NAME } from './constants';
+import { COOKIE_NAME } from './constants';
 import {
   API_BASE_PATH,
   COGNITO_POOL_ENDPOINT,
@@ -19,6 +19,7 @@ import {
   COGNITO_USER_POOL_ID,
   SERVER_PORT,
 } from './envValues';
+import type { JwtUser } from './types';
 import { websocket } from './websocket';
 
 export const init = (): FastifyInstance => {
@@ -30,7 +31,6 @@ export const init = (): FastifyInstance => {
   fastify.register(cookie);
 
   fastify.register(fastifyJwt, {
-    decoratorName: JWT_PROP_NAME,
     cookie: { cookieName: COOKIE_NAME, signed: false },
     decode: { complete: true },
     secret: (_: FastifyRequest, token: TokenOrHeader) => {
@@ -43,7 +43,7 @@ export const init = (): FastifyInstance => {
     },
   });
 
-  if (process.env.NODE_ENV === 'production') {
+  if (IS_PROD) {
     fastify.register(fastifyHttpProxy, {
       upstream: `http://localhost:${SERVER_PORT + 1}`,
       replyOptions: {
@@ -55,7 +55,13 @@ export const init = (): FastifyInstance => {
   fastify.register(fastifyWebsocket);
   fastify.register(async (fastify) => {
     websocket.init(fastify);
-    fastify.get(WS_PATH, { websocket: true }, () => {});
+
+    fastify.get(WS_PATH, { websocket: true }, async (socket, req) => {
+      await req
+        .jwtVerify<JwtUser>({ onlyCookie: true })
+        .then((user) => websocket.add(user.sub, socket))
+        .catch((e) => socket.close(401, e.message));
+    });
   });
 
   server(fastify, { basePath: API_BASE_PATH });

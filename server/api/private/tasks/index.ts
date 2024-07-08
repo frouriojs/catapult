@@ -18,7 +18,7 @@ export type Methods = DefineMethods<{
 
   patch: {
     reqBody: TaskUpdateVal;
-    status: 204;
+    status: 200;
     resBody: TaskDto;
   };
 
@@ -26,7 +26,7 @@ export type Methods = DefineMethods<{
     reqBody: {
       taskId: MaybeId['task'];
     };
-    status: 204;
+    status: 200;
     resBody: TaskDto;
   };
 }>;

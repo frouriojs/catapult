@@ -4,7 +4,7 @@ import {
   AdminInitiateAuthCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import api from 'api/$api';
-import assert from 'assert';
+import { WS_PATH } from 'api/@constants';
 import axios from 'axios';
 import { COOKIE_NAME } from 'service/constants';
 import {
@@ -13,6 +13,7 @@ import {
   COGNITO_USER_POOL_ID,
 } from 'service/envValues';
 import { cognitoClient } from 'tests/api/cognito';
+import WebSocket from 'ws';
 import { TEST_PORT } from './utils';
 
 const baseURL = `http://127.0.0.1:${TEST_PORT}${API_BASE_PATH}`;
@@ -21,7 +22,10 @@ export const noCookieClient = api(
   aspida(undefined, { baseURL, headers: { 'Content-Type': 'text/plain' } }),
 );
 
-export const createUserClient = async (): Promise<typeof noCookieClient> => {
+export const createSessionClients = async (): Promise<{
+  apiClient: typeof noCookieClient;
+  wsClient: WebSocket;
+}> => {
   const userName = `test-${Date.now()}`;
   const password = `Test-user-${Date.now()}`;
   const command1 = new AdminCreateUserCommand({
@@ -40,20 +44,20 @@ export const createUserClient = async (): Promise<typeof noCookieClient> => {
     AuthParameters: { USERNAME: userName, PASSWORD: password },
   });
 
-  const res = await cognitoClient.send(command2);
-  assert(res.AuthenticationResult);
+  const cookie = await cognitoClient
+    .send(command2)
+    .then((res) => `${COOKIE_NAME}=${res.AuthenticationResult?.IdToken}`);
 
-  const agent = axios.create({
-    baseURL,
-    headers: {
-      cookie: `${COOKIE_NAME}=${res.AuthenticationResult.IdToken}`,
-      'Content-Type': 'text/plain',
-    },
-  });
+  const agent = axios.create({ baseURL, headers: { cookie, 'Content-Type': 'text/plain' } });
 
   agent.interceptors.response.use(undefined, (err) =>
     Promise.reject(axios.isAxiosError(err) ? new Error(JSON.stringify(err.toJSON())) : err),
   );
 
-  return api(aspida(agent));
+  const wsClient = await new Promise<WebSocket>((resolve): void => {
+    const ws = new WebSocket(`ws://127.0.0.1:${TEST_PORT}${WS_PATH}`, { headers: { cookie } });
+    ws.on('open', () => resolve(ws));
+  });
+
+  return { apiClient: api(aspida(agent)), wsClient };
 };

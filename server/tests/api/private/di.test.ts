@@ -5,23 +5,17 @@ import controller from 'api/private/tasks/di/controller';
 import type { TaskEntity } from 'domain/task/model/taskEntity';
 import fastify from 'fastify';
 import { brandedId } from 'service/brandedId';
-import type { JwtUser } from 'service/types';
 import { ulid } from 'ulid';
 import { expect, test } from 'vitest';
 
 test('Dependency Injection', async () => {
-  const jwtUser: JwtUser = {
-    sub: brandedId.user.dto.parse(''),
-    'cognito:username': 'dummy-user',
-    email: 'aa@example.com',
-  };
   const user: UserDto = {
-    id: jwtUser.sub,
-    signInName: jwtUser['cognito:username'],
-    email: jwtUser.email,
+    id: brandedId.user.dto.parse(ulid()),
+    signInName: 'dummy-user',
+    email: 'aa@example.com',
     createdTime: Date.now(),
   };
-  const res1 = await controller(fastify()).get({ jwtUser, user });
+  const res1 = await controller(fastify()).get({ user });
 
   expect(res1.body).toHaveLength(0);
 
@@ -41,7 +35,7 @@ test('Dependency Injection', async () => {
 
   const res2 = await controller
     .inject({ listByAuthorId: mockedFindManyTask })(fastify())
-    .get({ jwtUser, user });
+    .get({ user });
 
   expect(res2.body).toHaveLength(1);
 });

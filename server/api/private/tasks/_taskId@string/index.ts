@@ -7,12 +7,12 @@ export type Methods = DefineMethods<{
       label?: string;
       done?: boolean;
     };
-    status: 204;
+    status: 200;
     resBody: TaskDto;
   };
 
   delete: {
-    status: 204;
+    status: 200;
     resBody: TaskDto;
   };
 }>;

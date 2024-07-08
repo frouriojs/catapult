@@ -4,6 +4,7 @@ import { useUser } from 'components/auth/useUser';
 import { useConfirm } from 'components/confirm/useConfirm';
 import { Loading } from 'components/loading/Loading';
 import { useLoading } from 'components/loading/useLoading';
+import { AuthedWebSocket } from 'features/ws/AuthedWebSocket';
 import { BasicHeader } from 'layouts/basicHeader/BasicHeader';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -26,6 +27,7 @@ export const Layout = (props: { render: (user: UserDto) => React.ReactNode }) =>
 
   return (
     <div>
+      <AuthedWebSocket />
       <BasicHeader user={user.data} />
       {props.render(user.data)}
       {loadingElm}
