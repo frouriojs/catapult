@@ -1,6 +1,6 @@
-import { WS_PING, WS_PONG } from 'api/@constants';
-import type { DtoId } from 'api/@types/brandedId';
-import type { WebSocketData } from 'api/@types/websocket';
+import { WS_PING, WS_PONG } from 'common/constants';
+import type { DtoId } from 'common/types/brandedId';
+import type { WebSocketData } from 'common/types/websocket';
 import type { FastifyInstance } from 'fastify';
 import { WebSocket } from 'ws';
 

@@ -1,7 +1,7 @@
-import type { TaskUpdateDoneDto } from 'api/@types/task';
-import type { UserDto } from 'api/@types/user';
-import { labelValidator } from 'api/@validators/task';
 import assert from 'assert';
+import type { TaskUpdateDoneDto } from 'common/types/task';
+import type { UserDto } from 'common/types/user';
+import { labelValidator } from 'common/validators/task';
 import { brandedId } from 'service/brandedId';
 import { s3 } from 'service/s3Client';
 import { ulid } from 'ulid';

@@ -1,5 +1,5 @@
-import { IS_PROD, WS_PATH, WS_PING, WS_PONG } from 'api/@constants';
-import type { WebSocketData } from 'api/@types/websocket';
+import { IS_PROD, WS_PATH, WS_PING, WS_PONG } from 'common/constants';
+import type { WebSocketData } from 'common/types/websocket';
 import { atom, useAtom } from 'jotai';
 import { useEffect, useRef } from 'react';
 import useWebSocket from 'react-use-websocket';

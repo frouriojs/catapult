@@ -1,4 +1,4 @@
-import type { UserDto } from 'api/@types/user';
+import type { UserDto } from 'common/types/user';
 import { brandedId } from 'service/brandedId';
 import type { UserEntity } from '../model/userEntity';
 

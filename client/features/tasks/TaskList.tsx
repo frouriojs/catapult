@@ -1,5 +1,5 @@
-import type { TaskDto } from 'api/@types/task';
-import { labelValidator } from 'api/@validators/task';
+import type { TaskDto } from 'common/types/task';
+import { labelValidator } from 'common/validators/task';
 import { Loading } from 'components/loading/Loading';
 import { usePickedLastMsg } from 'features/ws/AuthedWebSocket';
 import { useAlert } from 'hooks/useAlert';

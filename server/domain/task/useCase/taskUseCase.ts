@@ -1,6 +1,6 @@
-import type { MaybeId } from 'api/@types/brandedId';
-import type { TaskDto, TaskUpdateDoneDto } from 'api/@types/task';
-import type { UserDto } from 'api/@types/user';
+import type { MaybeId } from 'common/types/brandedId';
+import type { TaskDto, TaskUpdateDoneDto } from 'common/types/task';
+import type { UserDto } from 'common/types/user';
 import { transaction } from 'service/prismaClient';
 import { taskEvent } from '../event/taskEvent';
 import type { TaskCreateServerVal } from '../model/taskEntity';

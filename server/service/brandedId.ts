@@ -1,5 +1,5 @@
-import { BRANDED_ID_NAMES } from 'api/@constants';
-import type { DtoId, MaybeId } from 'api/@types/brandedId';
+import { BRANDED_ID_NAMES } from 'common/constants';
+import type { DtoId, MaybeId } from 'common/types/brandedId';
 import { z } from 'zod';
 
 type IdName = (typeof BRANDED_ID_NAMES)[number];

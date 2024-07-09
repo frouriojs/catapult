@@ -1,4 +1,4 @@
-import type { WS_TYPES } from 'api/@constants';
+import type { WS_TYPES } from 'common/constants';
 import type { DtoId, MaybeId } from './brandedId';
 
 export type TaskDto = {

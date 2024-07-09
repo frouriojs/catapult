@@ -1,4 +1,4 @@
-import type { UserDto } from 'api/@types/user';
+import type { UserDto } from 'common/types/user';
 import { Loading } from 'components/loading/Loading';
 import { useLoading } from 'components/loading/useLoading';
 import { AuthedWebSocket } from 'features/ws/AuthedWebSocket';

@@ -1,5 +1,5 @@
-import { WS_TYPES } from 'api/@constants';
-import type { TaskCreatedEvent, TaskDeletedEvent, TaskUpdatedEvent } from 'api/@types/task';
+import { WS_TYPES } from 'common/constants';
+import type { TaskCreatedEvent, TaskDeletedEvent, TaskUpdatedEvent } from 'common/types/task';
 import { expect, test } from 'vitest';
 import { createSessionClients, noCookieClient } from '../apiClient';
 import { DELETE, GET, PATCH, POST, WS } from '../utils';

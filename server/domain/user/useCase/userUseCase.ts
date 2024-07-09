@@ -1,4 +1,4 @@
-import type { UserDto } from 'api/@types/user';
+import type { UserDto } from 'common/types/user';
 import { prismaClient, transaction } from 'service/prismaClient';
 import type { JwtUser } from 'service/types';
 import { userMethod } from '../model/userMethod';

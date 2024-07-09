@@ -1,6 +1,6 @@
 import { Authenticator } from '@aws-amplify/ui-react';
-import { APP_NAME } from 'api/@constants';
 import { signUp } from 'aws-amplify/auth';
+import { APP_NAME } from 'common/constants';
 import { Spacer } from 'components/Spacer';
 import { Loading } from 'components/loading/Loading';
 import { useUser } from 'hooks/useUser';

@@ -4,8 +4,8 @@ import {
   AdminInitiateAuthCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import api from 'api/$api';
-import { WS_PATH } from 'api/@constants';
 import axios from 'axios';
+import { WS_PATH } from 'common/constants';
 import { COOKIE_NAME } from 'service/constants';
 import {
   API_BASE_PATH,

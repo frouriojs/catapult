@@ -1,4 +1,4 @@
-import type { WS_TYPES } from 'api/@constants';
+import type { WS_TYPES } from 'common/constants';
 import { SERVER_PORT } from 'service/envValues';
 
 export const TEST_PORT = SERVER_PORT - 1;

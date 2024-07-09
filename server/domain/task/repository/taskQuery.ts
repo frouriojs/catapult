@@ -1,5 +1,5 @@
 import type { Prisma, Task, User } from '@prisma/client';
-import type { DtoId, MaybeId } from 'api/@types/brandedId';
+import type { DtoId, MaybeId } from 'common/types/brandedId';
 import { brandedId } from 'service/brandedId';
 import { s3 } from 'service/s3Client';
 import { depend } from 'velona';

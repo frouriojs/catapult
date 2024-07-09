@@ -1,11 +1,11 @@
-import { WS_TYPES } from 'api/@constants';
+import { WS_TYPES } from 'common/constants';
 import type {
   TaskCreatedEvent,
   TaskDeletedEvent,
   TaskDto,
   TaskUpdatedEvent,
-} from 'api/@types/task';
-import type { UserDto } from 'api/@types/user';
+} from 'common/types/task';
+import type { UserDto } from 'common/types/user';
 import { websocket } from 'service/websocket';
 
 export const taskEvent = {

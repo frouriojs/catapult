@@ -1,4 +1,4 @@
-import type { TaskDto } from 'api/@types/task';
+import type { TaskDto } from 'common/types/task';
 import { brandedId } from 'service/brandedId';
 import type { TaskEntity } from '../model/taskEntity';
 

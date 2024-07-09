@@ -1,8 +1,8 @@
 import { Authenticator, translations } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
-import { APP_NAME } from 'api/@constants';
 import { Amplify } from 'aws-amplify';
 import { I18n } from 'aws-amplify/utils';
+import { APP_NAME } from 'common/constants';
 import { AuthLoader } from 'features/auth/AuthLoader';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';

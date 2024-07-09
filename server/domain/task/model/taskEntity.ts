@@ -1,5 +1,5 @@
 import type { MultipartFile } from '@fastify/multipart';
-import type { TaskDto } from 'api/@types/task';
+import type { TaskDto } from 'common/types/task';
 import type { EntityId } from 'service/brandedId';
 import type { S3PutParams } from 'service/s3Client';
 
