@@ -1,5 +1,5 @@
 import { multipartFileValidator } from 'api/$relay';
-import type { TaskUpdateVal } from 'api/@types/task';
+import type { TaskUpdateDoneDto } from 'api/@types/task';
 import { brandedId } from 'service/brandedId';
 import { z } from 'zod';
 import type { TaskCreateServerVal } from '../model/taskEntity';
@@ -11,7 +11,6 @@ export const taskValidator = {
   }) satisfies z.ZodType<TaskCreateServerVal>,
   taskUpdate: z.object({
     taskId: brandedId.task.maybe,
-    label: z.string().optional(),
-    done: z.boolean().optional(),
-  }) satisfies z.ZodType<TaskUpdateVal>,
+    done: z.boolean(),
+  }) satisfies z.ZodType<TaskUpdateDoneDto>,
 };

@@ -5,18 +5,18 @@ import { defineController } from './$relay';
 
 export default defineController(() => ({
   patch: {
-    validators: { body: z.object({ label: z.string().optional(), done: z.boolean().optional() }) },
+    validators: { body: z.object({ done: z.boolean() }) },
     handler: async ({ user, body, params }) => {
-      const task = await taskUseCase.update(user, {
+      const task = await taskUseCase.updateDone(user, {
         ...body,
-        taskId: brandedId.task.dto.parse(params.taskId),
+        taskId: brandedId.task.maybe.parse(params.taskId),
       });
 
       return { status: 200, body: task };
     },
   },
   delete: async ({ user, params }) => {
-    const task = await taskUseCase.delete(user, brandedId.task.dto.parse(params.taskId));
+    const task = await taskUseCase.delete(user, brandedId.task.maybe.parse(params.taskId));
 
     return { status: 200, body: task };
   },

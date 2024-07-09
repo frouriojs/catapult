@@ -4,8 +4,7 @@ import type { DefineMethods } from 'aspida';
 export type Methods = DefineMethods<{
   patch: {
     reqBody: {
-      label?: string;
-      done?: boolean;
+      done: boolean;
     };
     status: 200;
     resBody: TaskDto;

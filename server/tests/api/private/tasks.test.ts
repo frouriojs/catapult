@@ -1,5 +1,5 @@
 import { WS_TYPES } from 'api/@constants';
-import type { TaskCreated, TaskDeleted, TaskUpdated } from 'api/@types/task';
+import type { TaskCreatedEvent, TaskDeletedEvent, TaskUpdatedEvent } from 'api/@types/task';
 import { expect, test } from 'vitest';
 import { createSessionClients, noCookieClient } from '../apiClient';
 import { DELETE, GET, PATCH, POST, WS } from '../utils';
@@ -21,7 +21,7 @@ test(POST(noCookieClient.private.tasks), async () => {
 test(PATCH(noCookieClient.private.tasks), async () => {
   const { apiClient } = await createSessionClients();
   const task = await apiClient.private.tasks.$post({ body: { label: 'a' } });
-  const res = await apiClient.private.tasks.patch({ body: { taskId: task.id, label: 'b' } });
+  const res = await apiClient.private.tasks.patch({ body: { taskId: task.id, done: true } });
 
   expect(res.status).toEqual(200);
 });
@@ -37,7 +37,7 @@ test(DELETE(noCookieClient.private.tasks), async () => {
 test(PATCH(noCookieClient.private.tasks._taskId('_taskId')), async () => {
   const { apiClient } = await createSessionClients();
   const task = await apiClient.private.tasks.$post({ body: { label: 'a' } });
-  const res = await apiClient.private.tasks._taskId(task.id).patch({ body: { label: 'b' } });
+  const res = await apiClient.private.tasks._taskId(task.id).patch({ body: { done: true } });
 
   expect(res.status).toEqual(200);
 });
@@ -62,7 +62,7 @@ test(WS(WS_TYPES[0]), async () => {
     const label = 'a';
 
     wsClient.on('message', async (json: string): Promise<void> => {
-      const { type, task }: TaskCreated = JSON.parse(json);
+      const { type, task }: TaskCreatedEvent = JSON.parse(json);
 
       expect(type).toBe(WS_TYPES[0]);
       expect(task.label).toBe(label);
@@ -79,18 +79,16 @@ test(WS(WS_TYPES[1]), async () => {
   const created = await apiClient.private.tasks.$post({ body: { label: 'a' } });
 
   await new Promise<void>((resolve): void => {
-    const label = 'b';
-
     wsClient.on('message', async (json: string): Promise<void> => {
-      const { type, task }: TaskUpdated = JSON.parse(json);
+      const { type, task }: TaskUpdatedEvent = JSON.parse(json);
 
       expect(type).toBe(WS_TYPES[1]);
-      expect(task.label).toBe(label);
+      expect(task.done).toBe(true);
       resolve();
       wsClient.close();
     });
 
-    apiClient.private.tasks.patch({ body: { taskId: created.id, label } });
+    apiClient.private.tasks.patch({ body: { taskId: created.id, done: true } });
   });
 });
 
@@ -100,7 +98,7 @@ test(WS(WS_TYPES[2]), async () => {
 
   await new Promise<void>((resolve): void => {
     wsClient.on('message', async (json: string): Promise<void> => {
-      const { type, taskId }: TaskDeleted = JSON.parse(json);
+      const { type, taskId }: TaskDeletedEvent = JSON.parse(json);
 
       expect(type).toBe(WS_TYPES[2]);
       expect(taskId).toBe(created.id);

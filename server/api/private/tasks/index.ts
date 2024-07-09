@@ -1,5 +1,5 @@
 import type { MaybeId } from 'api/@types/brandedId';
-import type { TaskCreateVal, TaskDto, TaskUpdateVal } from 'api/@types/task';
+import type { TaskCreateVal, TaskDto, TaskUpdateDoneDto } from 'api/@types/task';
 import type { DefineMethods } from 'aspida';
 
 export type Methods = DefineMethods<{
@@ -17,7 +17,7 @@ export type Methods = DefineMethods<{
   };
 
   patch: {
-    reqBody: TaskUpdateVal;
+    reqBody: TaskUpdateDoneDto;
     status: 200;
     resBody: TaskDto;
   };

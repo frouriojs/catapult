@@ -15,5 +15,10 @@
     "incremental": true
   },
   "include": ["**/*.ts", "**/*.js"],
-  "exclude": ["node_modules", "api/@types/$relay.ts", "api/@constants/$relay.ts"]
+  "exclude": [
+    "node_modules",
+    "api/@types/$relay.ts",
+    "api/@constants/$relay.ts",
+    "api/@validators/$relay.ts"
+  ]
 }

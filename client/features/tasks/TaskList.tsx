@@ -1,6 +1,8 @@
 import type { TaskDto } from 'api/@types/task';
+import { labelValidator } from 'api/@validators/task';
 import { Loading } from 'components/loading/Loading';
 import { usePickedLastMsg } from 'features/ws/AuthedWebSocket';
+import { useAlert } from 'hooks/useAlert';
 import type { FormEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { apiClient } from 'utils/apiClient';
@@ -8,6 +10,7 @@ import { catchApiErr } from 'utils/catchApiErr';
 import styles from './taskList.module.css';
 
 export const TaskList = () => {
+  const { setAlert } = useAlert();
   const { lastMsg } = usePickedLastMsg(['taskCreated', 'taskUpdated']);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [tasks, setTasks] = useState<TaskDto[]>();
@@ -17,16 +20,23 @@ export const TaskList = () => {
 
   const createTask = async (e: FormEvent) => {
     e.preventDefault();
-    if (!fileRef.current) return;
+
+    const parsedLabel = labelValidator.safeParse(label);
+
+    if (parsedLabel.error) {
+      await setAlert(parsedLabel.error.issues[0].message);
+      return;
+    }
 
     await apiClient.private.tasks
-      .$post({ body: { label, image } })
+      .$post({ body: { label: parsedLabel.data, image } })
       .then((task) => setTasks((tasks) => [task, ...(tasks ?? [])]))
       .catch(catchApiErr);
     setLabel('');
     setImage(undefined);
     setPreviewImageUrl(undefined);
-    fileRef.current.value = '';
+
+    if (fileRef.current) fileRef.current.value = '';
   };
   const toggleDone = async (task: TaskDto) => {
     await apiClient.private.tasks

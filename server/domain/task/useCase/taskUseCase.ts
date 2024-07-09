@@ -1,5 +1,5 @@
 import type { MaybeId } from 'api/@types/brandedId';
-import type { TaskDto, TaskUpdateVal } from 'api/@types/task';
+import type { TaskDto, TaskUpdateDoneDto } from 'api/@types/task';
 import type { UserDto } from 'api/@types/user';
 import { transaction } from 'service/prismaClient';
 import { taskEvent } from '../event/taskEvent';
@@ -21,7 +21,7 @@ export const taskUseCase = {
 
       return dto;
     }),
-  update: (user: UserDto, val: TaskUpdateVal): Promise<TaskDto> =>
+  updateDone: (user: UserDto, val: TaskUpdateDoneDto): Promise<TaskDto> =>
     transaction('RepeatableRead', async (tx) => {
       const task = await taskQuery.findById(tx, val.taskId);
       const updated = await taskMethod.update(user, task, val);

@@ -24,7 +24,7 @@ export default defineController(() => ({
   patch: {
     validators: { body: taskValidator.taskUpdate },
     handler: async ({ user, body }) => {
-      const task = await taskUseCase.update(user, body);
+      const task = await taskUseCase.updateDone(user, body);
 
       return { status: 200, body: task };
     },
