@@ -50,19 +50,19 @@
   },
   "devDependencies": {
     "@aspida/axios": "^1.14.0",
-    "@aws-sdk/client-cognito-identity-provider": "^3.609.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.614.0",
     "@types/busboy": "^1.5.4",
-    "@types/node": "^20.12.10",
+    "@types/node": "^20.14.10",
     "@types/ws": "^8.5.10",
-    "axios": "^1.6.8",
-    "esbuild": "^0.20.2",
-    "esbuild-node-externals": "^1.13.0",
+    "axios": "^1.7.2",
+    "esbuild": "^0.23.0",
+    "esbuild-node-externals": "^1.14.0",
     "esbuild-register": "^3.5.0",
     "frourio": "^1.0.1",
     "node-dev": "^8.0.0",
-    "notios": "^0.4.1",
-    "prisma": "^5.13.0",
-    "typescript": "^5.4.5"
+    "notios": "^0.5.3",
+    "prisma": "^5.16.2",
+    "typescript": "^5.5.3"
   },
   "engines": {
     "node": ">=20.0.0"
