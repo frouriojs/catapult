@@ -5,7 +5,7 @@
     "predev": "run-p generate migrate:deploy",
     "dev": "run-p dev:*",
     "dev:build": "node ./scripts/build.dev.js",
-    "dev:server": "touch index.js && node-dev --respawn index.js",
+    "dev:server": "touch index.js && node-dev --enable-source-maps --respawn index.js",
     "dev:frourio": "frourio --watch",
     "dev:prisma": "prisma generate --watch",
     "prebuild": "run-p generate migrate:deploy",
@@ -27,7 +27,7 @@
     "typecheck": "tsc --noEmit"
   },
   "prisma": {
-    "seed": "node -r esbuild-register prisma/seed.ts"
+    "seed": "node -r esbuild-register --enable-source-maps prisma/seed.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.569.0",

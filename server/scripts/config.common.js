@@ -9,4 +9,5 @@ module.exports = {
   bundle: true,
   plugins: [nodeExternalsPlugin()],
   logLevel: 'info',
+  sourcemap: 'linked',
 };

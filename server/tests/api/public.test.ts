@@ -17,7 +17,7 @@ test(GET(noCookieClient.health), async () => {
 
   expect(res.server).toEqual('ok');
   expect(res.db).toEqual('ok');
-  expect(res.storage).toEqual('ok');
+  expect(res.s3).toEqual('ok');
 });
 
 test(POST(noCookieClient.session), async () => {

@@ -12,6 +12,7 @@ import Fastify from 'fastify';
 import buildGetJwks from 'get-jwks';
 import server from '../$server';
 import { COOKIE_NAME } from './constants';
+import { CustomError } from './customAssert';
 import {
   API_BASE_PATH,
   COGNITO_POOL_ENDPOINT,
@@ -60,8 +61,16 @@ export const init = (): FastifyInstance => {
       await req
         .jwtVerify<JwtUser>({ onlyCookie: true })
         .then((user) => websocket.add(user.sub, socket))
-        .catch((e) => socket.close(401, e.message));
+        .catch(() => null);
     });
+  });
+
+  fastify.setErrorHandler((err, req, reply) => {
+    console.error(new Date(), err.stack);
+
+    reply
+      .status(req.method === 'GET' ? 404 : 403)
+      .send(err instanceof CustomError ? err.message : undefined);
   });
 
   server(fastify, { basePath: API_BASE_PATH });

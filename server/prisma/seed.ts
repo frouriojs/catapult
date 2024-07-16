@@ -1,10 +1,11 @@
-import { prismaClient } from 'service/prismaClient';
+import type { Prisma } from '@prisma/client';
+import { prismaClient, transaction } from 'service/prismaClient';
 
-async function main(): Promise<void> {
+const someFn = async (_tx: Prisma.TransactionClient): Promise<void> => {
   // seeder script
-}
+};
 
-main()
+transaction('RepeatableRead', (tx) => Promise.all([someFn(tx)]))
   .catch((e) => {
     console.error(e);
     process.exit(1);
