@@ -8,6 +8,12 @@ let fastify: FastifyInstance;
 
 const users: Record<DtoId['user'], WebSocket | undefined> = {};
 
+const sendJson = (socket: WebSocket, data: WebSocketData): void => {
+  if (socket.readyState !== WebSocket.OPEN) return;
+
+  socket.send(JSON.stringify(data));
+};
+
 export const websocket = {
   init: (app: FastifyInstance): void => {
     fastify = app;
@@ -26,13 +32,14 @@ export const websocket = {
     });
   },
   send: (userId: DtoId['user'], data: WebSocketData): void => {
-    users[userId]?.send(JSON.stringify(data));
+    users[userId] && sendJson(users[userId], data);
+  },
+  broadcastToAuthedClients: (data: WebSocketData): void => {
+    Object.values(users)
+      .filter((user) => user !== undefined)
+      .forEach((socket) => sendJson(socket, data));
   },
   broadcast: (data: WebSocketData): void => {
-    fastify.websocketServer.clients.forEach((socket) => {
-      if (socket.readyState !== WebSocket.OPEN) return;
-
-      socket.send(JSON.stringify(data));
-    });
+    fastify.websocketServer.clients.forEach((socket) => sendJson(socket, data));
   },
 };
