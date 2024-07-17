@@ -6,6 +6,17 @@ node_modules/
 *.pem
 tsconfig.tsbuildinfo
 .env
+**/$*.ts
 
 # debug
 npm-debug.log*
+
+# client
+client/.next/
+client/out/
+client/api/*
+**/*.css.d.ts*
+
+# server
+server/index.js*
+server/coverage/
