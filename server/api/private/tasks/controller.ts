@@ -12,7 +12,7 @@ export default defineController(() => ({
     status: 200,
     body: await taskQuery
       .listByAuthorId(prismaClient, user.id, query?.limit)
-      .then((tasks) => tasks.map(toTaskDto)),
+      .then((tasks) => Promise.all(tasks.map(toTaskDto))),
   }),
   post: {
     validators: { body: taskValidator.taskCreate },

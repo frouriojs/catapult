@@ -27,7 +27,7 @@ test('Dependency Injection', async () => {
       id: brandedId.task.entity.parse(ulid()),
       label: 'baz',
       done: false,
-      image: undefined,
+      imageKey: undefined,
       createdTime: Date.now(),
       author: { id: brandedId.user.entity.parse(authorId), signInName: user.signInName },
     },

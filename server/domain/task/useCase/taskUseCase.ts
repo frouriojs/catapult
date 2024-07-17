@@ -12,11 +12,11 @@ import { toTaskDto } from '../service/toTaskDto';
 export const taskUseCase = {
   create: (user: UserDto, val: TaskCreateServerVal): Promise<TaskDto> =>
     transaction('RepeatableRead', async (tx) => {
-      const created = await taskMethod.create(user, val);
+      const created = taskMethod.create(user, val);
 
       await taskCommand.save(tx, created);
 
-      const dto = toTaskDto(created.task);
+      const dto = await toTaskDto(created.task);
       taskEvent.created(user, dto);
 
       return dto;
@@ -28,7 +28,7 @@ export const taskUseCase = {
 
       await taskCommand.save(tx, updated);
 
-      const dto = toTaskDto(updated.task);
+      const dto = await toTaskDto(updated.task);
       taskEvent.updated(user, dto);
 
       return dto;
@@ -40,7 +40,7 @@ export const taskUseCase = {
 
       await taskCommand.delete(tx, deleted);
 
-      const dto = toTaskDto(deleted.task);
+      const dto = await toTaskDto(deleted.task);
       taskEvent.deleted(user, dto);
 
       return dto;

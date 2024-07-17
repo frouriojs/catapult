@@ -9,12 +9,12 @@ export const taskCommand = {
 
     await tx.task.upsert({
       where: { id: val.task.id },
-      update: { label: val.task.label, done: val.task.done, imageKey: val.task.image?.s3Key },
+      update: { label: val.task.label, done: val.task.done, imageKey: val.task.imageKey },
       create: {
         id: val.task.id,
         label: val.task.label,
         done: val.task.done,
-        imageKey: val.task.image?.s3Key,
+        imageKey: val.task.imageKey,
         createdAt: new Date(val.task.createdTime),
         authorId: val.task.author.id,
       },
@@ -25,6 +25,6 @@ export const taskCommand = {
 
     await tx.task.delete({ where: { id: val.task.id } });
 
-    if (val.task.image !== undefined) await s3.delete(val.task.image.s3Key);
+    if (val.task.imageKey !== undefined) await s3.delete(val.task.imageKey);
   },
 };
