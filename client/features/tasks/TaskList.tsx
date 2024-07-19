@@ -59,7 +59,10 @@ export const TaskList = () => {
 
     switch (lastMsg.type) {
       case 'taskCreated':
-        mutateTasks((tasks) => [lastMsg.task, ...(tasks ?? [])], { revalidate: false });
+        mutateTasks(
+          (tasks) => [lastMsg.task, ...(tasks?.filter((t) => t.id !== lastMsg.task.id) ?? [])],
+          { revalidate: false },
+        );
         return;
       case 'taskUpdated':
         mutateTasks((tasks) => tasks?.map((t) => (t.id === lastMsg.task.id ? lastMsg.task : t)), {
