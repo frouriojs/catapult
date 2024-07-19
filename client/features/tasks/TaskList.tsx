@@ -1,3 +1,4 @@
+import useAspidaSWR from '@aspida/swr';
 import type { TaskDto } from 'common/types/task';
 import { labelValidator } from 'common/validators/task';
 import { Loading } from 'components/loading/Loading';
@@ -11,9 +12,9 @@ import styles from './taskList.module.css';
 
 export const TaskList = () => {
   const { setAlert } = useAlert();
-  const { lastMsg } = usePickedLastMsg(['taskCreated', 'taskUpdated']);
+  const { data: tasks, mutate: mutateTasks } = useAspidaSWR(apiClient.private.tasks);
+  const { lastMsg } = usePickedLastMsg(['taskCreated', 'taskUpdated', 'taskDeleted']);
   const fileRef = useRef<HTMLInputElement | null>(null);
-  const [tasks, setTasks] = useState<TaskDto[]>();
   const [label, setLabel] = useState('');
   const [image, setImage] = useState<File>();
   const [previewImageUrl, setPreviewImageUrl] = useState<string>();
@@ -30,7 +31,7 @@ export const TaskList = () => {
 
     await apiClient.private.tasks
       .$post({ body: { label: parsedLabel.data, image } })
-      .then((task) => setTasks((tasks) => [task, ...(tasks ?? [])]))
+      .then((task) => mutateTasks((tasks) => [task, ...(tasks ?? [])]))
       .catch(catchApiErr);
     setLabel('');
     setImage(undefined);
@@ -42,30 +43,33 @@ export const TaskList = () => {
     await apiClient.private.tasks
       ._taskId(task.id)
       .$patch({ body: { done: !task.done } })
-      .then((task) => setTasks((tasks) => tasks?.map((t) => (t.id === task.id ? task : t))))
+      .then((task) => mutateTasks((tasks) => tasks?.map((t) => (t.id === task.id ? task : t))))
       .catch(catchApiErr);
   };
   const deleteTask = async (task: TaskDto) => {
     await apiClient.private.tasks
       ._taskId(task.id)
       .$delete()
-      .then((task) => setTasks((tasks) => tasks?.filter((t) => t.id !== task.id)))
+      .then((task) => mutateTasks((tasks) => tasks?.filter((t) => t.id !== task.id)))
       .catch(catchApiErr);
   };
-
-  useEffect(() => {
-    if (tasks !== undefined) return;
-
-    apiClient.private.tasks.$get().then(setTasks).catch(catchApiErr);
-  }, [tasks]);
 
   useEffect(() => {
     if (lastMsg === undefined) return;
 
     switch (lastMsg.type) {
       case 'taskCreated':
+        mutateTasks((tasks) => [lastMsg.task, ...(tasks ?? [])], { revalidate: false });
+        return;
       case 'taskUpdated':
-        console.log(lastMsg);
+        mutateTasks((tasks) => tasks?.map((t) => (t.id === lastMsg.task.id ? lastMsg.task : t)), {
+          revalidate: false,
+        });
+        return;
+      case 'taskDeleted':
+        mutateTasks((tasks) => tasks?.filter((t) => t.id !== lastMsg.taskId), {
+          revalidate: false,
+        });
         return;
       /* v8 ignore next 2 */
       default:

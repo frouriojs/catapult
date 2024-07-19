@@ -6,7 +6,7 @@ import { WebSocket } from 'ws';
 
 let fastify: FastifyInstance;
 
-const users: Record<DtoId['user'], WebSocket | undefined> = {};
+const users: Record<DtoId['user'], WebSocket[] | undefined> = {};
 
 const sendJson = (socket: WebSocket, data: WebSocketData): void => {
   if (socket.readyState !== WebSocket.OPEN) return;
@@ -19,7 +19,7 @@ export const websocket = {
     fastify = app;
   },
   add: (userId: DtoId['user'], socket: WebSocket): void => {
-    users[userId] = socket;
+    users[userId] = [socket, ...(users[userId] ?? [])];
 
     socket.on('message', (msg) => {
       if (socket.readyState !== WebSocket.OPEN) return;
@@ -28,16 +28,16 @@ export const websocket = {
     });
 
     socket.on('close', () => {
-      users[userId] = undefined;
+      users[userId] = users[userId]?.filter((s) => s !== socket);
     });
   },
   send: (userId: DtoId['user'], data: WebSocketData): void => {
-    users[userId] && sendJson(users[userId], data);
+    users[userId]?.forEach((socket) => sendJson(socket, data));
   },
   broadcastToAuthedClients: (data: WebSocketData): void => {
     Object.values(users)
       .filter((user) => user !== undefined)
-      .forEach((socket) => sendJson(socket, data));
+      .forEach((sockets) => sockets.forEach((socket) => sendJson(socket, data)));
   },
   broadcast: (data: WebSocketData): void => {
     fastify.websocketServer.clients.forEach((socket) => sendJson(socket, data));
