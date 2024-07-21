@@ -58,6 +58,8 @@ services:
         mc alias set myminio http://minio:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD
         mc mb myminio/$$S3_BUCKET --region=$$S3_REGION || true
         mc mb myminio/$$S3_BUCKET-test --region=$$S3_REGION || true
+        mc anonymous set download myminio/$$S3_BUCKET
+        mc anonymous set download myminio/$$S3_BUCKET-test
       "
 
   postgres:
