@@ -5,7 +5,7 @@ import { Loading } from 'components/loading/Loading';
 import { usePickedLastMsg } from 'features/ws/AuthedWebSocket';
 import { useAlert } from 'hooks/useAlert';
 import type { FormEvent } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { apiClient } from 'utils/apiClient';
 import { catchApiErr } from 'utils/catchApiErr';
 import styles from './taskList.module.css';
@@ -17,7 +17,7 @@ export const TaskList = () => {
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [label, setLabel] = useState('');
   const [image, setImage] = useState<File>();
-  const [previewImageUrl, setPreviewImageUrl] = useState<string>();
+  const previewImageUrl = useMemo(() => image && URL.createObjectURL(image), [image]);
 
   const createTask = async (e: FormEvent) => {
     e.preventDefault();
@@ -35,7 +35,6 @@ export const TaskList = () => {
       .catch(catchApiErr);
     setLabel('');
     setImage(undefined);
-    setPreviewImageUrl(undefined);
 
     if (fileRef.current) fileRef.current.value = '';
   };
@@ -81,13 +80,10 @@ export const TaskList = () => {
   }, [lastMsg]);
 
   useEffect(() => {
-    if (!image) return;
+    if (!previewImageUrl) return;
 
-    const newUrl = URL.createObjectURL(image);
-    setPreviewImageUrl(newUrl);
-
-    return () => URL.revokeObjectURL(newUrl);
-  }, [image]);
+    return () => URL.revokeObjectURL(previewImageUrl);
+  }, [previewImageUrl]);
 
   if (!tasks) return <Loading visible />;
 
