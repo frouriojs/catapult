@@ -11,7 +11,7 @@ import { S3_ACCESS_KEY, S3_BUCKET, S3_ENDPOINT, S3_REGION, S3_SECRET_KEY } from 
 
 export type S3PutParams = { key: string; data: MultipartFile };
 
-const s3Client = new S3Client({
+export const s3Client = new S3Client({
   forcePathStyle: true,
   ...(S3_ACCESS_KEY && S3_ENDPOINT && S3_SECRET_KEY
     ? {
