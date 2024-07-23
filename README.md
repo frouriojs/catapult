@@ -1,6 +1,6 @@
 # C A T A P U L T
 
-aspida と frourio を用いた TypeScript フレームワーク
+aspida と frourio を用いた TypeScript フルスタックテンプレート
 
 - Frontend: Next.js
 - Backend: Fastify
@@ -69,22 +69,11 @@ Web ブラウザで http://localhost:3000 を開く
 
 閉じるときは `Ctrl + C` を 2 回連続で入力
 
-#### MinIO Console
+### ローカルでのアカウント作成方法
 
-http://localhost:9001
+Docker の Inbucket に仮想メールが届くため任意のメールアドレスでアカウント作成可能
 
-#### PostgreSQL UI
-
-```sh
-$ cd server
-$ npx prisma studio
-```
-
-#### SMTPサーバー
-
-2501 番ポートの Inbucket が SMTP サーバーのスタブを提供している
-
-ローカル開発時にアカウントを作成すると http://localhost:2501 のヘッダー中央の「Recent Mailboxes」に検証コードの仮想メールが届く
+検証コード含めて開発時のメールは全て http://localhost:2501 のヘッダー中央の「Recent Mailboxes」に届く
 
 ## デプロイ
 
@@ -122,4 +111,15 @@ S3_ENDPOINT=
 S3_REGION=
 S3_SECRET_KEY=
 PORT= # optional
+```
+
+#### MinIO Console
+
+http://localhost:9001
+
+#### PostgreSQL UI
+
+```sh
+$ cd server
+$ npx prisma studio
 ```
