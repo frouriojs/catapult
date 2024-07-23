@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 export const prismaClient = new PrismaClient();
 
 export const transaction = <U>(
-  isolationLevel: Prisma.TransactionIsolationLevel,
+  isolationLevel: 'RepeatableRead' | 'Serializable',
   fn: (tx: Prisma.TransactionClient) => Promise<U>,
   retry = 3,
 ): Promise<U> =>
