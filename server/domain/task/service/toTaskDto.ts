@@ -1,7 +1,7 @@
 import type { TaskDto } from 'common/types/task';
 import { brandedId } from 'service/brandedId';
 import { s3 } from 'service/s3Client';
-import type { TaskEntity } from '../model/taskEntity';
+import type { TaskEntity } from '../model/taskType';
 
 export const toTaskDto = async (task: TaskEntity): Promise<TaskDto> => ({
   ...task,

@@ -2,7 +2,7 @@ import type { Prisma } from '@prisma/client';
 import controller from 'api/private/tasks/di/controller';
 import type { DtoId } from 'common/types/brandedId';
 import type { UserDto } from 'common/types/user';
-import type { TaskEntity } from 'domain/task/model/taskEntity';
+import type { TaskEntity } from 'domain/task/model/taskType';
 import fastify from 'fastify';
 import { brandedId } from 'service/brandedId';
 import { ulid } from 'ulid';

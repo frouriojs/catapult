@@ -1,6 +1,6 @@
 import type { Prisma, User } from '@prisma/client';
 import { brandedId } from 'service/brandedId';
-import type { UserEntity } from '../model/userEntity';
+import type { UserEntity } from '../model/userType';
 
 const toUserEntity = (prismaUser: User): UserEntity => ({
   id: brandedId.user.entity.parse(prismaUser.id),

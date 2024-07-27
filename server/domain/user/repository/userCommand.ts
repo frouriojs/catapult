@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client';
-import type { UserEntity } from '../model/userEntity';
+import type { UserEntity } from '../model/userType';
 
 export const userCommand = {
   save: async (tx: Prisma.TransactionClient, user: UserEntity): Promise<void> => {

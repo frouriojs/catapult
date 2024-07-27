@@ -1,7 +1,7 @@
 import type { Prisma } from '@prisma/client';
 import assert from 'assert';
 import { s3 } from 'service/s3Client';
-import type { TaskDeleteVal, TaskSaveVal } from '../model/taskEntity';
+import type { TaskDeleteVal, TaskSaveVal } from '../model/taskType';
 
 export const taskCommand = {
   save: async (tx: Prisma.TransactionClient, val: TaskSaveVal): Promise<void> => {

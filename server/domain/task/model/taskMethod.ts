@@ -4,7 +4,7 @@ import type { UserDto } from 'common/types/user';
 import { labelValidator } from 'common/validators/task';
 import { brandedId } from 'service/brandedId';
 import { ulid } from 'ulid';
-import type { TaskCreateServerVal, TaskDeleteVal, TaskEntity, TaskSaveVal } from './taskEntity';
+import type { TaskCreateServerVal, TaskDeleteVal, TaskEntity, TaskSaveVal } from './taskType';
 
 export const taskMethod = {
   create: (user: UserDto, val: TaskCreateServerVal): TaskSaveVal => {
