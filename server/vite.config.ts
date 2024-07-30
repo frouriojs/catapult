@@ -16,8 +16,8 @@ export default defineConfig({
     includeSource: ['**/*.ts'],
     // include: ['**/index.test.ts'],
     poolOptions: { forks: { singleFork: true } },
-    hookTimeout: 100000,
-    testTimeout: 10000,
+    hookTimeout: 10000,
+    testTimeout: 15000,
     coverage: {
       thresholds: { statements: 100, branches: 100, functions: 100, lines: 100 },
       include: ['api/**/{controller,hooks,validators}.ts', 'domain/**'],
