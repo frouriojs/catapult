@@ -13,6 +13,7 @@ import {
   COGNITO_USER_POOL_ID,
 } from 'service/envValues';
 import { cognitoClient } from 'tests/api/cognito';
+import { ulid } from 'ulid';
 import WebSocket from 'ws';
 import { TEST_PORT } from './utils';
 
@@ -26,13 +27,13 @@ export const createSessionClients = async (): Promise<{
   apiClient: typeof noCookieClient;
   wsClient: WebSocket;
 }> => {
-  const userName = `test-${Date.now()}`;
-  const password = `Test-user-${Date.now()}`;
+  const userName = `test-${ulid()}`;
+  const password = `Test-user-${ulid()}`;
   const command1 = new AdminCreateUserCommand({
     UserPoolId: COGNITO_USER_POOL_ID,
     Username: userName,
     TemporaryPassword: password,
-    UserAttributes: [{ Name: 'email', Value: `${Date.now()}@example.com` }],
+    UserAttributes: [{ Name: 'email', Value: `${ulid()}@example.com` }],
   });
 
   await cognitoClient.send(command1);
