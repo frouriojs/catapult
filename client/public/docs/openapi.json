@@ -1,0 +1,875 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "catapult api",
+    "version": "v0.0"
+  },
+  "servers": [
+    {
+      "url": "/api"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "parameters": [],
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Record<\"server\"|\"db\"|\"s3\",\"ok\">"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private": {
+      "get": {
+        "tags": [
+          "private"
+        ],
+        "parameters": [],
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/me": {
+      "get": {
+        "tags": [
+          "private",
+          "me"
+        ],
+        "parameters": [],
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"user\">"
+                    },
+                    "signInName": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "createdTime": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "createdTime",
+                    "email",
+                    "id",
+                    "signInName"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/tasks/{taskId}": {
+      "patch": {
+        "tags": [
+          "private",
+          "tasks"
+        ],
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "done": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "done"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"task\">"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "done": {
+                      "type": "boolean"
+                    },
+                    "createdTime": {
+                      "type": "number"
+                    },
+                    "image": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
+                    },
+                    "author": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/Dto<\"user\">"
+                        },
+                        "signInName": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "author",
+                    "createdTime",
+                    "done",
+                    "id",
+                    "image",
+                    "label"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "private",
+          "tasks"
+        ],
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"task\">"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "done": {
+                      "type": "boolean"
+                    },
+                    "createdTime": {
+                      "type": "number"
+                    },
+                    "image": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
+                    },
+                    "author": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/Dto<\"user\">"
+                        },
+                        "signInName": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "author",
+                    "createdTime",
+                    "done",
+                    "id",
+                    "image",
+                    "label"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/tasks/di": {
+      "get": {
+        "tags": [
+          "private",
+          "tasks",
+          "di"
+        ],
+        "parameters": [],
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "$ref": "#/components/schemas/Dto<\"task\">"
+                      },
+                      "label": {
+                        "type": "string"
+                      },
+                      "done": {
+                        "type": "boolean"
+                      },
+                      "createdTime": {
+                        "type": "number"
+                      },
+                      "image": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "s3Key": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "s3Key",
+                          "url"
+                        ]
+                      },
+                      "author": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "$ref": "#/components/schemas/Dto<\"user\">"
+                          },
+                          "signInName": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "signInName"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "author",
+                      "createdTime",
+                      "done",
+                      "id",
+                      "image",
+                      "label"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/tasks": {
+      "get": {
+        "tags": [
+          "private",
+          "tasks"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "$ref": "#/components/schemas/Dto<\"task\">"
+                      },
+                      "label": {
+                        "type": "string"
+                      },
+                      "done": {
+                        "type": "boolean"
+                      },
+                      "createdTime": {
+                        "type": "number"
+                      },
+                      "image": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "s3Key": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "s3Key",
+                          "url"
+                        ]
+                      },
+                      "author": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "$ref": "#/components/schemas/Dto<\"user\">"
+                          },
+                          "signInName": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "signInName"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "author",
+                      "createdTime",
+                      "done",
+                      "id",
+                      "image",
+                      "label"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "private",
+          "tasks"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "$ref": "#/components/schemas/Blob"
+                  }
+                },
+                "required": [
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"task\">"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "done": {
+                      "type": "boolean"
+                    },
+                    "createdTime": {
+                      "type": "number"
+                    },
+                    "image": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
+                    },
+                    "author": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/Dto<\"user\">"
+                        },
+                        "signInName": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "author",
+                    "createdTime",
+                    "done",
+                    "id",
+                    "image",
+                    "label"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "private",
+          "tasks"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "taskId": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/Branded<\"maybe\">"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Dto<\"task\">"
+                      }
+                    ]
+                  },
+                  "done": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "done",
+                  "taskId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"task\">"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "done": {
+                      "type": "boolean"
+                    },
+                    "createdTime": {
+                      "type": "number"
+                    },
+                    "image": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
+                    },
+                    "author": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/Dto<\"user\">"
+                        },
+                        "signInName": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "author",
+                    "createdTime",
+                    "done",
+                    "id",
+                    "image",
+                    "label"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "private",
+          "tasks"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "taskId": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/Branded<\"maybe\">"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Dto<\"task\">"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "taskId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"task\">"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "done": {
+                      "type": "boolean"
+                    },
+                    "createdTime": {
+                      "type": "number"
+                    },
+                    "image": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
+                    },
+                    "author": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/Dto<\"user\">"
+                        },
+                        "signInName": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "author",
+                    "createdTime",
+                    "done",
+                    "id",
+                    "image",
+                    "label"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session": {
+      "post": {
+        "tags": [
+          "session"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "jwt": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "jwt"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "const": "success"
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "session"
+        ],
+        "parameters": [],
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "const": "success"
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Record<\"server\"|\"db\"|\"s3\",\"ok\">": {
+        "type": "object",
+        "properties": {
+          "server": {
+            "type": "string",
+            "const": "ok"
+          },
+          "db": {
+            "type": "string",
+            "const": "ok"
+          },
+          "s3": {
+            "type": "string",
+            "const": "ok"
+          }
+        },
+        "required": [
+          "db",
+          "s3",
+          "server"
+        ]
+      },
+      "Dto<\"user\">": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "Dto<\"task\">": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "FormData": {
+        "type": "object"
+      },
+      "Blob": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "size",
+          "type"
+        ]
+      },
+      "Branded<\"maybe\">": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {
+            "type": "string"
+          }
+        ]
+      }
+    }
+  }
+}

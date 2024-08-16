@@ -11,6 +11,7 @@
     "start": "sh -c \"next start -p $(($PORT + 1))\"",
     "generate": "run-p generate:*",
     "generate:aspida": "aspida",
+    "generate:openapi": "aspida2openapi -o public/docs/openapi.json",
     "generate:path": "pathpida --ignorePath ../.gitignore -s",
     "hcm": "hcm '**/*.module.css'",
     "test": "vitest run",
@@ -30,12 +31,15 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-use-websocket": "^4.8.1",
+    "swagger-ui-react": "^5.17.14",
     "swr": "^2.2.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@types/swagger-ui-react": "^4.18.3",
+    "aspida2openapi": "^0.2.1",
     "happy-css-modules": "^3.1.1",
     "notios": "^0.5.3",
     "pathpida": "^0.22.0"
