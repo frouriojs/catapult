@@ -5,8 +5,10 @@ import type { UserDto } from 'common/types/user';
 import { Spacer } from 'components/Spacer';
 import { HumanIcon } from 'components/icons/HumanIcon';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'components/modal/Modal';
+import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
+import { pagesPath } from 'utils/$path';
 import styles from './BasicHeader.module.css';
 
 const Menu = ({
@@ -46,6 +48,10 @@ export const BasicHeader = (props: { user: UserDto }) => {
     <div className={styles.container}>
       <div className={styles.main}>
         <span className={styles.appName}>{APP_NAME}</span>
+        <Spacer axis="x" size={20} />
+        <Link className={styles.docLink} href={pagesPath.docs.$url()} target="_brank">
+          API Docs
+        </Link>
         <div className={styles.btnContainer}>
           <div className={styles.userBtn} onClick={(e) => setAnchorEl(e.currentTarget)}>
             <HumanIcon size={18} fill="#336" />
