@@ -8,6 +8,6 @@ export default defineController({ listByAuthorId: taskQuery.listByAuthorId }, (d
     status: 200,
     body: await taskQuery.findManyWithDI
       .inject(deps)(prismaClient, user.id)
-      .then((tasks) => Promise.all(tasks.map(toTaskDto))),
+      .then((tasks) => tasks.map(toTaskDto)),
   }),
 }));

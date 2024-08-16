@@ -7,7 +7,14 @@ import {
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import type { MultipartFile } from '@fastify/multipart';
-import { S3_ACCESS_KEY, S3_BUCKET, S3_ENDPOINT, S3_REGION, S3_SECRET_KEY } from './envValues';
+import {
+  S3_ACCESS_KEY,
+  S3_BUCKET,
+  S3_ENDPOINT,
+  S3_PUBLIC_ENDPOINT,
+  S3_REGION,
+  S3_SECRET_KEY,
+} from './envValues';
 
 export type S3PutParams = { key: string; data: MultipartFile };
 
@@ -23,6 +30,7 @@ export const s3Client = new S3Client({
 });
 
 export const s3 = {
+  keyToUrl: (key: string): string => `${S3_PUBLIC_ENDPOINT}/${key}`,
   getSignedUrl: async (key: string): Promise<string> => {
     const command = new GetObjectCommand({ Bucket: S3_BUCKET, Key: key });
 

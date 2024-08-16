@@ -16,7 +16,7 @@ export const taskUseCase = {
 
       await taskCommand.save(tx, created);
 
-      const dto = await toTaskDto(created.task);
+      const dto = toTaskDto(created.task);
       taskEvent.created(user, dto);
 
       return dto;
@@ -28,7 +28,7 @@ export const taskUseCase = {
 
       await taskCommand.save(tx, updated);
 
-      const dto = await toTaskDto(updated.task);
+      const dto = toTaskDto(updated.task);
       taskEvent.updated(user, dto);
 
       return dto;
@@ -40,7 +40,7 @@ export const taskUseCase = {
 
       await taskCommand.delete(tx, deleted);
 
-      const dto = await toTaskDto(deleted.task);
+      const dto = toTaskDto(deleted.task);
       taskEvent.deleted(user, dto);
 
       return dto;

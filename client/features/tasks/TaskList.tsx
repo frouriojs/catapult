@@ -12,7 +12,9 @@ import styles from './taskList.module.css';
 
 export const TaskList = () => {
   const { setAlert } = useAlert();
-  const { data: tasks, mutate: mutateTasks } = useAspidaSWR(apiClient.private.tasks);
+  const { data: tasks, mutate: mutateTasks } = useAspidaSWR(apiClient.private.tasks, {
+    refreshInterval: 5000,
+  });
   const { lastMsg } = usePickedLastMsg(['taskCreated', 'taskUpdated', 'taskDeleted']);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [label, setLabel] = useState('');
