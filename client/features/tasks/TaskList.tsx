@@ -2,7 +2,6 @@ import useAspidaSWR from '@aspida/swr';
 import type { TaskDto } from 'common/types/task';
 import { labelValidator } from 'common/validators/task';
 import { Loading } from 'components/loading/Loading';
-import { usePickedLastMsg } from 'features/ws/AuthedWebSocket';
 import { useAlert } from 'hooks/useAlert';
 import type { FormEvent } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -15,7 +14,6 @@ export const TaskList = () => {
   const { data: tasks, mutate: mutateTasks } = useAspidaSWR(apiClient.private.tasks, {
     refreshInterval: 5000,
   });
-  const { lastMsg } = usePickedLastMsg(['taskCreated', 'taskUpdated', 'taskDeleted']);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [label, setLabel] = useState('');
   const [image, setImage] = useState<File>();
@@ -54,32 +52,6 @@ export const TaskList = () => {
       .then((task) => mutateTasks((tasks) => tasks?.filter((t) => t.id !== task.id)))
       .catch(catchApiErr);
   };
-
-  useEffect(() => {
-    if (lastMsg === undefined) return;
-
-    switch (lastMsg.type) {
-      case 'taskCreated':
-        mutateTasks(
-          (tasks) => [lastMsg.task, ...(tasks?.filter((t) => t.id !== lastMsg.task.id) ?? [])],
-          { revalidate: false },
-        );
-        return;
-      case 'taskUpdated':
-        mutateTasks((tasks) => tasks?.map((t) => (t.id === lastMsg.task.id ? lastMsg.task : t)), {
-          revalidate: false,
-        });
-        return;
-      case 'taskDeleted':
-        mutateTasks((tasks) => tasks?.filter((t) => t.id !== lastMsg.taskId), {
-          revalidate: false,
-        });
-        return;
-      /* v8 ignore next 2 */
-      default:
-        throw new Error(lastMsg satisfies never);
-    }
-  }, [lastMsg]);
 
   useEffect(() => {
     if (!previewImageUrl) return;

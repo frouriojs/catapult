@@ -5,7 +5,6 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 import api from 'api/$api';
 import axios from 'axios';
-import { WS_PATH } from 'common/constants';
 import { COOKIE_NAME } from 'service/constants';
 import {
   API_BASE_PATH,
@@ -14,7 +13,6 @@ import {
 } from 'service/envValues';
 import { cognitoClient } from 'tests/api/cognito';
 import { ulid } from 'ulid';
-import WebSocket from 'ws';
 import { TEST_PORT } from './utils';
 
 const baseURL = `http://127.0.0.1:${TEST_PORT}${API_BASE_PATH}`;
@@ -23,10 +21,7 @@ export const noCookieClient = api(
   aspida(undefined, { baseURL, headers: { 'Content-Type': 'text/plain' } }),
 );
 
-export const createSessionClients = async (): Promise<{
-  apiClient: typeof noCookieClient;
-  wsClient: WebSocket;
-}> => {
+export const createSessionClients = async (): Promise<typeof noCookieClient> => {
   const userName = `test-${ulid()}`;
   const password = `Test-user-${ulid()}`;
   const command1 = new AdminCreateUserCommand({
@@ -55,10 +50,5 @@ export const createSessionClients = async (): Promise<{
     Promise.reject(axios.isAxiosError(err) ? new Error(JSON.stringify(err.toJSON())) : err),
   );
 
-  const wsClient = await new Promise<WebSocket>((resolve): void => {
-    const ws = new WebSocket(`ws://127.0.0.1:${TEST_PORT}${WS_PATH}`, { headers: { cookie } });
-    ws.on('open', () => resolve(ws));
-  });
-
-  return { apiClient: api(aspida(agent)), wsClient };
+  return api(aspida(agent));
 };

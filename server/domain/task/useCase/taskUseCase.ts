@@ -2,7 +2,6 @@ import type { MaybeId } from 'common/types/brandedId';
 import type { TaskDto, TaskUpdateDoneDto } from 'common/types/task';
 import type { UserDto } from 'common/types/user';
 import { transaction } from 'service/prismaClient';
-import { taskEvent } from '../event/taskEvent';
 import { taskMethod } from '../model/taskMethod';
 import type { TaskCreateServerVal } from '../model/taskType';
 import { taskCommand } from '../repository/taskCommand';
@@ -16,10 +15,7 @@ export const taskUseCase = {
 
       await taskCommand.save(tx, created);
 
-      const dto = toTaskDto(created.task);
-      taskEvent.created(user, dto);
-
-      return dto;
+      return toTaskDto(created.task);
     }),
   updateDone: (user: UserDto, val: TaskUpdateDoneDto): Promise<TaskDto> =>
     transaction('RepeatableRead', async (tx) => {
@@ -28,10 +24,7 @@ export const taskUseCase = {
 
       await taskCommand.save(tx, updated);
 
-      const dto = toTaskDto(updated.task);
-      taskEvent.updated(user, dto);
-
-      return dto;
+      return toTaskDto(updated.task);
     }),
   delete: (user: UserDto, taskId: MaybeId['task']): Promise<TaskDto> =>
     transaction('RepeatableRead', async (tx) => {
@@ -40,9 +33,6 @@ export const taskUseCase = {
 
       await taskCommand.delete(tx, deleted);
 
-      const dto = toTaskDto(deleted.task);
-      taskEvent.deleted(user, dto);
-
-      return dto;
+      return toTaskDto(deleted.task);
     }),
 };

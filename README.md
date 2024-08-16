@@ -9,7 +9,6 @@ aspida と frourio を用いた TypeScript フルスタックテンプレート
 - Object Storage: AWS S3 or Cloudflare R2
 - 関数型ドメイン駆動設計
 - 全ての関数に依存性注入が可能
-- Cookie 認証付き WebSocket 対応
 - 3rd Party Cookie なし
 - Docker コンテナー1つだけでデプロイ
 - ローカル開発は Node.js + Docker Compose で完結
@@ -78,7 +77,6 @@ Docker の Inbucket に仮想メールが届くため任意のメールアドレ
 ## デプロイ
 
 - `Dockerfile` でデプロイ可能
-- WebSocket 対応サーバー必須
 
 ### データベース
 

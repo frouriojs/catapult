@@ -1,4 +1,3 @@
-import type { WS_TYPES } from 'common/constants';
 import { SERVER_PORT } from 'service/envValues';
 
 export const TEST_PORT = SERVER_PORT - 1;
@@ -12,5 +11,3 @@ export const PATCH = (api: { patch: unknown; $path: () => string }): string =>
 
 export const DELETE = (api: { delete: unknown; $path: () => string }): string =>
   `DELETE: ${api.$path()}`;
-
-export const WS = (type: (typeof WS_TYPES)[number]): string => `WS: ${type}`;

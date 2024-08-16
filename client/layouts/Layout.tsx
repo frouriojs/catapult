@@ -1,7 +1,6 @@
 import type { UserDto } from 'common/types/user';
 import { Loading } from 'components/loading/Loading';
 import { useLoading } from 'components/loading/useLoading';
-import { AuthedWebSocket } from 'features/ws/AuthedWebSocket';
 import { useAlert } from 'hooks/useAlert';
 import { useConfirm } from 'hooks/useConfirm';
 import { useUser } from 'hooks/useUser';
@@ -27,7 +26,6 @@ export const Layout = (props: { render: (user: UserDto) => React.ReactNode }) =>
 
   return (
     <div>
-      <AuthedWebSocket />
       <BasicHeader user={user.data} />
       {props.render(user.data)}
       {loadingElm}

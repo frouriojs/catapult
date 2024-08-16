@@ -4,9 +4,8 @@ import helmet from '@fastify/helmet';
 import fastifyHttpProxy from '@fastify/http-proxy';
 import type { TokenOrHeader } from '@fastify/jwt';
 import fastifyJwt from '@fastify/jwt';
-import fastifyWebsocket from '@fastify/websocket';
 import assert from 'assert';
-import { IS_PROD, WS_PATH } from 'common/constants';
+import { IS_PROD } from 'common/constants';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import Fastify from 'fastify';
 import buildGetJwks from 'get-jwks';
@@ -20,8 +19,6 @@ import {
   COGNITO_USER_POOL_ID,
   SERVER_PORT,
 } from './envValues';
-import type { JwtUser } from './types';
-import { websocket } from './websocket';
 
 export const init = (): FastifyInstance => {
   const fastify = Fastify();
@@ -52,18 +49,6 @@ export const init = (): FastifyInstance => {
       },
     });
   }
-
-  fastify.register(fastifyWebsocket);
-  fastify.register(async (fastify) => {
-    websocket.init(fastify);
-
-    fastify.get(WS_PATH, { websocket: true }, async (socket, req) => {
-      await req
-        .jwtVerify<JwtUser>({ onlyCookie: true })
-        .then((user) => websocket.add(user.sub, socket))
-        .catch(() => null);
-    });
-  });
 
   fastify.setErrorHandler((err, req, reply) => {
     console.error(new Date(), err.stack);
