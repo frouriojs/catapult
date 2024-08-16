@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
-import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { defineConfig } from 'vitest/config';
 import { S3_BUCKET } from './service/envValues';
 
 dotenv.config();
