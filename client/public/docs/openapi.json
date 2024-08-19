@@ -12,10 +12,6 @@
   "paths": {
     "/health": {
       "get": {
-        "tags": [
-          "health"
-        ],
-        "parameters": [],
         "responses": {
           "2XX": {
             "content": {
@@ -31,7 +27,6 @@
     },
     "/": {
       "get": {
-        "parameters": [],
         "responses": {
           "2XX": {
             "content": {
@@ -47,10 +42,6 @@
     },
     "/private": {
       "get": {
-        "tags": [
-          "private"
-        ],
-        "parameters": [],
         "responses": {
           "2XX": {
             "content": {
@@ -66,11 +57,6 @@
     },
     "/private/me": {
       "get": {
-        "tags": [
-          "private",
-          "me"
-        ],
-        "parameters": [],
         "responses": {
           "2XX": {
             "content": {
@@ -106,10 +92,6 @@
     },
     "/private/tasks/{taskId}": {
       "patch": {
-        "tags": [
-          "private",
-          "tasks"
-        ],
         "parameters": [
           {
             "name": "taskId",
@@ -202,10 +184,6 @@
         }
       },
       "delete": {
-        "tags": [
-          "private",
-          "tasks"
-        ],
         "parameters": [
           {
             "name": "taskId",
@@ -283,12 +261,6 @@
     },
     "/private/tasks/di": {
       "get": {
-        "tags": [
-          "private",
-          "tasks",
-          "di"
-        ],
-        "parameters": [],
         "responses": {
           "2XX": {
             "content": {
@@ -359,10 +331,6 @@
     },
     "/private/tasks": {
       "get": {
-        "tags": [
-          "private",
-          "tasks"
-        ],
         "parameters": [
           {
             "name": "limit",
@@ -441,11 +409,6 @@
         }
       },
       "post": {
-        "tags": [
-          "private",
-          "tasks"
-        ],
-        "parameters": [],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -531,11 +494,6 @@
         }
       },
       "patch": {
-        "tags": [
-          "private",
-          "tasks"
-        ],
-        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -629,11 +587,6 @@
         }
       },
       "delete": {
-        "tags": [
-          "private",
-          "tasks"
-        ],
-        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -725,10 +678,6 @@
     },
     "/session": {
       "post": {
-        "tags": [
-          "session"
-        ],
-        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -768,10 +717,6 @@
         }
       },
       "delete": {
-        "tags": [
-          "session"
-        ],
-        "parameters": [],
         "responses": {
           "2XX": {
             "content": {
