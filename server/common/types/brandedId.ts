@@ -1,7 +1,7 @@
-import type { BRANDED_ID_NAMES } from 'common/constants';
+import type { ID_NAME_LIST } from 'common/constants';
 import type { z } from 'zod';
 
-type IdName = (typeof BRANDED_ID_NAMES)[number];
+type IdName = (typeof ID_NAME_LIST)[number];
 
 type Branded<T extends string> = string & z.BRAND<T>;
 
