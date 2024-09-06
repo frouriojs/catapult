@@ -20,3 +20,4 @@ client/api/*
 # server
 server/index.js*
 server/coverage/
+server/api/@openapi-*
