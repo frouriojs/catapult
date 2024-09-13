@@ -7,6 +7,7 @@ import { useUser } from 'hooks/useUser';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { pagesPath, staticPath } from 'utils/$path';
+import { NEXT_PUBLIC_OAUTH_DOMAIN } from 'utils/envValues';
 import styles from './index.module.css';
 
 const Login = () => {
@@ -28,6 +29,7 @@ const Login = () => {
           <Spacer axis="y" size={36} />
           <Authenticator
             signUpAttributes={['email']}
+            socialProviders={NEXT_PUBLIC_OAUTH_DOMAIN === undefined ? undefined : ['google']}
             services={{
               handleSignUp: (input) =>
                 signUp({
