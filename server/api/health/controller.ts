@@ -1,3 +1,4 @@
+import { cognito } from 'service/cognito';
 import { CustomError } from 'service/customAssert';
 import { prismaClient } from 'service/prismaClient';
 import { s3 } from 'service/s3Client';
@@ -20,6 +21,10 @@ export default defineController(() => ({
         .health()
         .then(() => 'ok' as const)
         .catch(throwCustomError('S3')),
+      cognito: await cognito
+        .health()
+        .then(() => 'ok' as const)
+        .catch(throwCustomError('Cognito')),
     },
   }),
 }));

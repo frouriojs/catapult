@@ -16,8 +16,8 @@ export const AuthLoader = () => {
     const jwt = await fetchAuthSession().then((e) => e.tokens?.idToken?.toString());
 
     if (jwt !== undefined) {
-      await apiClient.session.$post({ body: { jwt } }).catch(catchApiErr);
-      await apiClient.private.me.$get().catch(catchApiErr).then(setUser);
+      await apiClient.session.$post({ body: { jwt } });
+      await apiClient.private.me.$get().then(setUser);
     } else {
       setUser(null);
     }

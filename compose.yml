@@ -1,6 +1,6 @@
 services:
   magnito:
-    image: frourio/magnito:0.16.1
+    image: frourio/magnito:0.17.0
     ports:
       - 5050:5050
       - 5051:5051

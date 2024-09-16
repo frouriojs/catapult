@@ -21,14 +21,19 @@ export const noCookieClient = api(
   aspida(undefined, { baseURL, headers: { 'Content-Type': 'text/plain' } }),
 );
 
-export const createSessionClients = async (): Promise<typeof noCookieClient> => {
+export const createSessionClients = async (option?: {
+  hasPicture: boolean;
+}): Promise<typeof noCookieClient> => {
   const userName = `test-${ulid()}`;
   const password = `Test-user-${ulid()}`;
   const command1 = new AdminCreateUserCommand({
     UserPoolId: COGNITO_USER_POOL_ID,
     Username: userName,
     TemporaryPassword: password,
-    UserAttributes: [{ Name: 'email', Value: `${ulid()}@example.com` }],
+    UserAttributes: [
+      { Name: 'email', Value: `${ulid()}@example.com` },
+      ...(option?.hasPicture ? [{ Name: 'picture', Value: 'https://example.com/icon.png' }] : []),
+    ],
   });
 
   await cognitoClient.send(command1);

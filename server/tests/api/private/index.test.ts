@@ -12,7 +12,7 @@ test(GET(noCookieClient.private), async () => {
 });
 
 test(GET(noCookieClient.private.me), async () => {
-  const apiClient = await createSessionClients();
+  const apiClient = await createSessionClients({ hasPicture: true });
   const res = await apiClient.private.me.get();
 
   expect(res.status).toEqual(200);

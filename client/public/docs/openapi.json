@@ -17,7 +17,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Record<\"server\"|\"db\"|\"s3\",\"ok\">"
+                  "$ref": "#/components/schemas/Record<\"server\"|\"db\"|\"s3\"|\"cognito\",\"ok\">"
                 }
               }
             }
@@ -70,17 +70,25 @@
                     "signInName": {
                       "type": "string"
                     },
+                    "displayName": {
+                      "type": "string"
+                    },
                     "email": {
                       "type": "string"
                     },
                     "createdTime": {
                       "type": "number"
+                    },
+                    "photoUrl": {
+                      "type": "string"
                     }
                   },
                   "required": [
                     "createdTime",
+                    "displayName",
                     "email",
                     "id",
+                    "photoUrl",
                     "signInName"
                   ]
                 }
@@ -742,7 +750,7 @@
   },
   "components": {
     "schemas": {
-      "Record<\"server\"|\"db\"|\"s3\",\"ok\">": {
+      "Record<\"server\"|\"db\"|\"s3\"|\"cognito\",\"ok\">": {
         "type": "object",
         "properties": {
           "server": {
@@ -756,9 +764,14 @@
           "s3": {
             "type": "string",
             "const": "ok"
+          },
+          "cognito": {
+            "type": "string",
+            "const": "ok"
           }
         },
         "required": [
+          "cognito",
           "db",
           "s3",
           "server"

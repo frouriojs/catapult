@@ -1,5 +1,7 @@
+import assert from 'assert';
 import type { UserDto } from 'common/types/user';
 import { userUseCase } from 'domain/user/useCase/userUseCase';
+import { COOKIE_NAME } from 'service/constants';
 import type { JwtUser } from 'service/types';
 import { defineHooks } from './$relay';
 
@@ -9,7 +11,12 @@ export default defineHooks(() => ({
   onRequest: async (req, res) => {
     req.user = await req
       .jwtVerify<JwtUser>({ onlyCookie: true })
-      .then(userUseCase.findOrCreateUser)
+      .then((jwtUser) => {
+        const token = req.cookies[COOKIE_NAME];
+        assert(token);
+
+        return userUseCase.findOrCreateUser(jwtUser, token);
+      })
       .catch((e) => res.status(401).send((e as Error).message));
   },
 }));

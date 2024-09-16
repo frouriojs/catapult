@@ -8,11 +8,13 @@ generator client {
 }
 
 model User {
-  id         String   @id
-  email      String
-  signInName String
-  createdAt  DateTime
-  tasks      Task[]
+  id          String   @id
+  email       String
+  signInName  String
+  displayName String?
+  photoUrl    String?
+  createdAt   DateTime
+  tasks       Task[]
 }
 
 model Task {
