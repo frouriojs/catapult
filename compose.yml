@@ -1,9 +1,10 @@
 services:
   magnito:
-    image: frourio/magnito:0.15.2
+    image: frourio/magnito:0.16.1
     ports:
       - 5050:5050
       - 5051:5051
+      - 5052:5052
     environment:
       COGNITO_USER_POOL_ID: ap-northeast-1_frourio
       COGNITO_USER_POOL_CLIENT_ID: catapult
