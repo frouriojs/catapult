@@ -10,12 +10,11 @@ import { toUserDto } from '../service/toUserDto';
 export const userUseCase = {
   findOrCreateUser: (jwtUser: JwtUser, accessToken: string): Promise<UserDto> =>
     transaction('RepeatableRead', async (tx) => {
-      const cognitoUser = await cognito.getUser(accessToken).catch((e) => e.message);
-      console.log(111, cognitoUser);
       const user = await userQuery.findById(prismaClient, jwtUser.sub).catch(() => null);
 
       if (user !== null) return toUserDto(user);
 
+      const cognitoUser = await cognito.getUser(accessToken).catch((e) => e.message);
       const newUser = userMethod.create(jwtUser, cognitoUser);
 
       await userCommand.save(tx, newUser);

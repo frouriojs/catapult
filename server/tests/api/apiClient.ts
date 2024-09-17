@@ -5,9 +5,11 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 import api from 'api/$api';
 import axios from 'axios';
+import { createHash } from 'crypto';
 import { COOKIE_NAMES } from 'service/constants';
 import {
   API_BASE_PATH,
+  COGNITO_POOL_ENDPOINT,
   COGNITO_USER_POOL_CLIENT_ID,
   COGNITO_USER_POOL_ID,
 } from 'service/envValues';
@@ -21,19 +23,14 @@ export const noCookieClient = api(
   aspida(undefined, { baseURL, headers: { 'Content-Type': 'text/plain' } }),
 );
 
-export const createSessionClients = async (option?: {
-  hasPicture: boolean;
-}): Promise<typeof noCookieClient> => {
+export const createCognitoUserClient = async (): Promise<typeof noCookieClient> => {
   const userName = `test-${ulid()}`;
   const password = `Test-user-${ulid()}`;
   const command1 = new AdminCreateUserCommand({
     UserPoolId: COGNITO_USER_POOL_ID,
     Username: userName,
     TemporaryPassword: password,
-    UserAttributes: [
-      { Name: 'email', Value: `${ulid()}@example.com` },
-      ...(option?.hasPicture ? [{ Name: 'picture', Value: 'https://example.com/icon.png' }] : []),
-    ],
+    UserAttributes: [{ Name: 'email', Value: `${ulid()}@example.com` }],
   });
 
   await cognitoClient.send(command1);
@@ -52,6 +49,42 @@ export const createSessionClients = async (option?: {
         `${COOKIE_NAMES.idToken}=${res.AuthenticationResult?.IdToken};${COOKIE_NAMES.accessToken}=${res.AuthenticationResult?.AccessToken}`,
     );
 
+  const agent = axios.create({ baseURL, headers: { cookie, 'Content-Type': 'text/plain' } });
+
+  agent.interceptors.response.use(undefined, (err) =>
+    Promise.reject(axios.isAxiosError(err) ? new Error(JSON.stringify(err.toJSON())) : err),
+  );
+
+  return api(aspida(agent));
+};
+
+export const createGoogleUserClient = async (): Promise<typeof noCookieClient> => {
+  const codeVerifier = ulid();
+  const user = await fetch(`${COGNITO_POOL_ENDPOINT}/public/socialUsers`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      provider: 'Google',
+      name: 'user1',
+      email: `${ulid()}@example.com`,
+      photoUrl: 'https://example.com/user.png',
+      codeChallenge: createHash('sha256').update(codeVerifier).digest('base64url'),
+      userPoolClientId: COGNITO_USER_POOL_CLIENT_ID,
+    }),
+  }).then((res) => res.json());
+  const tokens = await fetch(`${COGNITO_POOL_ENDPOINT}/oauth2/token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      grant_type: 'authorization_code',
+      code: user.authorizationCode,
+      client_id: COGNITO_USER_POOL_CLIENT_ID,
+      redirect_uri: 'https://example.com',
+      code_verifier: codeVerifier,
+    }),
+  }).then((res) => res.json());
+
+  const cookie = `${COOKIE_NAMES.idToken}=${tokens.id_token};${COOKIE_NAMES.accessToken}=${tokens.access_token}`;
   const agent = axios.create({ baseURL, headers: { cookie, 'Content-Type': 'text/plain' } });
 
   agent.interceptors.response.use(undefined, (err) =>

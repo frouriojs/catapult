@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest';
-import { createSessionClients, noCookieClient } from '../apiClient';
+import { createCognitoUserClient, createGoogleUserClient, noCookieClient } from '../apiClient';
 import { GET } from '../utils';
 
 test(GET(noCookieClient.private), async () => {
-  const apiClient = await createSessionClients();
+  const apiClient = await createCognitoUserClient();
   const res = await apiClient.private.$get();
 
   expect(res).toEqual('');
@@ -12,7 +12,7 @@ test(GET(noCookieClient.private), async () => {
 });
 
 test(GET(noCookieClient.private.me), async () => {
-  const apiClient = await createSessionClients({ hasPicture: true });
+  const apiClient = await createGoogleUserClient();
   const res = await apiClient.private.me.get();
 
   expect(res.status).toEqual(200);
