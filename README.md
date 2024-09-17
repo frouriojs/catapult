@@ -108,6 +108,9 @@ S3_BUCKET=
 S3_ENDPOINT=
 S3_REGION=
 S3_SECRET_KEY=
+COGNITO_ACCESS_KEY= # optional
+COGNITO_SECRET_KEY= # optional
+COGNITO_REGION= # optional
 PORT= # optional
 ```
 

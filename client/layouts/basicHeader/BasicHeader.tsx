@@ -54,8 +54,15 @@ export const BasicHeader = (props: { user: UserDto }) => {
         </Link>
         <div className={styles.btnContainer}>
           <div className={styles.userBtn} onClick={(e) => setAnchorEl(e.currentTarget)}>
-            <HumanIcon size={18} fill="#336" />
-            {props.user.signInName}
+            {props.user.photoUrl ? (
+              <div
+                className={styles.photo}
+                style={{ backgroundImage: `url(${props.user.photoUrl})` }}
+              />
+            ) : (
+              <HumanIcon size={18} fill="#336" />
+            )}
+            {props.user.displayName}
           </div>
           <Menu open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
             <MenuItem onClick={() => setOpenProfile(true)}>Your profile</MenuItem>
@@ -67,7 +74,9 @@ export const BasicHeader = (props: { user: UserDto }) => {
       <Modal open={openProfile} onClose={() => setOpenProfile(false)}>
         <ModalHeader text="Your profile" />
         <ModalBody>
-          <div>User name: {props.user.signInName}</div>
+          <div>Sign in name: {props.user.signInName}</div>
+          <Spacer axis="y" size={8} />
+          <div>Display name: {props.user.displayName}</div>
           <Spacer axis="y" size={8} />
           <div>Email: {props.user.email}</div>
         </ModalBody>

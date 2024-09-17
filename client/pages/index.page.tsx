@@ -7,7 +7,7 @@ const Home = () => {
     <Layout
       render={(user) => (
         <div className={styles.container}>
-          <div className={styles.title}>Hello {user.signInName}!</div>
+          <div className={styles.title}>Hello {user.displayName}!</div>
           <TaskList />
         </div>
       )}

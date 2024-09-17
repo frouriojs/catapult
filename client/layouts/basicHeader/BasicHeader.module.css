@@ -59,6 +59,13 @@
   background: #f0f0f0;
 }
 
+.photo {
+  width: 24px;
+  height: 24px;
+  background-size: cover;
+  border-radius: 50%;
+}
+
 .menu {
   position: absolute;
   top: 100%;

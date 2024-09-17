@@ -31,10 +31,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             NEXT_PUBLIC_OAUTH_DOMAIN === undefined
               ? undefined
               : {
-                  email: true,
                   oauth: {
                     domain: NEXT_PUBLIC_OAUTH_DOMAIN,
-                    scopes: ['openid'],
+                    scopes: ['openid', 'profile', 'aws.cognito.signin.user.admin'],
                     redirectSignIn: [location.origin],
                     redirectSignOut: [location.origin],
                     responseType: 'code',
