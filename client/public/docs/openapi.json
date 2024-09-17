@@ -692,12 +692,16 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "jwt": {
+                  "idToken": {
+                    "type": "string"
+                  },
+                  "accessToken": {
                     "type": "string"
                   }
                 },
                 "required": [
-                  "jwt"
+                  "accessToken",
+                  "idToken"
                 ]
               }
             }

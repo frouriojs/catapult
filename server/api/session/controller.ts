@@ -1,6 +1,6 @@
 import type { CookieSerializeOptions } from '@fastify/cookie';
 import assert from 'assert';
-import { COOKIE_NAME } from 'service/constants';
+import { COOKIE_NAMES } from 'service/constants';
 import { z } from 'zod';
 import type { Methods } from '.';
 import { defineController } from './$relay';
@@ -18,7 +18,7 @@ const options: CookieSerializeOptions = {
 
 export default defineController((fastify) => ({
   post: {
-    validators: { body: z.object({ jwt: z.string() }) },
+    validators: { body: z.object({ idToken: z.string(), accessToken: z.string() }) },
     hooks: {
       preHandler: (req, reply, done) => {
         assert(req.body);
@@ -26,9 +26,14 @@ export default defineController((fastify) => ({
         const decoded = z
           .object({ payload: z.object({ exp: z.number() }).passthrough() })
           .passthrough()
-          .parse(fastify.jwt.decode(req.body.jwt));
+          .parse(fastify.jwt.decode(req.body.idToken));
 
-        reply.setCookie(COOKIE_NAME, req.body.jwt, {
+        reply.setCookie(COOKIE_NAMES.idToken, req.body.idToken, {
+          ...options,
+          expires: new Date(decoded.payload.exp * 1000),
+        });
+
+        reply.setCookie(COOKIE_NAMES.accessToken, req.body.accessToken, {
           ...options,
           expires: new Date(decoded.payload.exp * 1000),
         });
@@ -41,7 +46,8 @@ export default defineController((fastify) => ({
   delete: {
     hooks: {
       preHandler: (_, reply, done) => {
-        reply.clearCookie(COOKIE_NAME, options);
+        reply.clearCookie(COOKIE_NAMES.idToken, options);
+        reply.clearCookie(COOKIE_NAMES.accessToken, options);
         done();
       },
     },

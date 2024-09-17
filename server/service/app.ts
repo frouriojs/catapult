@@ -10,7 +10,7 @@ import type { FastifyInstance, FastifyRequest } from 'fastify';
 import Fastify from 'fastify';
 import buildGetJwks from 'get-jwks';
 import server from '../$server';
-import { COOKIE_NAME } from './constants';
+import { COOKIE_NAMES } from './constants';
 import { CustomError } from './customAssert';
 import {
   API_BASE_PATH,
@@ -29,7 +29,7 @@ export const init = (): FastifyInstance => {
   fastify.register(cookie);
 
   fastify.register(fastifyJwt, {
-    cookie: { cookieName: COOKIE_NAME, signed: false },
+    cookie: { cookieName: COOKIE_NAMES.idToken, signed: false },
     decode: { complete: true },
     secret: (_: FastifyRequest, token: TokenOrHeader) => {
       assert('header' in token);

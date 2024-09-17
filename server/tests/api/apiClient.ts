@@ -5,7 +5,7 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 import api from 'api/$api';
 import axios from 'axios';
-import { COOKIE_NAME } from 'service/constants';
+import { COOKIE_NAMES } from 'service/constants';
 import {
   API_BASE_PATH,
   COGNITO_USER_POOL_CLIENT_ID,
@@ -47,7 +47,10 @@ export const createSessionClients = async (option?: {
 
   const cookie = await cognitoClient
     .send(command2)
-    .then((res) => `${COOKIE_NAME}=${res.AuthenticationResult?.IdToken}`);
+    .then(
+      (res) =>
+        `${COOKIE_NAMES.idToken}=${res.AuthenticationResult?.IdToken};${COOKIE_NAMES.accessToken}=${res.AuthenticationResult?.AccessToken}`,
+    );
 
   const agent = axios.create({ baseURL, headers: { cookie, 'Content-Type': 'text/plain' } });
 
