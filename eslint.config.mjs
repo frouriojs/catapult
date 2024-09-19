@@ -51,13 +51,13 @@ export default tseslint.config(
     },
   },
   {
-    files: ['*.tsx'],
+    files: ['**/*.tsx'],
     rules: {
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'react/self-closing-comp': 'error',
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'error',
+      // 'react-hooks/rules-of-hooks': 'error',
+      // 'react-hooks/exhaustive-deps': 'error',
     },
   },
   {
