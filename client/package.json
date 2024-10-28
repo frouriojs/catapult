@@ -18,7 +18,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:updateSnapshot": "vitest -u",
-    "typecheck": "npm run hcm && tsc --noEmit"
+    "typecheck": "npm run hcm && tsc --pretty --noEmit"
   },
   "dependencies": {
     "@aspida/axios": "^1.14.0",

@@ -1,7 +1,9 @@
+import { fixupPluginRules } from '@eslint/compat';
 import js from '@eslint/js';
 import gitignore from 'eslint-config-flat-gitignore';
 import prettierConfig from 'eslint-config-prettier';
 import reactPlugin from 'eslint-plugin-react';
+import hooksPlugin from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -12,19 +14,7 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   {
     languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-        ...globals.es2020,
-      },
-    },
-    plugins: {
-      react: reactPlugin,
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      },
+      globals: { ...globals.browser, ...globals.node, ...globals.es2020 },
     },
     rules: {
       eqeqeq: 'error',
@@ -52,12 +42,19 @@ export default tseslint.config(
   },
   {
     files: ['**/*.tsx'],
+    plugins: {
+      react: reactPlugin,
+      'react-hooks': fixupPluginRules(hooksPlugin),
+    },
+    settings: {
+      react: { version: 'detect' },
+    },
     rules: {
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'react/self-closing-comp': 'error',
-      // 'react-hooks/rules-of-hooks': 'error',
-      // 'react-hooks/exhaustive-deps': 'error',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'error',
     },
   },
   {

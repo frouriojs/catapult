@@ -20,7 +20,7 @@
     "migrate:reset": "prisma migrate reset",
     "start": "node --enable-source-maps index.js",
     "test": "vitest run --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --pretty --noEmit"
   },
   "prisma": {
     "seed": "node -r esbuild-register --enable-source-maps prisma/seed.ts"
