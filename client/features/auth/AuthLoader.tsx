@@ -1,4 +1,4 @@
-import { fetchAuthSession, getCurrentUser, signOut } from 'aws-amplify/auth';
+import { fetchAuthSession, signOut } from 'aws-amplify/auth';
 import { Hub } from 'aws-amplify/utils';
 import { isAxiosError } from 'axios';
 import { useLoading } from 'components/loading/useLoading';
@@ -13,23 +13,26 @@ export const AuthLoader = () => {
   const { setLoading } = useLoading();
   const { setAlert } = useAlert();
   const updateCookie = useCallback(async () => {
-    const tokens = await fetchAuthSession().then((e) => e.tokens);
+    const tokens = await fetchAuthSession()
+      .then((e) => e.tokens)
+      .catch(catchApiErr);
 
-    if (tokens !== undefined && tokens.idToken !== undefined) {
-      await apiClient.session.$post({
+    if (!tokens?.idToken) return setUser(null);
+
+    const result = await apiClient.session
+      .$post({
         body: { idToken: tokens.idToken.toString(), accessToken: tokens.accessToken.toString() },
-      });
-      await apiClient.private.me.$get().then(setUser);
-    } else {
-      setUser(null);
+      })
+      .catch(catchApiErr);
+
+    if (result?.status === 'success') {
+      await apiClient.private.me.$get().catch(catchApiErr).then(setUser);
     }
   }, [setUser]);
 
   useEffect(() => {
-    getCurrentUser()
-      .then(updateCookie)
-      .catch(() => setUser(null));
-  }, [setUser, updateCookie]);
+    updateCookie();
+  }, [updateCookie]);
 
   useEffect(() => {
     // eslint-disable-next-line complexity
@@ -63,7 +66,7 @@ export const AuthLoader = () => {
             setUser(null);
             break;
           case 'signedIn':
-            await updateCookie().catch(catchApiErr);
+            await updateCookie();
             break;
           case 'tokenRefresh_failure':
             await signOut();
