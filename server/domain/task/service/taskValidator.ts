@@ -1,6 +1,6 @@
 import { multipartFileValidator } from 'api/$relay';
 import type { TaskUpdateDoneDto } from 'common/types/task';
-import { brandedId } from 'service/brandedId';
+import { brandedId } from 'common/validators/brandedId';
 import { z } from 'zod';
 import type { TaskCreateServerVal } from '../model/taskType';
 

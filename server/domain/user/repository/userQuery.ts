@@ -1,5 +1,5 @@
 import type { Prisma, User } from '@prisma/client';
-import { brandedId } from 'service/brandedId';
+import { brandedId } from 'common/validators/brandedId';
 import type { UserEntity } from '../model/userType';
 
 const toUserEntity = (prismaUser: User): UserEntity => ({

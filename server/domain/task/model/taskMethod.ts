@@ -1,8 +1,8 @@
 import assert from 'assert';
 import type { TaskUpdateDoneDto } from 'common/types/task';
 import type { UserDto } from 'common/types/user';
+import { brandedId } from 'common/validators/brandedId';
 import { labelValidator } from 'common/validators/task';
-import { brandedId } from 'service/brandedId';
 import { ulid } from 'ulid';
 import type { TaskCreateServerVal, TaskDeleteVal, TaskEntity, TaskSaveVal } from './taskType';
 
