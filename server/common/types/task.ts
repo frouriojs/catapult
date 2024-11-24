@@ -1,14 +1,13 @@
-import type { DtoId, MaybeId } from './brandedId';
+import type { DtoId } from './brandedId';
 
-export type TaskDto = {
-  id: DtoId['task'];
+export type TaskBase = {
   label: string;
   done: boolean;
   createdTime: number;
-  image: { url: string; s3Key: string } | undefined;
   author: { id: DtoId['user']; signInName: string };
 };
 
-export type TaskCreateVal = { label: string; image?: Blob };
-
-export type TaskUpdateDoneDto = { taskId: MaybeId['task']; done: boolean };
+export type TaskDto = TaskBase & {
+  id: DtoId['task'];
+  image: { url: string; s3Key: string } | undefined;
+};

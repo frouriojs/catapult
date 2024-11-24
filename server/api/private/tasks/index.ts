@@ -1,32 +1,31 @@
 import type { DefineMethods } from 'aspida';
-import type { MaybeId } from 'common/types/brandedId';
-import type { TaskCreateVal, TaskDto, TaskUpdateDoneDto } from 'common/types/task';
+import type { TaskDto } from 'common/types/task';
+import type {
+  CreateTaskBody,
+  DeleteTaskBody,
+  ListTaskQuery,
+  UpdateTaskBody,
+} from 'common/validators/task';
 
 export type Methods = DefineMethods<{
   get: {
-    query?: {
-      limit?: number;
-    };
+    query?: ListTaskQuery;
     resBody: TaskDto[];
   };
 
   post: {
     reqFormat: FormData;
-    reqBody: TaskCreateVal;
+    reqBody: CreateTaskBody;
     resBody: TaskDto;
   };
 
   patch: {
-    reqBody: TaskUpdateDoneDto;
-    status: 200;
+    reqBody: UpdateTaskBody;
     resBody: TaskDto;
   };
 
   delete: {
-    reqBody: {
-      taskId: MaybeId['task'];
-    };
-    status: 200;
+    reqBody: DeleteTaskBody;
     resBody: TaskDto;
   };
 }>;

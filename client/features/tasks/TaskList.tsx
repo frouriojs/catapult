@@ -1,6 +1,6 @@
 import useAspidaSWR from '@aspida/swr';
 import type { TaskDto } from 'common/types/task';
-import { labelValidator } from 'common/validators/task';
+import { taskValidator } from 'common/validators/task';
 import { Loading } from 'components/loading/Loading';
 import { useAlert } from 'hooks/useAlert';
 import type { FormEvent } from 'react';
@@ -22,7 +22,7 @@ export const TaskList = () => {
   const createTask = async (e: FormEvent) => {
     e.preventDefault();
 
-    const parsedLabel = labelValidator.safeParse(label);
+    const parsedLabel = taskValidator.createBodyBase.safeParse({ label });
 
     if (parsedLabel.error) {
       await setAlert(parsedLabel.error.issues[0].message);
@@ -30,7 +30,7 @@ export const TaskList = () => {
     }
 
     await apiClient.private.tasks
-      .$post({ body: { label: parsedLabel.data, image } })
+      .$post({ body: { label: parsedLabel.data.label, image } })
       .then((task) => mutateTasks((tasks) => [task, ...(tasks ?? [])]))
       .catch(catchApiErr);
     setLabel('');

@@ -1,38 +1,31 @@
-import type { MaybeId } from 'common/types/brandedId';
-import type { TaskDto, TaskUpdateDoneDto } from 'common/types/task';
+import type { TaskDto } from 'common/types/task';
 import type { UserDto } from 'common/types/user';
+import type { DeleteTaskBody, UpdateTaskBody } from 'common/validators/task';
 import { transaction } from 'service/prismaClient';
 import { taskMethod } from '../model/taskMethod';
-import type { TaskCreateServerVal } from '../model/taskType';
+import type { CreateTaskPayload } from '../model/taskType';
 import { taskCommand } from '../repository/taskCommand';
 import { taskQuery } from '../repository/taskQuery';
-import { toTaskDto } from '../service/toTaskDto';
 
 export const taskUseCase = {
-  create: (user: UserDto, val: TaskCreateServerVal): Promise<TaskDto> =>
+  create: (user: UserDto, payload: CreateTaskPayload): Promise<TaskDto> =>
     transaction('RepeatableRead', async (tx) => {
-      const created = taskMethod.create(user, val);
+      const created = taskMethod.create(user, payload);
 
-      await taskCommand.save(tx, created);
-
-      return toTaskDto(created.task);
+      return await taskCommand.save(tx, user, created, payload.image);
     }),
-  updateDone: (user: UserDto, val: TaskUpdateDoneDto): Promise<TaskDto> =>
+  update: (user: UserDto, body: UpdateTaskBody): Promise<TaskDto> =>
     transaction('RepeatableRead', async (tx) => {
-      const task = await taskQuery.findById(tx, val.taskId);
-      const updated = await taskMethod.update(user, task, val);
+      const task = await taskQuery.findById(tx, user, body.taskId);
+      const updated = await taskMethod.update(user, task, body);
 
-      await taskCommand.save(tx, updated);
-
-      return toTaskDto(updated.task);
+      return await taskCommand.save(tx, user, updated);
     }),
-  delete: (user: UserDto, taskId: MaybeId['task']): Promise<TaskDto> =>
+  delete: (user: UserDto, body: DeleteTaskBody): Promise<TaskDto> =>
     transaction('RepeatableRead', async (tx) => {
-      const task = await taskQuery.findById(tx, taskId);
+      const task = await taskQuery.findById(tx, user, body.taskId);
       const deleted = taskMethod.delete(user, task);
 
-      await taskCommand.delete(tx, deleted);
-
-      return toTaskDto(deleted.task);
+      return await taskCommand.delete(tx, user, deleted);
     }),
 };

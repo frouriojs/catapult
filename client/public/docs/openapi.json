@@ -62,35 +62,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "$ref": "#/components/schemas/Dto<\"user\">"
-                    },
-                    "signInName": {
-                      "type": "string"
-                    },
-                    "displayName": {
-                      "type": "string"
-                    },
-                    "email": {
-                      "type": "string"
-                    },
-                    "createdTime": {
-                      "type": "number"
-                    },
-                    "photoUrl": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "createdTime",
-                    "displayName",
-                    "email",
-                    "id",
-                    "photoUrl",
-                    "signInName"
-                  ]
+                  "$ref": "#/components/schemas/UserDto"
                 }
               }
             }
@@ -128,63 +100,11 @@
           }
         },
         "responses": {
-          "200": {
+          "2XX": {
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "$ref": "#/components/schemas/Dto<\"task\">"
-                    },
-                    "label": {
-                      "type": "string"
-                    },
-                    "done": {
-                      "type": "boolean"
-                    },
-                    "createdTime": {
-                      "type": "number"
-                    },
-                    "image": {
-                      "type": "object",
-                      "properties": {
-                        "url": {
-                          "type": "string"
-                        },
-                        "s3Key": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "s3Key",
-                        "url"
-                      ]
-                    },
-                    "author": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "$ref": "#/components/schemas/Dto<\"user\">"
-                        },
-                        "signInName": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "signInName"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "author",
-                    "createdTime",
-                    "done",
-                    "id",
-                    "image",
-                    "label"
-                  ]
+                  "$ref": "#/components/schemas/TaskDto"
                 }
               }
             }
@@ -203,63 +123,11 @@
           }
         ],
         "responses": {
-          "200": {
+          "2XX": {
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "$ref": "#/components/schemas/Dto<\"task\">"
-                    },
-                    "label": {
-                      "type": "string"
-                    },
-                    "done": {
-                      "type": "boolean"
-                    },
-                    "createdTime": {
-                      "type": "number"
-                    },
-                    "image": {
-                      "type": "object",
-                      "properties": {
-                        "url": {
-                          "type": "string"
-                        },
-                        "s3Key": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "s3Key",
-                        "url"
-                      ]
-                    },
-                    "author": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "$ref": "#/components/schemas/Dto<\"user\">"
-                        },
-                        "signInName": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "signInName"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "author",
-                    "createdTime",
-                    "done",
-                    "id",
-                    "image",
-                    "label"
-                  ]
+                  "$ref": "#/components/schemas/TaskDto"
                 }
               }
             }
@@ -276,59 +144,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "$ref": "#/components/schemas/Dto<\"task\">"
-                      },
-                      "label": {
-                        "type": "string"
-                      },
-                      "done": {
-                        "type": "boolean"
-                      },
-                      "createdTime": {
-                        "type": "number"
-                      },
-                      "image": {
-                        "type": "object",
-                        "properties": {
-                          "url": {
-                            "type": "string"
-                          },
-                          "s3Key": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "s3Key",
-                          "url"
-                        ]
-                      },
-                      "author": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "$ref": "#/components/schemas/Dto<\"user\">"
-                          },
-                          "signInName": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "signInName"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "author",
-                      "createdTime",
-                      "done",
-                      "id",
-                      "image",
-                      "label"
-                    ]
+                    "$ref": "#/components/schemas/TaskDto"
                   }
                 }
               }
@@ -341,11 +157,19 @@
       "get": {
         "parameters": [
           {
-            "name": "limit",
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": "object"
+          },
+          {
+            "name": "properties",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "number"
+              "limit": {
+                "type": "number"
+              }
             }
           }
         ],
@@ -356,59 +180,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "$ref": "#/components/schemas/Dto<\"task\">"
-                      },
-                      "label": {
-                        "type": "string"
-                      },
-                      "done": {
-                        "type": "boolean"
-                      },
-                      "createdTime": {
-                        "type": "number"
-                      },
-                      "image": {
-                        "type": "object",
-                        "properties": {
-                          "url": {
-                            "type": "string"
-                          },
-                          "s3Key": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "s3Key",
-                          "url"
-                        ]
-                      },
-                      "author": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "$ref": "#/components/schemas/Dto<\"user\">"
-                          },
-                          "signInName": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "signInName"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "author",
-                      "createdTime",
-                      "done",
-                      "id",
-                      "image",
-                      "label"
-                    ]
+                    "$ref": "#/components/schemas/TaskDto"
                   }
                 }
               }
@@ -421,17 +193,13 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "label": {
-                    "type": "string"
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/{label:string;}"
                   },
-                  "image": {
-                    "$ref": "#/components/schemas/Blob"
+                  {
+                    "$ref": "#/components/schemas/{image?:File|undefined;}"
                   }
-                },
-                "required": [
-                  "label"
                 ]
               }
             }
@@ -442,59 +210,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "$ref": "#/components/schemas/Dto<\"task\">"
-                    },
-                    "label": {
-                      "type": "string"
-                    },
-                    "done": {
-                      "type": "boolean"
-                    },
-                    "createdTime": {
-                      "type": "number"
-                    },
-                    "image": {
-                      "type": "object",
-                      "properties": {
-                        "url": {
-                          "type": "string"
-                        },
-                        "s3Key": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "s3Key",
-                        "url"
-                      ]
-                    },
-                    "author": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "$ref": "#/components/schemas/Dto<\"user\">"
-                        },
-                        "signInName": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "signInName"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "author",
-                    "createdTime",
-                    "done",
-                    "id",
-                    "image",
-                    "label"
-                  ]
+                  "$ref": "#/components/schemas/TaskDto"
                 }
               }
             }
@@ -506,88 +222,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "taskId": {
-                    "anyOf": [
-                      {
-                        "$ref": "#/components/schemas/Branded<\"maybe\">"
-                      },
-                      {
-                        "$ref": "#/components/schemas/Dto<\"task\">"
-                      }
-                    ]
-                  },
-                  "done": {
-                    "type": "boolean"
-                  }
-                },
-                "required": [
-                  "done",
-                  "taskId"
-                ]
+                "$ref": "#/components/schemas/{done:boolean;taskId:Branded<\"maybe\">|Dto<\"task\">;}"
               }
             }
           }
         },
         "responses": {
-          "200": {
+          "2XX": {
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "$ref": "#/components/schemas/Dto<\"task\">"
-                    },
-                    "label": {
-                      "type": "string"
-                    },
-                    "done": {
-                      "type": "boolean"
-                    },
-                    "createdTime": {
-                      "type": "number"
-                    },
-                    "image": {
-                      "type": "object",
-                      "properties": {
-                        "url": {
-                          "type": "string"
-                        },
-                        "s3Key": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "s3Key",
-                        "url"
-                      ]
-                    },
-                    "author": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "$ref": "#/components/schemas/Dto<\"user\">"
-                        },
-                        "signInName": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "signInName"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "author",
-                    "createdTime",
-                    "done",
-                    "id",
-                    "image",
-                    "label"
-                  ]
+                  "$ref": "#/components/schemas/TaskDto"
                 }
               }
             }
@@ -599,84 +244,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "taskId": {
-                    "anyOf": [
-                      {
-                        "$ref": "#/components/schemas/Branded<\"maybe\">"
-                      },
-                      {
-                        "$ref": "#/components/schemas/Dto<\"task\">"
-                      }
-                    ]
-                  }
-                },
-                "required": [
-                  "taskId"
-                ]
+                "$ref": "#/components/schemas/{taskId:Branded<\"maybe\">|Dto<\"task\">;}"
               }
             }
           }
         },
         "responses": {
-          "200": {
+          "2XX": {
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "$ref": "#/components/schemas/Dto<\"task\">"
-                    },
-                    "label": {
-                      "type": "string"
-                    },
-                    "done": {
-                      "type": "boolean"
-                    },
-                    "createdTime": {
-                      "type": "number"
-                    },
-                    "image": {
-                      "type": "object",
-                      "properties": {
-                        "url": {
-                          "type": "string"
-                        },
-                        "s3Key": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "s3Key",
-                        "url"
-                      ]
-                    },
-                    "author": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "$ref": "#/components/schemas/Dto<\"user\">"
-                        },
-                        "signInName": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "signInName"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "author",
-                    "createdTime",
-                    "done",
-                    "id",
-                    "image",
-                    "label"
-                  ]
+                  "$ref": "#/components/schemas/TaskDto"
                 }
               }
             }
@@ -781,6 +359,48 @@
           "server"
         ]
       },
+      "UserDto": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "signInName": {
+                "type": "string"
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "createdTime": {
+                "type": "number"
+              },
+              "photoUrl": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "createdTime",
+              "displayName",
+              "email",
+              "photoUrl",
+              "signInName"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/components/schemas/Dto<\"user\">"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        ]
+      },
       "Dto<\"user\">": {
         "allOf": [
           {
@@ -789,6 +409,72 @@
           },
           {
             "type": "string"
+          }
+        ]
+      },
+      "TaskDto": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "done": {
+                "type": "boolean"
+              },
+              "createdTime": {
+                "type": "number"
+              },
+              "author": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/components/schemas/Dto<\"user\">"
+                  },
+                  "signInName": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "signInName"
+                ]
+              }
+            },
+            "required": [
+              "author",
+              "createdTime",
+              "done",
+              "label"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/components/schemas/Dto<\"task\">"
+              },
+              "image": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  },
+                  "s3Key": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "s3Key",
+                  "url"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "image"
+            ]
           }
         ]
       },
@@ -803,12 +489,48 @@
           }
         ]
       },
+      "{limit?:number|undefined;}": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "number"
+          }
+        }
+      },
       "FormData": {
         "type": "object"
       },
-      "Blob": {
+      "{label:string;}": {
         "type": "object",
         "properties": {
+          "label": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "label"
+        ]
+      },
+      "{image?:File|undefined;}": {
+        "type": "object",
+        "properties": {
+          "image": {
+            "$ref": "#/components/schemas/File"
+          }
+        }
+      },
+      "File": {
+        "type": "object",
+        "properties": {
+          "lastModified": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "webkitRelativePath": {
+            "type": "string"
+          },
           "size": {
             "type": "number"
           },
@@ -817,8 +539,33 @@
           }
         },
         "required": [
+          "lastModified",
+          "name",
           "size",
-          "type"
+          "type",
+          "webkitRelativePath"
+        ]
+      },
+      "{done:boolean;taskId:Branded<\"maybe\">|Dto<\"task\">;}": {
+        "type": "object",
+        "properties": {
+          "done": {
+            "type": "boolean"
+          },
+          "taskId": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Branded<\"maybe\">"
+              },
+              {
+                "$ref": "#/components/schemas/Dto<\"task\">"
+              }
+            ]
+          }
+        },
+        "required": [
+          "done",
+          "taskId"
         ]
       },
       "Branded<\"maybe\">": {
@@ -830,6 +577,24 @@
           {
             "type": "string"
           }
+        ]
+      },
+      "{taskId:Branded<\"maybe\">|Dto<\"task\">;}": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Branded<\"maybe\">"
+              },
+              {
+                "$ref": "#/components/schemas/Dto<\"task\">"
+              }
+            ]
+          }
+        },
+        "required": [
+          "taskId"
         ]
       }
     }

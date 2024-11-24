@@ -13,7 +13,7 @@ test(POST(noCookieClient.private.tasks), async () => {
   const apiClient = await createCognitoUserClient();
   const res = await apiClient.private.tasks.post({ body: { label: 'a' } });
 
-  expect(res.status).toEqual(201);
+  expect(res.status).toEqual(200);
 });
 
 test(PATCH(noCookieClient.private.tasks), async () => {
@@ -34,7 +34,9 @@ test(DELETE(noCookieClient.private.tasks), async () => {
 
 test(PATCH(noCookieClient.private.tasks._taskId('_taskId')), async () => {
   const apiClient = await createCognitoUserClient();
-  const task = await apiClient.private.tasks.$post({ body: { label: 'a' } });
+  const task = await apiClient.private.tasks.$post({
+    body: { label: 'a', image: new File([new Blob([])], 'aa.png') },
+  });
   const res = await apiClient.private.tasks._taskId(task.id).patch({ body: { done: true } });
 
   expect(res.status).toEqual(200);
@@ -47,7 +49,9 @@ test(DELETE(noCookieClient.private.tasks._taskId('_taskId')), async () => {
 
   expect(res.status).toEqual(200);
 
-  const task2 = await apiClient.private.tasks.$post({ body: { label: 'b', image: new Blob([]) } });
+  const task2 = await apiClient.private.tasks.$post({
+    body: { label: 'b', image: new File([new Blob([])], 'aa.png') },
+  });
   const res2 = await apiClient.private.tasks._taskId(task2.id).delete();
 
   expect(res2.status === 200).toBeTruthy();

@@ -1,16 +1,7 @@
 import type { MultipartFile } from '@fastify/multipart';
-import type { TaskDto } from 'common/types/task';
-import type { EntityId } from 'common/validators/brandedId';
-import type { S3PutParams } from 'service/s3Client';
+import type { EntityId } from 'common/types/brandedId';
+import type { TaskBase } from 'common/types/task';
 
-export type TaskEntity = Omit<TaskDto, 'id' | 'image' | 'author'> & {
-  id: EntityId['task'];
-  imageKey: string | undefined;
-  author: Omit<TaskDto['author'], 'id'> & { id: EntityId['user'] };
-};
+export type TaskEntity = TaskBase & { id: EntityId['task']; imageKey: string | undefined };
 
-export type TaskCreateServerVal = { label: string; image?: MultipartFile };
-
-export type TaskSaveVal = { task: TaskEntity; s3Params?: S3PutParams };
-
-export type TaskDeleteVal = { deletable: boolean; task: TaskEntity };
+export type CreateTaskPayload = { label: string; image?: MultipartFile };

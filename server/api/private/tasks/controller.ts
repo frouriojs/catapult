@@ -1,40 +1,41 @@
-import { brandedId } from 'common/validators/brandedId';
+import { taskValidator } from 'common/validators/task';
 import { taskQuery } from 'domain/task/repository/taskQuery';
-import { taskValidator } from 'domain/task/service/taskValidator';
-import { toTaskDto } from 'domain/task/service/toTaskDto';
 import { taskUseCase } from 'domain/task/useCase/taskUseCase';
 import { prismaClient } from 'service/prismaClient';
 import { z } from 'zod';
-import { defineController } from './$relay';
+import { defineController, multipartFileValidator } from './$relay';
 
 export default defineController(() => ({
-  get: async ({ user, query }) => ({
-    status: 200,
-    body: await taskQuery
-      .listByAuthorId(prismaClient, user.id, query?.limit)
-      .then((tasks) => tasks.map(toTaskDto)),
-  }),
+  get: {
+    validators: { query: taskValidator.listQuery },
+    handler: async ({ user, query }) => ({
+      status: 200,
+      body: await taskQuery.listByAuthorId(prismaClient, user, query),
+    }),
+  },
   post: {
-    validators: { body: taskValidator.taskCreate },
+    validators: {
+      body: taskValidator.createBodyBase.and(
+        z.object({ image: multipartFileValidator().optional() }),
+      ),
+    },
     handler: async ({ user, body }) => ({
-      status: 201,
+      status: 200,
       body: await taskUseCase.create(user, body),
     }),
   },
   patch: {
-    validators: { body: taskValidator.taskUpdate },
-    handler: async ({ user, body }) => {
-      const task = await taskUseCase.updateDone(user, body);
-
-      return { status: 200, body: task };
-    },
+    validators: { body: taskValidator.updateBody },
+    handler: async ({ user, body }) => ({
+      status: 200,
+      body: await taskUseCase.update(user, body),
+    }),
   },
   delete: {
-    validators: { body: z.object({ taskId: brandedId.task.maybe }) },
-    handler: async ({ user, body }) => {
-      const task = await taskUseCase.delete(user, body.taskId);
-
-      return { status: 200, body: task };
-    },
+    validators: { body: taskValidator.deleteBody },
+    handler: async ({ user, body }) => ({
+      status: 200,
+      body: await taskUseCase.delete(user, body),
+    }),
   },
 }));

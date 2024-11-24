@@ -1,36 +1,36 @@
 import assert from 'assert';
-import type { TaskUpdateDoneDto } from 'common/types/task';
+import type { TaskDto } from 'common/types/task';
 import type { UserDto } from 'common/types/user';
 import { brandedId } from 'common/validators/brandedId';
-import { labelValidator } from 'common/validators/task';
+import type { UpdateTaskBody } from 'common/validators/task';
 import { ulid } from 'ulid';
-import type { TaskCreateServerVal, TaskDeleteVal, TaskEntity, TaskSaveVal } from './taskType';
+import type { CreateTaskPayload, TaskEntity } from './taskType';
 
 export const taskMethod = {
-  create: (user: UserDto, val: TaskCreateServerVal): TaskSaveVal => {
-    const task: TaskEntity = {
+  create: (user: UserDto, payload: CreateTaskPayload): TaskEntity => {
+    return {
       id: brandedId.task.entity.parse(ulid()),
       done: false,
-      label: labelValidator.parse(val.label),
-      imageKey: undefined,
+      label: payload.label,
+      imageKey:
+        payload.image && `tasks/images/${ulid()}.${payload.image.filename.split('.').at(-1)}`,
       createdTime: Date.now(),
-      author: { id: brandedId.user.entity.parse(user.id), signInName: user.signInName },
+      author: { id: brandedId.user.dto.parse(user.id), signInName: user.signInName },
     };
-
-    if (val.image === undefined) return { task };
-
-    const imageKey = `tasks/images/${ulid()}.${val.image.filename.split('.').at(-1)}`;
-
-    return { task: { ...task, imageKey }, s3Params: { key: imageKey, data: val.image } };
   },
-  update: (user: UserDto, task: TaskEntity, dto: TaskUpdateDoneDto): TaskSaveVal => {
-    assert(user.id === String(task.author.id));
+  update: (user: UserDto, task: TaskDto, body: UpdateTaskBody): TaskEntity => {
+    assert(user.id === task.author.id);
 
-    return { task: { ...task, ...dto } };
+    return {
+      ...task,
+      ...body,
+      id: brandedId.task.entity.parse(task.id),
+      imageKey: task.image?.s3Key,
+    };
   },
-  delete: (user: UserDto, task: TaskEntity): TaskDeleteVal => {
-    assert(user.id === String(task.author.id));
+  delete: (user: UserDto, task: TaskDto): TaskEntity => {
+    assert(user.id === task.author.id);
 
-    return { deletable: true, task };
+    return { ...task, id: brandedId.task.entity.parse(task.id), imageKey: task.image?.s3Key };
   },
 };

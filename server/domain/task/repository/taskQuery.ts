@@ -1,43 +1,39 @@
-import type { Prisma, Task, User } from '@prisma/client';
-import type { DtoId, MaybeId } from 'common/types/brandedId';
-import { brandedId } from 'common/validators/brandedId';
+import type { Prisma } from '@prisma/client';
+import type { MaybeId } from 'common/types/brandedId';
+import type { TaskDto } from 'common/types/task';
+import type { UserDto } from 'common/types/user';
+import type { ListTaskQuery } from 'common/validators/task';
 import { depend } from 'velona';
-import type { TaskEntity } from '../model/taskType';
-
-const toEntity = (prismaTask: Task & { Author: User }): TaskEntity => ({
-  id: brandedId.task.entity.parse(prismaTask.id),
-  label: prismaTask.label,
-  done: prismaTask.done,
-  imageKey: prismaTask.imageKey ?? undefined,
-  author: {
-    id: brandedId.user.entity.parse(prismaTask.authorId),
-    signInName: prismaTask.Author.signInName,
-  },
-  createdTime: prismaTask.createdAt.getTime(),
-});
+import { TASK_INCLUDE, toTaskDto } from './toTaskDto';
 
 const listByAuthorId = async (
   tx: Prisma.TransactionClient,
-  authorId: DtoId['user'],
-  limit?: number,
-): Promise<TaskEntity[]> => {
-  const prismaTasks = await tx.task.findMany({
-    where: { authorId },
-    take: limit,
-    orderBy: { createdAt: 'desc' },
-    include: { Author: true },
-  });
-
-  return prismaTasks.map(toEntity);
+  user: UserDto,
+  query?: ListTaskQuery,
+): Promise<TaskDto[]> => {
+  return await tx.task
+    .findMany({
+      where: { authorId: user.id },
+      take: query?.limit,
+      orderBy: { createdAt: 'desc' },
+      include: TASK_INCLUDE,
+    })
+    .then((tasks) => tasks.map((task) => toTaskDto(user, task)));
 };
 
 export const taskQuery = {
   listByAuthorId,
   findManyWithDI: depend(
     { listByAuthorId },
-    (deps, tx: Prisma.TransactionClient, userId: DtoId['user']): Promise<TaskEntity[]> =>
-      deps.listByAuthorId(tx, userId),
+    (deps, tx: Prisma.TransactionClient, user: UserDto): Promise<TaskDto[]> =>
+      deps.listByAuthorId(tx, user),
   ),
-  findById: async (tx: Prisma.TransactionClient, taskId: MaybeId['task']): Promise<TaskEntity> =>
-    tx.task.findUniqueOrThrow({ where: { id: taskId }, include: { Author: true } }).then(toEntity),
+  findById: async (
+    tx: Prisma.TransactionClient,
+    user: UserDto,
+    taskId: MaybeId['task'],
+  ): Promise<TaskDto> =>
+    tx.task
+      .findUniqueOrThrow({ where: { id: taskId }, include: TASK_INCLUDE })
+      .then((task) => toTaskDto(user, task)),
 };

@@ -1,9 +1,8 @@
 import type { Prisma } from '@prisma/client';
 import controller from 'api/private/tasks/di/controller';
-import type { DtoId } from 'common/types/brandedId';
+import type { TaskDto } from 'common/types/task';
 import type { UserDto } from 'common/types/user';
 import { brandedId } from 'common/validators/brandedId';
-import type { TaskEntity } from 'domain/task/model/taskType';
 import fastify from 'fastify';
 import { ulid } from 'ulid';
 import { expect, test } from 'vitest';
@@ -23,15 +22,15 @@ test('Dependency Injection', async () => {
 
   const mockedFindManyTask = async (
     _: Prisma.TransactionClient,
-    authorId: DtoId['user'],
-  ): Promise<TaskEntity[]> => [
+    author: UserDto,
+  ): Promise<TaskDto[]> => [
     {
-      id: brandedId.task.entity.parse(ulid()),
+      id: brandedId.task.dto.parse(ulid()),
       label: 'baz',
       done: false,
-      imageKey: undefined,
+      image: undefined,
       createdTime: Date.now(),
-      author: { id: brandedId.user.entity.parse(authorId), signInName: user.signInName },
+      author: { id: author.id, signInName: user.signInName },
     },
   ];
 

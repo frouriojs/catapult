@@ -6,12 +6,10 @@ export type Methods = DefineMethods<{
     reqBody: {
       done: boolean;
     };
-    status: 200;
     resBody: TaskDto;
   };
 
   delete: {
-    status: 200;
     resBody: TaskDto;
   };
 }>;

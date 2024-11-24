@@ -1,4 +1,4 @@
-import type { UserDto } from 'common/types/user';
-import type { EntityId } from 'common/validators/brandedId';
+import type { EntityId } from 'common/types/brandedId';
+import type { UserBase } from 'common/types/user';
 
-export type UserEntity = Omit<UserDto, 'id'> & { id: EntityId['user'] };
+export type UserEntity = UserBase & { id: EntityId['user'] };

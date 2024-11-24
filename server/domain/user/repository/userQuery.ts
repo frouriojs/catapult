@@ -1,17 +1,8 @@
-import type { Prisma, User } from '@prisma/client';
-import { brandedId } from 'common/validators/brandedId';
-import type { UserEntity } from '../model/userType';
-
-const toUserEntity = (prismaUser: User): UserEntity => ({
-  id: brandedId.user.entity.parse(prismaUser.id),
-  email: prismaUser.email,
-  signInName: prismaUser.signInName,
-  displayName: prismaUser.displayName,
-  photoUrl: prismaUser.photoUrl ?? undefined,
-  createdTime: prismaUser.createdAt.getTime(),
-});
+import type { Prisma } from '@prisma/client';
+import type { UserDto } from 'common/types/user';
+import { toUserDto } from './toUserDto';
 
 export const userQuery = {
-  findById: (tx: Prisma.TransactionClient, id: string): Promise<UserEntity> =>
-    tx.user.findUniqueOrThrow({ where: { id } }).then(toUserEntity),
+  findById: (tx: Prisma.TransactionClient, id: string): Promise<UserDto> =>
+    tx.user.findUniqueOrThrow({ where: { id } }).then(toUserDto),
 };
