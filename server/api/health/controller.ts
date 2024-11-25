@@ -12,19 +12,10 @@ const throwCustomError = (label: string) => (e: Error) => {
 export default defineController(() => ({
   get: async () => ({
     status: 200,
-    body: {
-      server: 'ok',
-      db: await prismaClient.$queryRaw`SELECT CURRENT_TIMESTAMP;`
-        .then(() => 'ok' as const)
-        .catch(throwCustomError('DB')),
-      s3: await s3
-        .health()
-        .then(() => 'ok' as const)
-        .catch(throwCustomError('S3')),
-      cognito: await cognito
-        .health()
-        .then(() => 'ok' as const)
-        .catch(throwCustomError('Cognito')),
-    },
+    body: await Promise.all([
+      prismaClient.$queryRaw`SELECT CURRENT_TIMESTAMP;`.catch(throwCustomError('DB')),
+      s3.health().catch(throwCustomError('S3')),
+      cognito.health().catch(throwCustomError('Cognito')),
+    ]).then(() => 'ok'),
   }),
 }));

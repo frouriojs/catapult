@@ -16,9 +16,7 @@ test(GET(noCookieClient.health), async () => {
   const apiClient = await createCognitoUserClient();
   const res = await apiClient.health.$get();
 
-  expect(res.server).toEqual('ok');
-  expect(res.db).toEqual('ok');
-  expect(res.s3).toEqual('ok');
+  expect(res).toEqual('ok');
 });
 
 test(POST(noCookieClient.session), async () => {
