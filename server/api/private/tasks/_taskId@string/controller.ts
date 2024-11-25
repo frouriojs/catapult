@@ -1,5 +1,5 @@
 import { brandedId } from 'common/validators/brandedId';
-import { taskUseCase } from 'domain/task/useCase/taskUseCase';
+import { taskUseCase } from 'domain/task/taskUseCase';
 import { z } from 'zod';
 import { defineController } from './$relay';
 

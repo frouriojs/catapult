@@ -1,6 +1,6 @@
 import assert from 'assert';
 import type { UserDto } from 'common/types/user';
-import { userUseCase } from 'domain/user/useCase/userUseCase';
+import { userUseCase } from 'domain/user/userUseCase';
 import { COOKIE_NAMES, type JWT_PROP_NAME } from 'service/constants';
 import type { JwtUser } from 'service/types';
 import { defineHooks } from './$relay';

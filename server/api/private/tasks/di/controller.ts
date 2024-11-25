@@ -1,4 +1,4 @@
-import { taskQuery } from 'domain/task/repository/taskQuery';
+import { taskQuery } from 'domain/task/store/taskQuery';
 import { prismaClient } from 'service/prismaClient';
 import { defineController } from './$relay';
 

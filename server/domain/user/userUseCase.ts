@@ -2,9 +2,9 @@ import type { UserDto } from 'common/types/user';
 import { cognito } from 'service/cognito';
 import { prismaClient, transaction } from 'service/prismaClient';
 import type { JwtUser } from 'service/types';
-import { userMethod } from '../model/userMethod';
-import { userCommand } from '../repository/userCommand';
-import { userQuery } from '../repository/userQuery';
+import { userMethod } from './model/userMethod';
+import { userCommand } from './store/userCommand';
+import { userQuery } from './store/userQuery';
 
 export const userUseCase = {
   findOrCreateUser: (jwtUser: JwtUser, accessToken: string): Promise<UserDto> =>

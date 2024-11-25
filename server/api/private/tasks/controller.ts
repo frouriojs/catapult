@@ -1,6 +1,6 @@
 import { taskValidator } from 'common/validators/task';
-import { taskQuery } from 'domain/task/repository/taskQuery';
-import { taskUseCase } from 'domain/task/useCase/taskUseCase';
+import { taskQuery } from 'domain/task/store/taskQuery';
+import { taskUseCase } from 'domain/task/taskUseCase';
 import { prismaClient } from 'service/prismaClient';
 import { z } from 'zod';
 import { defineController, multipartFileValidator } from './$relay';
