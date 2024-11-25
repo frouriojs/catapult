@@ -1,18 +1,58 @@
 # C A T A P U L T
 
-aspida と frourio を用いた TypeScript フルスタックテンプレート
+aspida と frourio を用いた FullStack TypeScript テンプレート
 
 - Frontend: Next.js
 - Backend: Fastify
 - ORM: Prisma + PostgreSQL
 - Auth: AWS Cognito
 - Object Storage: AWS S3 or Cloudflare R2
-- 関数型ドメイン駆動設計
+- RESTではないHTTPリクエスト
+- 関数型アーキテクチャ
 - 全ての関数に依存性注入が可能
 - 3rd Party Cookie なし
 - Docker コンテナー1つだけでデプロイ
 - ローカル開発は Node.js + Docker Compose で完結
 - 最新コミットのデモ: https://catapult.frourio.com
+
+### データ取得時のデータフロー
+
+```mermaid
+flowchart TB
+  node_1["Next.js"]
+  node_2["GET server/api/{path}/controller.ts"]
+  node_3["server/domain/{kind}/store/xxxQuery.ts"]
+  node_4[("PostgreSQL")]
+  node_1 --"Query"--> node_2
+  node_2 --"Query"--> node_3
+  node_3 --"Prisma"--> node_4
+  node_4 =="data"==> node_3
+  node_3 =="Dto"==> node_2
+  node_2 =="Dto"==> node_1
+```
+
+### データ更新時のデータフロー
+
+```mermaid
+flowchart TB
+  node_1["Next.js"]
+  node_2["POST server/api/{path}/controller.ts"]
+  node_3["server/domain/{kind}/xxxUseCase.ts"]
+  node_4["server/domain/{kind}/model/xxxMethod.ts"]
+  node_5["server/domain/{kind}/store/xxxCommand.ts"]
+  node_6["server/domain/{kind}/store/xxxQuery.ts"]
+  node_7[("PostgreSQL")]
+  node_1 --"Body"--> node_2
+  node_2 --"Body"--> node_3
+  node_4 --"Entity"--> node_5
+  node_3 --"Body"--> node_6
+  node_6 --"Dto"--> node_4
+  node_5 --"Prisma"--> node_7
+  node_5 =="Dto"==> node_3
+  node_7 =="data"==> node_5
+  node_3 =="Dto"==> node_2
+  node_2 =="Dto"==> node_1
+```
 
 ## 開発手順
 
