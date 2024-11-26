@@ -17,7 +17,8 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Record<\"server\"|\"db\"|\"s3\"|\"cognito\",\"ok\">"
+                  "type": "string",
+                  "const": "ok"
                 }
               }
             }
@@ -332,33 +333,6 @@
   },
   "components": {
     "schemas": {
-      "Record<\"server\"|\"db\"|\"s3\"|\"cognito\",\"ok\">": {
-        "type": "object",
-        "properties": {
-          "server": {
-            "type": "string",
-            "const": "ok"
-          },
-          "db": {
-            "type": "string",
-            "const": "ok"
-          },
-          "s3": {
-            "type": "string",
-            "const": "ok"
-          },
-          "cognito": {
-            "type": "string",
-            "const": "ok"
-          }
-        },
-        "required": [
-          "cognito",
-          "db",
-          "s3",
-          "server"
-        ]
-      },
       "UserDto": {
         "allOf": [
           {

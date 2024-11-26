@@ -4,7 +4,7 @@ import { taskValidator } from 'common/validators/task';
 import { Loading } from 'components/loading/Loading';
 import { useAlert } from 'hooks/useAlert';
 import type { FormEvent } from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { apiClient } from 'utils/apiClient';
 import { catchApiErr } from 'utils/catchApiErr';
 import styles from './taskList.module.css';
@@ -14,7 +14,6 @@ export const TaskList = () => {
   const { data: tasks, mutate: mutateTasks } = useAspidaSWR(apiClient.private.tasks, {
     refreshInterval: 5000,
   });
-  const fileRef = useRef<HTMLInputElement | null>(null);
   const [label, setLabel] = useState('');
   const [image, setImage] = useState<File>();
   const previewImageUrl = useMemo(() => image && URL.createObjectURL(image), [image]);
@@ -29,15 +28,22 @@ export const TaskList = () => {
       return;
     }
 
-    await apiClient.private.tasks
+    const res = await apiClient.private.tasks
       .$post({ body: { label: parsedLabel.data.label, image } })
-      .then((task) => mutateTasks((tasks) => [task, ...(tasks ?? [])]))
       .catch(catchApiErr);
+
+    if (!res) return;
+
+    mutateTasks((tasks) => [res, ...(tasks ?? [])]);
     setLabel('');
     setImage(undefined);
-
-    if (fileRef.current) fileRef.current.value = '';
   };
+
+  const selectImage = (el: HTMLInputElement) => {
+    setImage(el.files?.[0]);
+    el.value = '';
+  };
+
   const toggleDone = async (task: TaskDto) => {
     await apiClient.private.tasks
       ._taskId(task.id)
@@ -45,6 +51,7 @@ export const TaskList = () => {
       .then((task) => mutateTasks((tasks) => tasks?.map((t) => (t.id === task.id ? task : t))))
       .catch(catchApiErr);
   };
+
   const deleteTask = async (task: TaskDto) => {
     await apiClient.private.tasks
       ._taskId(task.id)
@@ -74,12 +81,15 @@ export const TaskList = () => {
             onChange={(e) => setLabel(e.target.value)}
           />
           <div className={styles.controls}>
-            <input
-              type="file"
-              ref={fileRef}
-              accept=".png,.jpg,.jpeg,.gif,.webp,.svg"
-              onChange={(e) => setImage(e.target.files?.[0])}
-            />
+            <div className={styles.fileInputContainer}>
+              <input type="button" value="画像を選択" className={styles.btn} />
+              <input
+                type="file"
+                className={styles.fileInput}
+                accept=".png,.jpg,.jpeg,.gif,.webp,.svg"
+                onChange={(e) => selectImage(e.target)}
+              />
+            </div>
             <input className={styles.btn} disabled={label === ''} type="submit" value="ADD" />
           </div>
         </form>
