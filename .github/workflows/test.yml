@@ -33,11 +33,11 @@ jobs:
         if: steps.client-npm-cache.outputs.cache-hit != 'true'
       - run: npm ci --prefix server
         if: steps.server-npm-cache.outputs.cache-hit != 'true'
+      - run: cp client/.env.example client/.env
+      - run: cp server/.env.example server/.env
       - run: npm run generate
       - run: npm run lint
       - run: npm run typecheck
-      - run: cp client/.env.example client/.env
-      - run: cp server/.env.example server/.env
       - run: docker compose up -d
       - run: npm test
       - run: npm run build
