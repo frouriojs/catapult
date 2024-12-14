@@ -42,7 +42,7 @@
     "aspida2openapi": "^0.5.0",
     "happy-css-modules": "^3.2.0",
     "notios": "^0.5.3",
-    "pathpida": "^0.22.0"
+    "pathpida": "^0.23.0"
   },
   "engines": {
     "node": ">=20.0.0"
