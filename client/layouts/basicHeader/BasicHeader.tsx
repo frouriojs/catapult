@@ -10,6 +10,7 @@ import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { pagesPath } from 'utils/$path';
 import styles from './BasicHeader.module.css';
+import { YourProfile } from './YourProfile';
 
 const Menu = ({
   open,
@@ -71,17 +72,7 @@ export const BasicHeader = (props: { user: UserDto }) => {
           </Menu>
         </div>
       </div>
-      <Modal open={openProfile} onClose={() => setOpenProfile(false)}>
-        <ModalHeader text="Your profile" />
-        <ModalBody>
-          <div>Sign in name: {props.user.signInName}</div>
-          <Spacer axis="y" size={8} />
-          <div>Display name: {props.user.displayName}</div>
-          <Spacer axis="y" size={8} />
-          <div>Email: {props.user.email}</div>
-        </ModalBody>
-        <ModalFooter cancelText="Close" cancel={() => setOpenProfile(false)} />
-      </Modal>
+      {openProfile && <YourProfile user={props.user} onClose={() => setOpenPassword(false)} />}
       <Modal open={openPassword} onClose={() => setOpenPassword(false)}>
         <ModalHeader text="Change password" />
         <ModalBody>
