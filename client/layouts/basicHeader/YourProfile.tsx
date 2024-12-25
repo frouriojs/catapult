@@ -62,6 +62,7 @@ export const YourProfile = (props: { user: UserDto; onClose: () => void }) => {
               value={totpCode}
               onChange={(e) => setTotpCode(e.target.value)}
             />
+            <Spacer axis="y" size={8} />
             <Button onClick={verifyTOTP}>Verify TOTP</Button>
           </View>
         ) : (

@@ -72,7 +72,7 @@ export const BasicHeader = (props: { user: UserDto }) => {
           </Menu>
         </div>
       </div>
-      {openProfile && <YourProfile user={props.user} onClose={() => setOpenPassword(false)} />}
+      {openProfile && <YourProfile user={props.user} onClose={() => setOpenProfile(false)} />}
       <Modal open={openPassword} onClose={() => setOpenPassword(false)}>
         <ModalHeader text="Change password" />
         <ModalBody>
