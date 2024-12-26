@@ -91,3 +91,8 @@
 .passwordContainer {
   padding: 4px 8px;
 }
+
+.emailInput {
+  padding: 2px 8px;
+  border-radius: 6px;
+}

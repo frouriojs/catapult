@@ -1,31 +1,57 @@
 import { Button, TextField, View } from '@aws-amplify/ui-react';
 import {
+  confirmUserAttribute,
   fetchMFAPreference,
   setUpTOTP,
+  signOut,
   updateMFAPreference,
+  updateUserAttribute,
   verifyTOTPSetup,
 } from 'aws-amplify/auth';
 import { APP_NAME } from 'common/constants';
 import type { UserDto } from 'common/types/user';
+import { Btn } from 'components/btn/Btn';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'components/modal/Modal';
 import { Spacer } from 'components/Spacer';
 import { useEffect, useState } from 'react';
+import styles from './BasicHeader.module.css';
 
 export const YourProfile = (props: { user: UserDto; onClose: () => void }) => {
   const [enabledTotp, setEnabledTotp] = useState<boolean>();
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [totpCode, setTotpCode] = useState('');
+  const [email, setEmail] = useState(props.user.email);
   const enableTOTP = async () => {
     const totpSetupDetails = await setUpTOTP();
     const setupUri = totpSetupDetails.getSetupUri(APP_NAME);
 
     setQrCodeUrl(setupUri.toString());
   };
+  const disableTOTP = async () => {
+    await updateMFAPreference({ totp: 'DISABLED' });
+
+    setEnabledTotp(false);
+    alert('TOTP has been successfully disabled!');
+  };
   const verifyTOTP = async () => {
     await verifyTOTPSetup({ code: totpCode });
     await updateMFAPreference({ totp: 'PREFERRED' });
+
     alert('TOTP has been successfully enabled!');
     setQrCodeUrl('');
+  };
+  const saveEmail = async () => {
+    await updateUserAttribute({ userAttribute: { attributeKey: 'email', value: email } });
+
+    const confirmationCode = prompt('Enter confirmation code');
+
+    if (confirmationCode === null) return;
+
+    const result = await confirmUserAttribute({ userAttributeKey: 'email', confirmationCode })
+      .then(() => true)
+      .catch(() => false);
+
+    if (result) await signOut();
   };
 
   useEffect(() => {
@@ -42,10 +68,23 @@ export const YourProfile = (props: { user: UserDto; onClose: () => void }) => {
         <Spacer axis="y" size={8} />
         <div>Display name: {props.user.displayName}</div>
         <Spacer axis="y" size={8} />
-        <div>Email: {props.user.email}</div>
+        <div>
+          Email:
+          <Spacer axis="x" size={8} />
+          <input
+            className={styles.emailInput}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Spacer axis="x" size={8} />
+          <Btn size="small" text="SAVE" disabled={email === props.user.email} onClick={saveEmail} />
+        </div>
         <Spacer axis="y" size={8} />
         {enabledTotp ? (
-          <div>MFA: true</div>
+          <Button size="small" onClick={disableTOTP}>
+            Disable TOTP
+          </Button>
         ) : qrCodeUrl ? (
           <View>
             <p>Scan this QR code with your authenticator app:</p>
