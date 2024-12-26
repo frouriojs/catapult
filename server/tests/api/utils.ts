@@ -1,3 +1,5 @@
+import assert from 'assert';
+import { InbucketAPIClient } from 'inbucket-js-client';
 import { SERVER_PORT } from 'service/envValues';
 
 export const TEST_PORT = SERVER_PORT - 1;
@@ -11,3 +13,16 @@ export const PATCH = (api: { patch: unknown; $path: () => string }): string =>
 
 export const DELETE = (api: { delete: unknown; $path: () => string }): string =>
   `DELETE: ${api.$path()}`;
+
+assert(process.env.INBUCKET_URL);
+
+export const inbucketClient = new InbucketAPIClient(process.env.INBUCKET_URL);
+
+export const fetchMailBodyAndTrash = async (email: string): Promise<string> => {
+  const mailbox = await inbucketClient.mailbox(email);
+  const message = await inbucketClient.message(email, mailbox[0].id);
+
+  await inbucketClient.deleteMessage(email, mailbox[0].id);
+
+  return message.body.text.trim();
+};

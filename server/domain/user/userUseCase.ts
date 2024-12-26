@@ -22,8 +22,6 @@ export const userUseCase = {
 
       const updated = userMethod.checkDiff(user, jwtUser, cognitoUser);
 
-      if (updated) await userCommand.save(tx, updated);
-
-      return user;
+      return updated ? await userCommand.save(tx, updated) : user;
     }),
 };
