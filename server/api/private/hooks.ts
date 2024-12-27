@@ -5,7 +5,10 @@ import { COOKIE_NAMES, type JWT_PROP_NAME } from 'service/constants';
 import type { JwtUser } from 'service/types';
 import { defineHooks } from './$relay';
 
-export type AdditionalRequest = { [Key in typeof JWT_PROP_NAME]?: JwtUser } & { user: UserDto };
+export type AdditionalRequest = { [Key in typeof JWT_PROP_NAME]?: JwtUser } & {
+  accessToken: string;
+  user: UserDto;
+};
 
 export default defineHooks(() => ({
   onRequest: async (req, res) => {
@@ -16,11 +19,12 @@ export default defineHooks(() => ({
       return;
     }
 
-    const token = req.cookies[COOKIE_NAMES.accessToken];
+    const accessToken = req.cookies[COOKIE_NAMES.accessToken];
 
-    assert(token);
+    assert(accessToken);
     assert(req.jwtUser);
 
-    req.user = await userUseCase.findOrCreateUser(req.jwtUser, token);
+    req.accessToken = accessToken;
+    req.user = await userUseCase.findOrCreateUser(req.jwtUser, accessToken);
   },
 }));

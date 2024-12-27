@@ -21,39 +21,9 @@ export const userMethod = {
       createdTime: Date.now(),
     };
   },
-  checkDiff: (
-    user: UserDto,
-    jwtUser: JwtUser,
-    cognitoUser: GetUserCommandOutput,
-  ): UserEntity | null => {
-    const attributes = cognitoUser.UserAttributes;
-
-    assert(attributes);
-
-    const email = jwtUser.email;
-    const signInName = jwtUser['cognito:username'];
-    const displayName =
-      attributes.find((attr) => attr.Name === 'name')?.Value ?? jwtUser['cognito:username'];
-    const photoUrl = attributes.find((attr) => attr.Name === 'picture')?.Value;
-
-    if (
-      [
-        user.email === email,
-        user.signInName === signInName,
-        user.displayName === displayName,
-        user.photoUrl === photoUrl,
-      ].every(Boolean)
-    ) {
-      return null;
-    }
-
-    return {
-      ...user,
-      id: brandedId.user.entity.parse(user.id),
-      email,
-      signInName,
-      displayName,
-      photoUrl,
-    };
-  },
+  updateEmail: (user: UserDto, email: string): UserEntity => ({
+    ...user,
+    id: brandedId.user.entity.parse(user.id),
+    email,
+  }),
 };

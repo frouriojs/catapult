@@ -16,7 +16,8 @@ test('Dependency Injection', async () => {
     photoUrl: 'https://example.com/user.png',
     createdTime: Date.now(),
   };
-  const res1 = await controller(fastify()).get({ user });
+  const accessToken = ulid();
+  const res1 = await controller(fastify()).get({ user, accessToken });
 
   expect(res1.body).toHaveLength(0);
 
@@ -36,7 +37,7 @@ test('Dependency Injection', async () => {
 
   const res2 = await controller
     .inject({ listByAuthorId: mockedFindManyTask })(fastify())
-    .get({ user });
+    .get({ user, accessToken });
 
   expect(res2.body).toHaveLength(1);
 });

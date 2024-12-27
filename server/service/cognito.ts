@@ -3,6 +3,7 @@ import {
   CognitoIdentityProviderClient,
   GetUserCommand,
   ListUserPoolsCommand,
+  VerifyUserAttributeCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import {
   COGNITO_ACCESS_KEY,
@@ -29,5 +30,14 @@ export const cognito = {
   },
   getUser: async (AccessToken: string): Promise<GetUserCommandOutput> => {
     return await cognitoClient.send(new GetUserCommand({ AccessToken }));
+  },
+  verifyEmail: async (val: { accessToken: string; code: string }): Promise<void> => {
+    await cognitoClient.send(
+      new VerifyUserAttributeCommand({
+        AccessToken: val.accessToken,
+        AttributeName: 'email',
+        Code: val.code,
+      }),
+    );
   },
 };

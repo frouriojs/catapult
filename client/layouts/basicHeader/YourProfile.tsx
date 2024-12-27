@@ -1,9 +1,7 @@
 import { Button, TextField, View } from '@aws-amplify/ui-react';
 import {
-  confirmUserAttribute,
   fetchMFAPreference,
   setUpTOTP,
-  signOut,
   updateMFAPreference,
   updateUserAttribute,
   verifyTOTPSetup,
@@ -11,16 +9,23 @@ import {
 import { APP_NAME } from 'common/constants';
 import type { UserDto } from 'common/types/user';
 import { Btn } from 'components/btn/Btn';
+import { useLoading } from 'components/loading/useLoading';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'components/modal/Modal';
 import { Spacer } from 'components/Spacer';
+import { useUser } from 'hooks/useUser';
 import { useEffect, useState } from 'react';
-import styles from './BasicHeader.module.css';
+import { apiClient } from 'utils/apiClient';
+import { catchApiErr } from 'utils/catchApiErr';
+import { z } from 'zod';
 
 export const YourProfile = (props: { user: UserDto; onClose: () => void }) => {
+  const { setUser } = useUser();
+  const { setLoading } = useLoading();
   const [enabledTotp, setEnabledTotp] = useState<boolean>();
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [totpCode, setTotpCode] = useState('');
   const [email, setEmail] = useState(props.user.email);
+  const [emailCode, setEmailCode] = useState<string>();
   const enableTOTP = async () => {
     const totpSetupDetails = await setUpTOTP();
     const setupUri = totpSetupDetails.getSetupUri(APP_NAME);
@@ -40,18 +45,31 @@ export const YourProfile = (props: { user: UserDto; onClose: () => void }) => {
     alert('TOTP has been successfully enabled!');
     setQrCodeUrl('');
   };
-  const saveEmail = async () => {
-    await updateUserAttribute({ userAttribute: { attributeKey: 'email', value: email } });
+  const updateEmail = async () => {
+    setLoading(true);
 
-    const confirmationCode = prompt('Enter confirmation code');
+    const res = await updateUserAttribute({
+      userAttribute: { attributeKey: 'email', value: email },
+    }).catch(catchApiErr);
 
-    if (confirmationCode === null) return;
+    setLoading(false);
 
-    const result = await confirmUserAttribute({ userAttributeKey: 'email', confirmationCode })
-      .then(() => true)
-      .catch(() => false);
+    if (!res) return;
 
-    if (result) await signOut();
+    setEmailCode('');
+  };
+  const confirmEmail = async () => {
+    if (!emailCode) return;
+
+    setLoading(true);
+
+    await apiClient.private.me.email
+      .$post({ body: { code: emailCode } })
+      .then(setUser)
+      .catch(catchApiErr);
+
+    setLoading(false);
+    setEmailCode(undefined);
   };
 
   useEffect(() => {
@@ -68,17 +86,41 @@ export const YourProfile = (props: { user: UserDto; onClose: () => void }) => {
         <Spacer axis="y" size={8} />
         <div>Display name: {props.user.displayName}</div>
         <Spacer axis="y" size={8} />
-        <div>
-          Email:
-          <Spacer axis="x" size={8} />
-          <input
-            className={styles.emailInput}
+        <div style={{ minWidth: 400 }}>
+          <TextField
             type="email"
+            label="Email"
+            size="small"
+            disabled={emailCode !== undefined}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <Spacer axis="x" size={8} />
-          <Btn size="small" text="SAVE" disabled={email === props.user.email} onClick={saveEmail} />
+          <Spacer axis="y" size={12} />
+          {emailCode === undefined ? (
+            <div style={{ textAlign: 'right' }}>
+              <Btn
+                size="small"
+                text="SAVE"
+                disabled={
+                  !z.string().email().safeParse(email).success || props.user.email === email
+                }
+                onClick={updateEmail}
+              />
+            </div>
+          ) : (
+            <>
+              <TextField
+                label="Confirmation code"
+                size="small"
+                value={emailCode}
+                onChange={(e) => setEmailCode(e.target.value)}
+              />
+              <Spacer axis="y" size={12} />
+              <div style={{ textAlign: 'right' }}>
+                <Btn size="small" text="SEND" disabled={!emailCode} onClick={confirmEmail} />
+              </div>
+            </>
+          )}
         </div>
         <Spacer axis="y" size={8} />
         {enabledTotp ? (
@@ -98,6 +140,7 @@ export const YourProfile = (props: { user: UserDto; onClose: () => void }) => {
             <TextField
               label="Enter TOTP Code"
               placeholder="123456"
+              size="small"
               value={totpCode}
               onChange={(e) => setTotpCode(e.target.value)}
             />

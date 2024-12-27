@@ -26,9 +26,7 @@ export const noCookieClient = api(
 
 type Tokens = { idToken: string; accessToken: string };
 
-export const createCognitoUser = async (): Promise<
-  { userName: string; password: string } & Tokens
-> => {
+export const createCognitoUser = async (): Promise<Tokens> => {
   const userName = `test-${ulid()}`;
   const password = `Test-user-${ulid()}`;
   const command1 = new AdminCreateUserCommand({
@@ -52,8 +50,6 @@ export const createCognitoUser = async (): Promise<
   assert(res.AuthenticationResult?.AccessToken);
 
   return {
-    userName,
-    password,
     idToken: res.AuthenticationResult.IdToken,
     accessToken: res.AuthenticationResult.AccessToken,
   };
