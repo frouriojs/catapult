@@ -6,11 +6,12 @@ import { brandedId } from 'common/validators/brandedId';
 import fastify from 'fastify';
 import { ulid } from 'ulid';
 import { expect, test } from 'vitest';
+import { TEST_USERNAME_PREFIX } from '../utils';
 
 test('Dependency Injection', async () => {
   const user: UserDto = {
     id: brandedId.user.dto.parse(ulid()),
-    signInName: 'dummy-user',
+    signInName: `${TEST_USERNAME_PREFIX}-${ulid()}`,
     displayName: 'dummy-name',
     email: 'aa@example.com',
     photoUrl: 'https://example.com/user.png',

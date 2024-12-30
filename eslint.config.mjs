@@ -70,5 +70,6 @@ export default tseslint.config(
     files: ['**/*.js'],
     rules: { '@typescript-eslint/no-require-imports': ['off'] },
   },
+  { files: ['server/tests/**/*.ts'], rules: { 'max-lines': 'off' } },
   prettierConfig,
 );
