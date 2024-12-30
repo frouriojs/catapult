@@ -12,17 +12,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         id: root-npm-cache
         with:
           path: 'node_modules'
           key: root-npm-${{ hashFiles('package-lock.json') }}
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         id: client-npm-cache
         with:
           path: 'client/node_modules'
           key: client-npm-${{ hashFiles('client/package-lock.json') }}
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         id: server-npm-cache
         with:
           path: 'server/node_modules'
