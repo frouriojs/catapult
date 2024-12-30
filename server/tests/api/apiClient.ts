@@ -16,7 +16,7 @@ import {
   COGNITO_USER_POOL_ID,
 } from 'service/envValues';
 import { ulid } from 'ulid';
-import { TEST_PORT } from './utils';
+import { TEST_PORT, TEST_USERNAME_PREFIX } from './utils';
 
 const baseURL = `http://127.0.0.1:${TEST_PORT}${API_BASE_PATH}`;
 
@@ -27,7 +27,7 @@ export const noCookieClient = api(
 type Tokens = { idToken: string; accessToken: string };
 
 export const createCognitoUser = async (): Promise<Tokens> => {
-  const userName = `test-${ulid()}`;
+  const userName = `${TEST_USERNAME_PREFIX}-${ulid()}`;
   const password = `Test-user-${ulid()}`;
   const command1 = new AdminCreateUserCommand({
     UserPoolId: COGNITO_USER_POOL_ID,
@@ -56,7 +56,7 @@ export const createCognitoUser = async (): Promise<Tokens> => {
 };
 
 export const createGoogleUser = async (): Promise<Tokens> => {
-  const userName = `test-${ulid()}`;
+  const userName = `${TEST_USERNAME_PREFIX}-${ulid()}`;
   const codeVerifier = ulid();
   const user = await fetch(`${COGNITO_POOL_ENDPOINT}/public/socialUsers`, {
     method: 'POST',

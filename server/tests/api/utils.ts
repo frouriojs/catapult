@@ -4,6 +4,8 @@ import { SERVER_PORT } from 'service/envValues';
 
 export const TEST_PORT = SERVER_PORT - 1;
 
+export const TEST_USERNAME_PREFIX = 'test-username-prefix';
+
 export const GET = (api: { get: unknown; $path: () => string }): string => `GET: ${api.$path()}`;
 
 export const POST = (api: { post: unknown; $path: () => string }): string => `POST: ${api.$path()}`;
