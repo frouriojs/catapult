@@ -7,6 +7,7 @@ import api from 'api/$api';
 import assert from 'assert';
 import axios from 'axios';
 import { createHash } from 'crypto';
+import { cognitoClient } from 'service/cognito';
 import { COOKIE_NAMES } from 'service/constants';
 import {
   API_BASE_PATH,
@@ -14,7 +15,6 @@ import {
   COGNITO_USER_POOL_CLIENT_ID,
   COGNITO_USER_POOL_ID,
 } from 'service/envValues';
-import { cognitoClient } from 'tests/api/cognito';
 import { ulid } from 'ulid';
 import { TEST_PORT } from './utils';
 

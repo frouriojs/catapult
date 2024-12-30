@@ -1,5 +1,6 @@
 import { UpdateUserAttributesCommand } from '@aws-sdk/client-cognito-identity-provider';
 import assert from 'assert';
+import { cognitoClient } from 'service/cognito';
 import { ulid } from 'ulid';
 import { expect, test } from 'vitest';
 import {
@@ -8,7 +9,6 @@ import {
   createUserClient,
   noCookieClient,
 } from '../apiClient';
-import { cognitoClient } from '../cognito';
 import { fetchMailBodyAndTrash, GET } from '../utils';
 
 test(GET(noCookieClient.private), async () => {

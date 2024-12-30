@@ -12,7 +12,7 @@ import {
   COGNITO_SECRET_KEY,
 } from './envValues';
 
-const cognitoClient = new CognitoIdentityProviderClient({
+export const cognitoClient = new CognitoIdentityProviderClient({
   ...(COGNITO_ACCESS_KEY && COGNITO_SECRET_KEY
     ? {
         endpoint: COGNITO_POOL_ENDPOINT,

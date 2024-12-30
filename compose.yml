@@ -1,13 +1,13 @@
 services:
   magnito:
-    image: frourio/magnito:0.18.1
+    image: frourio/magnito:0.19.0
     ports:
       - 5050:5050
       - 5051:5051
       - 5052:5052
     environment:
       COGNITO_USER_POOL_ID: ap-northeast-1_frourio
-      COGNITO_USER_POOL_CLIENT_ID: catapult
+      COGNITO_USER_POOL_CLIENT_ID: app
       COGNITO_ACCESS_KEY: magnito-access-key
       COGNITO_SECRET_KEY: magnito-secret-key
       COGNITO_REGION: ap-northeast-1
