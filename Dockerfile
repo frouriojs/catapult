@@ -26,6 +26,4 @@ ENV NEXT_PUBLIC_SERVER_PORT=$PORT
 
 RUN npm run build
 
-HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl -f http://localhost:$PORT/$NEXT_PUBLIC_API_BASE_PATH/health && curl -f http://localhost:$PORT || exit 1
-
 CMD ["npm", "start"]
