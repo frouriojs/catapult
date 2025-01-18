@@ -52,7 +52,7 @@
     "esbuild": "^0.24.0",
     "esbuild-node-externals": "^1.15.0",
     "esbuild-register": "^3.6.0",
-    "frourio": "^1.2.1",
+    "frourio": "^1.2.2",
     "inbucket-js-client": "^2.0.0",
     "node-dev": "^8.0.0",
     "notios": "^0.5.3",
