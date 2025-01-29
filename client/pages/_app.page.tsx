@@ -44,7 +44,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     });
 
     I18n.putVocabularies(translations);
-    I18n.setLanguage(navigator.language.split('-')[0]);
+
+    const lang = navigator.language.split('-')[0];
+
+    if (lang) I18n.setLanguage(lang);
   }, []);
 
   return (

@@ -22,9 +22,9 @@ export const inbucketClient = new InbucketAPIClient(process.env.INBUCKET_URL);
 
 export const fetchMailBodyAndTrash = async (email: string): Promise<string> => {
   const mailbox = await inbucketClient.mailbox(email);
-  const message = await inbucketClient.message(email, mailbox[0].id);
+  const message = await inbucketClient.message(email, mailbox[0]!.id);
 
-  await inbucketClient.deleteMessage(email, mailbox[0].id);
+  await inbucketClient.deleteMessage(email, mailbox[0]!.id);
 
   return message.body.text.trim();
 };

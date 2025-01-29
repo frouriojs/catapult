@@ -70,6 +70,9 @@ export default tseslint.config(
     files: ['**/*.js'],
     rules: { '@typescript-eslint/no-require-imports': ['off'] },
   },
-  { files: ['server/tests/**/*.ts'], rules: { 'max-lines': 'off' } },
+  {
+    files: ['server/tests/**/*.ts'],
+    rules: { '@typescript-eslint/no-non-null-assertion': 'off', 'max-lines': 'off' },
+  },
   prettierConfig,
 );

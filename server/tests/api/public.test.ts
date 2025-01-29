@@ -25,10 +25,10 @@ test(POST(noCookieClient.session), async () => {
   const res = await noCookieClient.session.post({ body: { idToken, accessToken } });
 
   expect(
-    res.headers['set-cookie'][0].startsWith(`${COOKIE_NAMES.idToken}=${idToken};`),
+    res.headers['set-cookie']![0]!.startsWith(`${COOKIE_NAMES.idToken}=${idToken};`),
   ).toBeTruthy();
   expect(
-    res.headers['set-cookie'][1].startsWith(`${COOKIE_NAMES.accessToken}=${accessToken};`),
+    res.headers['set-cookie']![1]!.startsWith(`${COOKIE_NAMES.accessToken}=${accessToken};`),
   ).toBeTruthy();
   expect(res.body.status === 'success').toBeTruthy();
 });
@@ -37,7 +37,7 @@ test(DELETE(noCookieClient.session), async () => {
   const apiClient = await createCognitoUser().then(createUserClient);
   const res = await apiClient.session.delete();
 
-  expect(res.headers['set-cookie'][0].startsWith(`${COOKIE_NAMES.idToken}=;`)).toBeTruthy();
-  expect(res.headers['set-cookie'][1].startsWith(`${COOKIE_NAMES.accessToken}=;`)).toBeTruthy();
+  expect(res.headers['set-cookie']![0]!.startsWith(`${COOKIE_NAMES.idToken}=;`)).toBeTruthy();
+  expect(res.headers['set-cookie']![1]!.startsWith(`${COOKIE_NAMES.accessToken}=;`)).toBeTruthy();
   expect(res.body.status === 'success').toBeTruthy();
 });

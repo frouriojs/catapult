@@ -24,7 +24,8 @@ export const TaskList = () => {
     const parsedLabel = taskValidator.createBodyBase.safeParse({ label });
 
     if (parsedLabel.error) {
-      await setAlert(parsedLabel.error.issues[0].message);
+      await setAlert(parsedLabel.error.issues[0]?.message ?? 'error');
+
       return;
     }
 
