@@ -3,7 +3,6 @@ import js from '@eslint/js';
 import gitignore from 'eslint-config-flat-gitignore';
 import prettierConfig from 'eslint-config-prettier';
 import reactPlugin from 'eslint-plugin-react';
-import hooksPlugin from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -44,7 +43,7 @@ export default tseslint.config(
     files: ['**/*.tsx'],
     plugins: {
       react: reactPlugin,
-      'react-hooks': fixupPluginRules(hooksPlugin),
+      'react-hooks': fixupPluginRules(require('eslint-plugin-react-hooks')),
     },
     settings: {
       react: { version: 'detect' },
@@ -67,7 +66,7 @@ export default tseslint.config(
     rules: { '@typescript-eslint/explicit-function-return-type': ['off'] },
   },
   {
-    files: ['**/*.js'],
+    files: ['**/*.js', 'eslint.config.ts'],
     rules: { '@typescript-eslint/no-require-imports': ['off'] },
   },
   {
