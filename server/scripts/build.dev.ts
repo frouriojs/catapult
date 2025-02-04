@@ -1,7 +1,7 @@
-const { context } = require('esbuild');
-const config = require('./config.common');
+import { context } from 'esbuild';
+import { esbuildConfig } from './config.common';
 
 context({
-  ...config,
+  ...esbuildConfig,
   define: { 'process.env.NODE_ENV': `"development"`, 'import.meta.vitest': 'false' },
 }).then((ctx) => ctx.watch());

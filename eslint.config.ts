@@ -43,6 +43,7 @@ export default tseslint.config(
     files: ['**/*.tsx'],
     plugins: {
       react: reactPlugin,
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       'react-hooks': fixupPluginRules(require('eslint-plugin-react-hooks')),
     },
     settings: {
@@ -64,10 +65,6 @@ export default tseslint.config(
   {
     files: ['server/api/**/controller.ts', 'server/api/**/hooks.ts'],
     rules: { '@typescript-eslint/explicit-function-return-type': ['off'] },
-  },
-  {
-    files: ['**/*.js', 'eslint.config.ts'],
-    rules: { '@typescript-eslint/no-require-imports': ['off'] },
   },
   {
     files: ['server/tests/**/*.ts'],

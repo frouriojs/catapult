@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import { defineConfig } from 'vitest/config';
+import { defaultExclude, defineConfig } from 'vitest/config';
 import { S3_BUCKET } from './service/envValues';
 
 dotenv.config();
@@ -14,6 +14,7 @@ export default defineConfig({
     },
     setupFiles: ['tests/setup.ts'],
     includeSource: ['**/*.ts'],
+    exclude: [...defaultExclude, 'scripts/*.ts'],
     // include: ['**/index.test.ts'],
     poolOptions: { forks: { singleFork: true } },
     hookTimeout: 10000,
