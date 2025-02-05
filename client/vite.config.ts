@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite';
+import { defaultExclude, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    exclude: ['node_modules', 'out', 'api'],
+    exclude: [...defaultExclude, 'out', 'api'],
   },
 });
