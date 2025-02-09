@@ -15,6 +15,7 @@ npm-debug.log*
 client/.next/
 client/out/
 client/api/*
+client/common/*
 **/*.css.d.ts*
 
 # server
