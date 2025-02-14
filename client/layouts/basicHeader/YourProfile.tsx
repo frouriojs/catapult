@@ -13,6 +13,7 @@ import { useLoading } from 'components/loading/useLoading';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'components/modal/Modal';
 import { Spacer } from 'components/Spacer';
 import { useUser } from 'hooks/useUser';
+import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 import { apiClient } from 'utils/apiClient';
 import { catchApiErr } from 'utils/catchApiErr';
@@ -22,15 +23,15 @@ export const YourProfile = (props: { user: UserDto; onClose: () => void }) => {
   const { setUser } = useUser();
   const { setLoading } = useLoading();
   const [enabledTotp, setEnabledTotp] = useState<boolean>();
-  const [qrCodeUrl, setQrCodeUrl] = useState('');
+  const [qrDataURL, setQrDataURL] = useState<string | null>(null);
   const [totpCode, setTotpCode] = useState('');
   const [email, setEmail] = useState(props.user.email);
   const [emailCode, setEmailCode] = useState<string>();
   const enableTOTP = async () => {
     const totpSetupDetails = await setUpTOTP();
-    const setupUri = totpSetupDetails.getSetupUri(APP_NAME);
+    const setupUri = totpSetupDetails.getSetupUri(APP_NAME, props.user.signInName);
 
-    setQrCodeUrl(setupUri.toString());
+    await QRCode.toDataURL(setupUri.toString(), { width: 160 }).then(setQrDataURL);
   };
   const disableTOTP = async () => {
     await updateMFAPreference({ totp: 'DISABLED' });
@@ -43,7 +44,8 @@ export const YourProfile = (props: { user: UserDto; onClose: () => void }) => {
     await updateMFAPreference({ totp: 'PREFERRED' });
 
     alert('TOTP has been successfully enabled!');
-    setQrCodeUrl('');
+    setQrDataURL(null);
+    setEnabledTotp(true);
   };
   const updateEmail = async () => {
     setLoading(true);
@@ -127,16 +129,10 @@ export const YourProfile = (props: { user: UserDto; onClose: () => void }) => {
           <Button size="small" onClick={disableTOTP}>
             Disable TOTP
           </Button>
-        ) : qrCodeUrl ? (
+        ) : qrDataURL ? (
           <View>
             <p>Scan this QR code with your authenticator app:</p>
-            <img
-              src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
-                qrCodeUrl,
-              )}`}
-              alt="TOTP QR Code"
-              style={{ padding: 16, width: 150 }}
-            />
+            <img src={qrDataURL} alt="TOTP QR Code" />
             <TextField
               label="Enter TOTP Code"
               placeholder="123456"
