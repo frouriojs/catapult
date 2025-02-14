@@ -1,10 +1,12 @@
-import { TaskList } from 'features/tasks/TaskList';
-import { Layout } from 'layouts/Layout';
-import styles from './index.module.css';
+'use client';
 
-const Home = () => {
+import { TaskList } from 'features/tasks/TaskList';
+import { PageLayout } from 'layouts/PageLayout';
+import styles from './page.module.css';
+
+export default function Home() {
   return (
-    <Layout
+    <PageLayout
       render={(user) => (
         <div className={styles.container}>
           <div className={styles.title}>Hello {user.displayName}!</div>
@@ -13,6 +15,4 @@ const Home = () => {
       )}
     />
   );
-};
-
-export default Home;
+}

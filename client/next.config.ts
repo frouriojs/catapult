@@ -3,7 +3,6 @@ import { NEXT_PUBLIC_API_BASE_PATH, NEXT_PUBLIC_SERVER_PORT } from 'utils/envVal
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  pageExtensions: ['page.tsx'],
   trailingSlash: true,
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },

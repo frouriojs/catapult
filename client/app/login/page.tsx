@@ -1,21 +1,23 @@
+'use client';
+
 import { Authenticator } from '@aws-amplify/ui-react';
 import { signUp } from 'aws-amplify/auth';
 import { APP_NAME } from 'common/constants';
 import { Spacer } from 'components/Spacer';
 import { Loading } from 'components/loading/Loading';
 import { useUser } from 'hooks/useUser';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { pagesPath, staticPath } from 'utils/$path';
 import { NEXT_PUBLIC_OAUTH_DOMAIN } from 'utils/envValues';
-import styles from './index.module.css';
+import styles from './page.module.css';
 
-const Login = () => {
+export default function Login() {
   const { user } = useUser();
   const router = useRouter();
 
   useEffect(() => {
-    if (user.data !== null) router.replace(pagesPath.$url());
+    if (user.data !== null) router.replace(pagesPath.$url().path);
   }, [user, router]);
 
   return (
@@ -59,6 +61,4 @@ const Login = () => {
       </div>
     </div>
   );
-};
-
-export default Login;
+}
