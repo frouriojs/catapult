@@ -21,7 +21,6 @@ export default tseslint.config(
       'prefer-template': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
       complexity: ['error', 5],
       'max-depth': ['error', 2],
@@ -59,11 +58,14 @@ export default tseslint.config(
   },
   {
     files: ['server/**/*.ts'],
-    rules: { '@typescript-eslint/explicit-function-return-type': ['error'] },
+    rules: {
+      '@typescript-eslint/explicit-function-return-type': 'error',
+      '@typescript-eslint/no-non-null-assertion': 'error',
+    },
   },
   {
     files: ['server/api/**/controller.ts', 'server/api/**/hooks.ts'],
-    rules: { '@typescript-eslint/explicit-function-return-type': ['off'] },
+    rules: { '@typescript-eslint/explicit-function-return-type': 'off' },
   },
   {
     files: ['server/tests/**/*.ts'],
