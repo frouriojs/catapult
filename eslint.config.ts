@@ -53,7 +53,6 @@ export default tseslint.config(
       'react/self-closing-comp': 'error',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error',
-      'max-nested-callbacks': ['error', 4],
     },
   },
   {
