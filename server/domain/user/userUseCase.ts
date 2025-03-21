@@ -14,7 +14,7 @@ export const userUseCase = {
 
       if (user !== null) return user;
 
-      const cognitoUser = await cognito.getUser(accessToken).catch((e) => e.message);
+      const cognitoUser = await cognito.getUser(accessToken);
       const newUser = userMethod.create(jwtUser, cognitoUser);
 
       return await userCommand.save(tx, newUser);

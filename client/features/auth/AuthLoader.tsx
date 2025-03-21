@@ -31,7 +31,7 @@ export const AuthLoader = () => {
   }, [setUser]);
 
   useEffect(() => {
-    updateCookie();
+    void updateCookie();
   }, [updateCookie]);
 
   useEffect(() => {
@@ -44,6 +44,7 @@ export const AuthLoader = () => {
           .catch(() => Promise.reject(err));
       }
 
+      // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
       return Promise.reject(err);
     });
 

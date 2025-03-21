@@ -7,10 +7,13 @@ const nextConfig: NextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   webpack: (config) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     config.resolve.symlinks = false;
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return config;
   },
+  // eslint-disable-next-line @typescript-eslint/require-await
   rewrites: async () => [
     {
       source: `${NEXT_PUBLIC_API_BASE_PATH}/:path*`,

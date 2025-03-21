@@ -10,6 +10,6 @@ transaction('RepeatableRead', (tx) => Promise.all([someFn(tx)]))
     console.error(e);
     process.exit(1);
   })
-  .finally(async () => {
-    await prismaClient.$disconnect();
+  .finally(() => {
+    void prismaClient.$disconnect();
   });

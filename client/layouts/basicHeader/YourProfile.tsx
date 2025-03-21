@@ -75,7 +75,7 @@ export const YourProfile = (props: { user: UserDto; onClose: () => void }) => {
   };
 
   useEffect(() => {
-    fetchMFAPreference().then((res) => {
+    void fetchMFAPreference().then((res) => {
       setEnabledTotp(res.preferred === 'TOTP');
     });
   }, []);

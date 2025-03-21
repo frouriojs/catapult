@@ -33,11 +33,15 @@ export const init = (): FastifyInstance => {
     decode: { complete: true },
     secret: (_: FastifyRequest, token: TokenOrHeader) => {
       assert('header' in token);
-      assert(token.payload.aud === COGNITO_USER_POOL_CLIENT_ID);
+      assert((token.payload as { aud: string }).aud === COGNITO_USER_POOL_CLIENT_ID);
 
       const domain = `${COGNITO_POOL_ENDPOINT}/${COGNITO_USER_POOL_ID}`;
 
-      return getJwks.getPublicKey({ kid: token.header.kid, domain, alg: token.header.alg });
+      return getJwks.getPublicKey({
+        kid: (token.header as { kid: string }).kid,
+        domain,
+        alg: (token.header as { alg: string }).alg,
+      });
     },
   });
 

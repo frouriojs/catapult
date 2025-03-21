@@ -17,7 +17,7 @@ export const taskUseCase = {
   update: (user: UserDto, body: UpdateTaskBody): Promise<TaskDto> =>
     transaction('RepeatableRead', async (tx) => {
       const task = await taskQuery.findById(tx, user, body.taskId);
-      const updated = await taskMethod.update(user, task, body);
+      const updated = taskMethod.update(user, task, body);
 
       return await taskCommand.save(tx, user, updated);
     }),

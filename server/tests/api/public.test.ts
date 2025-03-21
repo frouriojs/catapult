@@ -30,7 +30,7 @@ test(POST(noCookieClient.session), async () => {
   expect(
     res.headers['set-cookie']![1]!.startsWith(`${COOKIE_NAMES.accessToken}=${accessToken};`),
   ).toBeTruthy();
-  expect(res.body.status === 'success').toBeTruthy();
+  expect(res.body.status).toBe('success');
 });
 
 test(DELETE(noCookieClient.session), async () => {
@@ -39,5 +39,5 @@ test(DELETE(noCookieClient.session), async () => {
 
   expect(res.headers['set-cookie']![0]!.startsWith(`${COOKIE_NAMES.idToken}=;`)).toBeTruthy();
   expect(res.headers['set-cookie']![1]!.startsWith(`${COOKIE_NAMES.accessToken}=;`)).toBeTruthy();
-  expect(res.body.status === 'success').toBeTruthy();
+  expect(res.body.status).toBe('success');
 });

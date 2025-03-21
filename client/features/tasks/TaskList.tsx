@@ -35,9 +35,10 @@ export const TaskList = () => {
 
     if (!res) return;
 
-    mutateTasks((tasks) => [res, ...(tasks ?? [])]);
     setLabel('');
     setImage(undefined);
+
+    await mutateTasks((tasks) => [res, ...(tasks ?? [])]);
   };
 
   const selectImage = (el: HTMLInputElement) => {

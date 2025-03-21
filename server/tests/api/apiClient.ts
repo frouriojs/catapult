@@ -47,7 +47,7 @@ export const createCognitoUser = async (): Promise<Tokens> => {
   const res = await cognitoClient.send(command2);
 
   assert(res.AuthenticationResult?.IdToken);
-  assert(res.AuthenticationResult?.AccessToken);
+  assert(res.AuthenticationResult.AccessToken);
 
   return {
     idToken: res.AuthenticationResult.IdToken,
@@ -69,7 +69,7 @@ export const createGoogleUser = async (): Promise<Tokens> => {
       codeChallenge: createHash('sha256').update(codeVerifier).digest('base64url'),
       userPoolClientId: COGNITO_USER_POOL_CLIENT_ID,
     }),
-  }).then((res) => res.json());
+  }).then((res) => res.json() as Promise<{ authorizationCode: string }>);
   const tokens = await fetch(`${COGNITO_POOL_ENDPOINT}/oauth2/token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -80,7 +80,7 @@ export const createGoogleUser = async (): Promise<Tokens> => {
       redirect_uri: 'https://example.com',
       code_verifier: codeVerifier,
     }),
-  }).then((res) => res.json());
+  }).then((res) => res.json() as Promise<{ id_token: string; access_token: string }>);
 
   return { idToken: tokens.id_token, accessToken: tokens.access_token };
 };
@@ -90,6 +90,7 @@ export const createUserClient = async (tokens: Tokens): Promise<typeof noCookieC
   const agent = axios.create({ baseURL, headers: { cookie, 'Content-Type': 'text/plain' } });
 
   agent.interceptors.response.use(undefined, (err) =>
+    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
     Promise.reject(axios.isAxiosError(err) ? new Error(JSON.stringify(err.toJSON())) : err),
   );
 

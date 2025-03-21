@@ -9,9 +9,13 @@ import tseslint from 'typescript-eslint';
 export default tseslint.config(
   gitignore(),
   js.configs.recommended,
-  ...tseslint.configs.recommended,
+  tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
       globals: { ...globals.browser, ...globals.node, ...globals.es2020 },
     },
     rules: {
@@ -22,6 +26,7 @@ export default tseslint.config(
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unnecessary-condition': 'error',
       complexity: ['error', 5],
       'max-depth': ['error', 2],
       'max-nested-callbacks': ['error', 3],
@@ -41,7 +46,7 @@ export default tseslint.config(
     files: ['**/*.tsx'],
     plugins: {
       react: reactPlugin,
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-unsafe-argument
       'react-hooks': fixupPluginRules(require('eslint-plugin-react-hooks')),
     },
     settings: {
@@ -50,6 +55,7 @@ export default tseslint.config(
     rules: {
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
       'react/self-closing-comp': 'error',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error',
@@ -68,7 +74,15 @@ export default tseslint.config(
   },
   {
     files: ['server/tests/**/*.ts'],
-    rules: { '@typescript-eslint/no-non-null-assertion': 'off', 'max-lines': 'off' },
+    rules: {
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      'max-lines': 'off',
+      '@typescript-eslint/require-await': 'off',
+      'no-restricted-syntax': [
+        'error',
+        { selector: 'OptionalChain', message: 'Optional chaining (?.) is not allowed.' },
+      ],
+    },
   },
   prettierConfig,
 );
