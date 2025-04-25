@@ -2,14 +2,13 @@ import { Portal } from 'components/Portal';
 import { Spacer } from 'components/Spacer';
 import { Btn } from 'components/btn/Btn';
 import type { PropsWithChildren } from 'react';
-import React from 'react';
 import styles from './Modal.module.css';
 
 export const ModalHeader = (props: { text: string }) => {
   return <div className={styles.header}>{props.text}</div>;
 };
 
-export const ModalBody = (props: { children: React.ReactNode }) => {
+export const ModalBody = (props: PropsWithChildren) => {
   return <div className={styles.body}>{props.children}</div>;
 };
 

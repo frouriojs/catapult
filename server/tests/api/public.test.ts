@@ -1,43 +1,37 @@
-import { createSigner } from 'fast-jwt';
 import { COOKIE_NAMES } from 'service/constants';
-import { ulid } from 'ulid';
 import { expect, test } from 'vitest';
 import { createCognitoUser, createUserClient, noCookieClient } from './apiClient';
-import { DELETE, GET, POST } from './utils';
+import { GET, POST } from './utils';
 
 test(GET(noCookieClient), async () => {
-  const apiClient = await createCognitoUser().then(createUserClient);
-  const res = await apiClient.$get();
+  const res = await noCookieClient.$get();
 
   expect(res).toEqual('');
 });
 
 test(GET(noCookieClient.health), async () => {
-  const apiClient = await createCognitoUser().then(createUserClient);
-  const res = await apiClient.health.$get();
+  const res = await noCookieClient.health.$get();
 
   expect(res).toEqual('ok');
 });
 
 test(POST(noCookieClient.session), async () => {
-  const idToken = createSigner({ key: 'dummy' })({ exp: Math.floor(Date.now() / 1000) + 100 });
-  const accessToken = ulid();
-  const res = await noCookieClient.session.post({ body: { idToken, accessToken } });
+  const tokens = await createCognitoUser();
+  const res1 = await noCookieClient.session.post({ body: tokens });
 
   expect(
-    res.headers['set-cookie']![0]!.startsWith(`${COOKIE_NAMES.idToken}=${idToken};`),
+    res1.headers['set-cookie']![0]!.startsWith(`${COOKIE_NAMES.idToken}=${tokens.idToken};`),
   ).toBeTruthy();
   expect(
-    res.headers['set-cookie']![1]!.startsWith(`${COOKIE_NAMES.accessToken}=${accessToken};`),
+    res1.headers['set-cookie']![1]!.startsWith(
+      `${COOKIE_NAMES.accessToken}=${tokens.accessToken};`,
+    ),
   ).toBeTruthy();
-  expect(res.body.status).toBe('success');
-});
+  expect(res1.body.status).toBe('success');
 
-test(DELETE(noCookieClient.session), async () => {
-  const apiClient = await createCognitoUser().then(createUserClient);
-  const res = await apiClient.session.delete();
+  const res2 = await createUserClient(tokens).session.delete();
 
-  expect(res.headers['set-cookie']![0]!.startsWith(`${COOKIE_NAMES.idToken}=;`)).toBeTruthy();
-  expect(res.headers['set-cookie']![1]!.startsWith(`${COOKIE_NAMES.accessToken}=;`)).toBeTruthy();
-  expect(res.body.status).toBe('success');
+  expect(res2.headers['set-cookie']![0]!.startsWith(`${COOKIE_NAMES.idToken}=;`)).toBeTruthy();
+  expect(res2.headers['set-cookie']![1]!.startsWith(`${COOKIE_NAMES.accessToken}=;`)).toBeTruthy();
+  expect(res2.body.status).toBe('success');
 });

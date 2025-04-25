@@ -22,7 +22,7 @@ test(GET(noCookieClient.private), async () => {
 
 test(GET(noCookieClient.private.me), async () => {
   const tokens = await createCognitoUser();
-  const apiClient = await createUserClient(tokens);
+  const apiClient = createUserClient(tokens);
   const res1 = await apiClient.private.me.get();
 
   expect(res1.status).toEqual(200);

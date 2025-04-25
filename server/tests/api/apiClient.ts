@@ -85,7 +85,7 @@ export const createGoogleUser = async (): Promise<Tokens> => {
   return { idToken: tokens.id_token, accessToken: tokens.access_token };
 };
 
-export const createUserClient = async (tokens: Tokens): Promise<typeof noCookieClient> => {
+export const createUserClient = (tokens: Tokens): typeof noCookieClient => {
   const cookie = `${COOKIE_NAMES.idToken}=${tokens.idToken};${COOKIE_NAMES.accessToken}=${tokens.accessToken}`;
   const agent = axios.create({ baseURL, headers: { cookie, 'Content-Type': 'text/plain' } });
 
